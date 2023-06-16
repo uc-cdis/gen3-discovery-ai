@@ -3,7 +3,7 @@
 A proof of concept wrapper service around OpenAI's API that allows for
 configuring multiple topics with different embeddings and system prompts.
 
-Blatently steals code from https://github.com/uc-cdis/ask-gen3
+Blatantly steals code from https://github.com/uc-cdis/ask-gen3
 
 ## Quickstart
 
