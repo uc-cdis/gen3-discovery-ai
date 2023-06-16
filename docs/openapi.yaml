@@ -58,16 +58,6 @@ paths:
           description: Successful Response
       summary: Get Status
   /ask/:
-    get:
-      description: ''
-      operationId: ask_ask__get
-      responses:
-        '200':
-          content:
-            application/json:
-              schema: {}
-          description: Successful Response
-      summary: Ask
     post:
       description: ''
       operationId: ask_ask__post
@@ -99,24 +89,41 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
           description: Validation Error
       summary: Ask
-  /ask/{topic}:
-    post:
+  /topics/:
+    get:
       description: ''
-      operationId: ask_ask__topic__post
+      operationId: ask_topics__get
+      parameters:
+      - in: query
+        name: provided_topic
+        required: false
+        schema:
+          title: Provided Topic
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {}
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      summary: Ask
+  /topics/{provided_topic}:
+    get:
+      description: ''
+      operationId: ask_topics__provided_topic__get
       parameters:
       - in: path
-        name: topic
+        name: provided_topic
         required: true
         schema:
-          title: Topic
+          title: Provided Topic
           type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              title: Data
-              type: object
-        required: true
       responses:
         '200':
           content:
