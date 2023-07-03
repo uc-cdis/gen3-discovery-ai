@@ -51,7 +51,7 @@ async def ask(data: dict, topic: str = "default"):
     query = data.get("query", "")
 
     if not query:
-        logging.debug("no query string provided")
+        logging.debug("no query provided")
 
     start_time = time.time()
     try:
@@ -102,7 +102,10 @@ def ask(
     ]
 
     response = openai.ChatCompletion.create(
-        model=model, messages=messages, temperature=0, api_key=config.OPENAI_API_KEY
+        model=model,
+        messages=messages,
+        temperature=0,
+        api_key=str(config.OPENAI_API_KEY).strip(),
     )
     response_message = response["choices"][0]["message"]["content"]
 
@@ -137,7 +140,9 @@ def strings_ranked_by_relatedness(
 ) -> tuple[list[str], list[float], list[str]]:
     """Returns a list of strings and relatedness, sorted from most related to least."""
     query_embedding_response = openai.Embedding.create(
-        model=config.EMBEDDINGS_MODEL, input=query, api_key=config.OPENAI_API_KEY
+        model=config.EMBEDDINGS_MODEL,
+        input=query,
+        api_key=str(config.OPENAI_API_KEY).strip(),
     )
     query_embedding = query_embedding_response["data"][0]["embedding"]
     strings_and_relatedness = [

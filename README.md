@@ -61,3 +61,33 @@ CUSTOM_EMBEDDINGS_PATH=embeddings/embeddings.csv
 ANOTHERTOPIC_SYSTEM_PROMPT=FOOBAR
 ANOTHERTOPIC_EMBEDDINGS_PATH=embeddings/anothertopic.csv
 ```
+
+## Manual Build, Upload to Private Quay Repo, and Pull into Dev Env
+
+Manual upload to Quay
+
+```
+sudo docker build -t gen3-openai .
+sudo docker tag gen3-openai quay.io/cdis/gen3-openai
+docker login quay.io
+sudo docker push quay.io/cdis/gen3-openai
+```
+
+Configure environment to read from private quay repo
+
+* Give test account access
+* Click on test robot account in quay
+* Follow instructions for "Credentials for {account}" on the "Kubernetes Secret" tab
+
+Configure g3auto secret with OpenAI API key
+
+Add `gen3-openai` entry to "manifest.json"
+
+Manually create service
+
+```
+g3kubectl apply -f "${GEN3_HOME}/kube/services/gen3-openai/gen3-openai-service.yaml"
+gen3 roll gen3-openai
+```
+
+Make sure revproxy nginx conf has /openai routing to this service
