@@ -117,7 +117,7 @@ def query_message(
 ) -> tuple[str, list[str]]:
     """Return a message for GPT, with relevant source texts pulled from a dataframe."""
     strings, relatedness, paths = strings_ranked_by_relatedness(query, df)
-    introduction = "Ask me about datasets in BioData Catalyst"
+    introduction = ""
     question = f"\n\nQuestion: {query}"
     message = introduction
     num_messages = 0

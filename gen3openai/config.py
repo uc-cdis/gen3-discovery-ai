@@ -1,3 +1,5 @@
+import os
+
 from starlette.config import Config
 from starlette.datastructures import Secret
 
@@ -16,9 +18,13 @@ DEFAULT_EMBEDDINGS_PATH = config(
 # {{`topic`.UPPER()}}_SYSTEM_PROMPT
 TOPICS = config("TOPICS", cast=str, default="default")
 
+# Note that changing this might require updating the Dockerfile caching
 EMBEDDINGS_MODEL = config(
     "EMBEDDINGS_MODEL", cast=str, default="text-embedding-ada-002"
 )
+# This gets setup in the Dockerfile
+if "TIKTOKEN_CACHE_DIR" not in os.environ:
+    os.environ["TIKTOKEN_CACHE_DIR"] = "../cache"
 
 
 # you can configure other embeddings for other topics like this: {{TOPIC}}_EMBEDDINGS_PATH
