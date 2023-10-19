@@ -1,37 +1,45 @@
-name: CI Workflow
+name: CI
 
-on: [push]
+on:
+  push:
+  pull_request:
+    types: [opened, reopened]
+
+concurrency:
+  group: '${{ github.workflow }} @ ${{ github.event.pull_request.head.label || github.head_ref || github.ref }}'
+  cancel-in-progress: true
 
 jobs:
+  Security:
+    name: Security Pipeline
+    uses: uc-cdis/.github/.github/workflows/securitypipeline.yaml@master
+    with:
+       python-poetry: 'false'
+    secrets: inherit
 
-  test:
-    runs-on: ubuntu-latest
+  UnitTest:
+    name: Python Unit Test with Postgres
+    uses: uc-cdis/.github/.github/workflows/python_unit_test.yaml@master
+    with:
+       test-script: 'tests/ci_commands_script.sh'
+       python-version: '3.9'
+
+  LintConfig:
+    name: Python Lint
+    uses: uc-cdis/.github/.github/workflows/lint-create-config.yaml@feat/lint
     steps:
-    - uses: actions/checkout@v1
-    - name: Set up Python 3.9
-      uses: actions/setup-python@v1
-      with:
-        python-version: 3.9
-    - uses: actions/cache@preview
-      with:
-        path: ~/.cache/pypoetry/virtualenvs
-        key: ${{ runner.os }}-poetry-${{ hashFiles(format('{0}{1}', github.workspace, '/poetry.lock')) }}
-        restore-keys: |
-          ${{ runner.os }}-poetry-
-    - name: Install dependencies
-      run: |
-        pip install poetry
-        poetry install -vv --no-interaction
-        poetry show -vv
-    - name: Test with pytest
-      env:
-        DEBUG: true
-      run: |
-        poetry run pytest --cov=src --cov=migrations/versions --cov-fail-under=94 --cov-report xml
-    - name: Submit coverage report
-      if: github.ref == 'refs/heads/master'
-      env:
-        COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_TOKEN }}
-      run: |
-        pip install coveralls
-        coveralls
+      # modify default isort to specify the module name for proper formatting
+      - run: echo "known_first_party=gen3discoveryai" >> linters/.isort.cfg
+
+  Lint:
+    name: Python Lint
+    uses: uc-cdis/.github/.github/workflows/lint.yaml@feat/lint
+
+  ImageBuildAndPush:
+    name: Build Image and Push
+    uses: uc-cdis/.github/.github/workflows/image_build_push.yaml@master
+    secrets:
+      ECR_AWS_ACCESS_KEY_ID: ${{ secrets.ECR_AWS_ACCESS_KEY_ID }}
+      ECR_AWS_SECRET_ACCESS_KEY: ${{ secrets.ECR_AWS_SECRET_ACCESS_KEY }}
+      QUAY_USERNAME: ${{ secrets.QUAY_USERNAME }}
+      QUAY_ROBOT_TOKEN: ${{ secrets.QUAY_ROBOT_TOKEN }}

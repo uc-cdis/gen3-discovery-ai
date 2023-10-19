@@ -1,8 +1,9 @@
 import logging
-import gunicorn.glogging
-import cdislogging
 
-import gen3openai.config
+import cdislogging
+import gunicorn.glogging
+
+import gen3discoveryai.config
 
 
 class CDISLogger(gunicorn.glogging.Logger):
@@ -27,18 +28,25 @@ class CDISLogger(gunicorn.glogging.Logger):
 
         self._remove_handlers(logging.getLogger())
         cdislogging.get_logger(
-            None, log_level="debug" if gen3openai.config.DEBUG else "warn"
+            None, log_level="debug" if gen3discoveryai.config.DEBUG else "warn"
         )
         for logger_name in ["gunicorn", "gunicorn.error", "gunicorn.access"]:
             self._remove_handlers(logging.getLogger(logger_name))
             cdislogging.get_logger(
-                logger_name, log_level="debug" if gen3openai.config.DEBUG else "info"
+                logger_name,
+                log_level="debug" if gen3discoveryai.config.DEBUG else "info",
             )
 
 
 logger_class = CDISLogger
 
+wsgi_app = "gen3discoveryai.main:app"
+bind = "0.0.0.0:80"
+workers = 1
+# user = "appuser"
+# group = "appuser"
+
 # OpenAI API can take a while
 # default was `30`
-timeout = 180
-graceful_timeout = 180
+timeout = 300
+graceful_timeout = 300
