@@ -33,7 +33,7 @@ jobs:
   CustomizeLintConfig:
     runs-on: ubuntu-latest
     name: Customize Lint Config
-    needs: [LintConfig, GetLintConfigFiles]
+    needs: [LintConfig]
     steps:
       - uses: actions/download-artifact@v3
         with:
