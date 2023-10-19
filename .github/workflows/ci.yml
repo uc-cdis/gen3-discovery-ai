@@ -32,17 +32,20 @@ jobs:
   CustomizeLintConfig:
     runs-on: ubuntu-latest
     name: Customize Lint Config
+    needs: LintConfig
     steps:
       # modify default isort to specify the module name for proper formatting
       - run: echo "known_first_party=gen3discoveryai" >> .github/linters/.isort.cfg
 
   Lint:
     name: Python Lint
+    needs: [LintConfig, CustomizeLintConfig]
     uses: uc-cdis/.github/.github/workflows/lint.yaml@feat/lint
 
   ImageBuildAndPush:
     name: Build Image and Push
     uses: uc-cdis/.github/.github/workflows/image_build_push.yaml@master
+    needs: [Security, UnitTest]
     secrets:
       ECR_AWS_ACCESS_KEY_ID: ${{ secrets.ECR_AWS_ACCESS_KEY_ID }}
       ECR_AWS_SECRET_ACCESS_KEY: ${{ secrets.ECR_AWS_SECRET_ACCESS_KEY }}
