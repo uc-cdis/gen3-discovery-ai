@@ -30,10 +30,10 @@ jobs:
     uses: uc-cdis/.github/.github/workflows/lint-create-config.yaml@feat/lint
 
   # (optional) modify the linter configurations from above. You could omit this if you didn't need to do this
-  GetLintConfigFiles:
+  CustomizeLintConfig:
     runs-on: ubuntu-latest
-    name: Get Lint Config Files locally
-    needs: LintConfig
+    name: Customize Lint Config
+    needs: [LintConfig, GetLintConfigFiles]
     steps:
       - uses: actions/download-artifact@v3
         with:
@@ -41,25 +41,12 @@ jobs:
           name: linters-config
           path: .github/linters
 
-      - name: Display structure of downloaded linters-config files
-        run: ls -R
-        working-directory: .github/linters
-
       - uses: actions/download-artifact@v3
         with:
           # this is uploaded by the lint-create-config.yaml workflow
           name: super-linter-config
           path: .github/
 
-      - name: Display structure of downloaded super-linter-config file
-        run: ls -R
-        working-directory: .github
-
-  CustomizeLintConfig:
-    runs-on: ubuntu-latest
-    name: Customize Lint Config
-    needs: [LintConfig, GetLintConfigFiles]
-    steps:
       # modify default isort to specify the module name for proper formatting
       - run: echo "known_first_party=gen3discoveryai" >> .github/linters/.isort.cfg
 
@@ -70,6 +57,7 @@ jobs:
           path: |
             .github/linters/
           if-no-files-found: error
+
       - uses: actions/upload-artifact@v3
         with:
           name: super-linter-config
