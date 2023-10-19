@@ -21,13 +21,13 @@
 name: Lint Create Config
 on: [workflow_call]
 jobs:
-  create-dirs:
-    name: Make dirs
-    run: |
-      mkdir .github/linters
-
   create-files:
+    runs-on: ubuntu-latest
+
     steps:
+    - name: Make dirs
+      run: |
+        mkdir .github/linters
     - name: Create super linter config
       run: |
         cat <<EOL > super-linter.env
