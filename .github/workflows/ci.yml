@@ -30,6 +30,7 @@ jobs:
     uses: uc-cdis/.github/.github/workflows/lint-create-config.yaml@feat/lint
 
   CustomizeLintConfig:
+    runs-on: ubuntu-latest
     name: Customize Lint Config
     steps:
       # modify default isort to specify the module name for proper formatting
