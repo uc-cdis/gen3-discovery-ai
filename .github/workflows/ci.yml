@@ -43,7 +43,7 @@ jobs:
 
       - uses: actions/download-artifact@v3
         with:
-          # this is uploaded by the lint-create-config.yaml workflow 
+          # this is uploaded by the lint-create-config.yaml workflow
           name: super-linter-config
           path: .github/
 
