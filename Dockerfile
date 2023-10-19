@@ -12,11 +12,11 @@ USER root
 
 ENV appname=gen3discoveryai
 
-RUN pip3 install --upgrade poetry
+RUN pip3 install --no-cache-dir --upgrade poetry
 
 RUN yum update -y && yum install -y --setopt install_weak_deps=0 \
     kernel-devel libffi-devel libxml2-devel libxslt-devel postgresql-devel python3-devel \
-    git
+    git && yum clean all
 
 WORKDIR /$appname
 
@@ -49,7 +49,7 @@ RUN pip3 install --upgrade poetry
 
 RUN yum update -y && yum install -y --setopt install_weak_deps=0 \
     postgresql-devel shadow-utils\
-    bash
+    bash && yum clean all
 
 RUN useradd -ms /bin/bash appuser
 
