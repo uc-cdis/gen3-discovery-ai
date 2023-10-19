@@ -17,13 +17,14 @@ jobs:
        python-poetry: 'false'
     secrets: inherit
 
-#  UnitTest:
-#    name: Python Unit Test with Postgres
-#    uses: uc-cdis/.github/.github/workflows/python_unit_test.yaml@master
-#    with:
-#       test-script: 'tests/ci_commands_script.sh'
-#       python-version: '3.9'
+  UnitTest:
+    name: Python Unit Test with Postgres
+    uses: uc-cdis/.github/.github/workflows/python_unit_test.yaml@master
+    with:
+       test-script: 'tests/ci_commands_script.sh'
+       python-version: '3.9'
 
+  # this creates linter settings in a `.github/linters` folder
   LintConfig:
     name: Python Lint
     uses: uc-cdis/.github/.github/workflows/lint-create-config.yaml@feat/lint
