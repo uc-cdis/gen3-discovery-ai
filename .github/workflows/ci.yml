@@ -19,12 +19,12 @@ jobs:
 
   UnitTest:
     name: Python Unit Test with Postgres
-    uses: uc-cdis/.github/.github/workflows/python_unit_test.yaml@master
+    uses: uc-cdis/.github/.github/workflows/python_unit_test.yaml@feat/lint
     with:
        test-script: 'tests/ci_commands_script.sh'
        python-version: '3.9'
 
-  # this creates linter settings and uploads to an artifact so the configs can be pulled and used across jobs 
+  # this creates linter settings and uploads to an artifact so the configs can be pulled and used across jobs
   LintConfig:
     name: Get Lint Config
     uses: uc-cdis/.github/.github/workflows/lint-create-config.yaml@feat/lint
@@ -41,12 +41,6 @@ jobs:
           name: linters-config
           path: .github/linters
 
-      - uses: actions/download-artifact@v3
-        with:
-          # this is uploaded by the lint-create-config.yaml workflow
-          name: super-linter-config
-          path: .github/
-
       # modify default isort to specify the module name for proper formatting
       - run: echo "known_first_party=gen3discoveryai" >> .github/linters/.isort.cfg
 
@@ -56,13 +50,6 @@ jobs:
           name: linters-config
           path: |
             .github/linters/
-          if-no-files-found: error
-
-      - uses: actions/upload-artifact@v3
-        with:
-          name: super-linter-config
-          path: |
-            .github/super-linter.env
           if-no-files-found: error
 
   Lint:
