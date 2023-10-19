@@ -14,7 +14,7 @@
 # For example:
 #   - run `lint-create-config.yaml`
 #   - modify one of the configs:
-#     - echo "known_first_party=gen3discoveryai" >> linters/.isort.cfg
+#     - echo "known_first_party=gen3discoveryai" >> .github/linters/.isort.cfg
 #   - run `lint.yaml`
 #
 ---
@@ -34,7 +34,7 @@ jobs:
         mkdir .github/linters
     - name: Create super linter config
       run: |
-        cat <<EOL > super-linter.env
+        cat <<EOL > .github/super-linter.env
         VALIDATE_ALL_CODEBASE=true
         LOG_LEVEL=ERROR
         
@@ -74,25 +74,25 @@ jobs:
         VALIDATE_YAML=true
         EOL
 
-    - name: Create `linters/.flake8`
+    - name: Create `.github/linters/.flake8`
       run: |
-        cat <<EOL > linters/.flake8
+        cat <<EOL > .github/linters/.flake8
         [flake8]
         max-line-length = 120
         extend-ignore = E203
         EOL
 
-    - name: Create `linters/.isort.cfg`
+    - name: Create `.github/linters/.isort.cfg`
       run: |
-        cat <<EOL > linters/.isort.cfg
+        cat <<EOL > .github/linters/.isort.cfg
         [settings]
         profile=black
         line_length=120
         EOL
 
-    - name: Create `linters/.mypy.ini`
+    - name: Create `.github/linters/.mypy.ini`
       run: |
-        cat <<EOL > linters/.mypy.ini
+        cat <<EOL > .github/linters/.mypy.ini
         # Global options:
         [mypy]
         ignore_missing_imports = True
