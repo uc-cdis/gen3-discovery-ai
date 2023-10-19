@@ -814,6 +814,7 @@ jobs:
 
     - name: list
       run: |
+        cd .github
         ls
         cd linters
         ls
