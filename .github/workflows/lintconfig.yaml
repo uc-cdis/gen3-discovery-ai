@@ -22,7 +22,7 @@ name: Lint Create Config
 on: [workflow_call]
 jobs:
   create-dirs:
-  - name: Make dirs
+    name: Make dirs
     run: |
       mkdir .github/linters
 
