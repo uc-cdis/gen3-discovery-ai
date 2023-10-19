@@ -26,7 +26,7 @@ jobs:
 
   # this creates linter settings and uploads to an artifact so the configs can be pulled and used across jobs
   LintConfig:
-    name: Python Lint
+    name: Get Lint Config
     uses: uc-cdis/.github/.github/workflows/lint-create-config.yaml@feat/lint
 
   # (optional) modify the linter configurations from above. You could omit this if you didn't need to do this
@@ -37,7 +37,7 @@ jobs:
     steps:
       - uses: actions/download-artifact@v3
         with:
-          # this is uploaded by the lint-create-config.yaml workflow 
+          # this is uploaded by the lint-create-config.yaml workflow
           name: linters-config
           path: .github/linters
 
