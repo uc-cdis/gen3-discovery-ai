@@ -30,6 +30,7 @@ jobs:
     steps:
     - name: Make dirs
       run: |
+        mkdir .github
         mkdir .github/linters
     - name: Create super linter config
       run: |
