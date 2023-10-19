@@ -9,7 +9,7 @@ Provides an API for querying about specific pre-configured topics.
 Queries will be augmented with relevant information from a 
 knowledge library for that topic. Augmented queries will then be sent 
 to a foundational large language model 
-for a response.
+for a response. 
 
 ## Details
 

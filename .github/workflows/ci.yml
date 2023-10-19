@@ -34,7 +34,7 @@ jobs:
     name: Customize Lint Config
     steps:
       # modify default isort to specify the module name for proper formatting
-      - run: echo "known_first_party=gen3discoveryai" >> linters/.isort.cfg
+      - run: echo "known_first_party=gen3discoveryai" >> .github/linters/.isort.cfg
 
   Lint:
     name: Python Lint
