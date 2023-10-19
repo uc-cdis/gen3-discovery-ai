@@ -1,9 +1,9 @@
-name: CI
-
 on:
   push:
   pull_request:
     types: [opened, reopened]
+
+name: CI (Security Scans, Unit Test, Lint, Image Build and Push)
 
 concurrency:
   group: '${{ github.workflow }} @ ${{ github.event.pull_request.head.label || github.head_ref || github.ref }}'
@@ -27,6 +27,9 @@ jobs:
   LintConfig:
     name: Python Lint
     uses: uc-cdis/.github/.github/workflows/lint-create-config.yaml@feat/lint
+
+  CustomizeLintConfig:
+    name: Customize Lint Config
     steps:
       # modify default isort to specify the module name for proper formatting
       - run: echo "known_first_party=gen3discoveryai" >> linters/.isort.cfg
