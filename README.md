@@ -170,7 +170,7 @@ git clone git@github.com:uc-cdis/.github.git ~/.gen3/.github
 known_first_party=gen3discoveryai
 ```
 
-Now run super linter:
+Now run Super Linter locally with docker:
 
 ```bash
 docker run --rm \
