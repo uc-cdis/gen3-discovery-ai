@@ -154,16 +154,20 @@ See how to set up with [Visual Studio Code](https://github.com/super-linter/supe
 
 And/or use Docker to run locally.
 
-First get the same linter config that Github is using.
+First get the same linter config that Github is using. It's 
+stored alongside our other global workflows and defaults in 
+our `.github` repo.
 
 ```bash
-git git@github.com:uc-cdis/.github.git
+git clone git@github.com:uc-cdis/.github.git ~/.gen3/.github
 ```
 
-Then move only the linter config to a user-global `.gen3` folder 
+#### Modifying the Linter configs
 
-```commandline
-cp -R .github/.github/linters ~/.gen3/linters
+#### Edit the `~/.gen3/linters/.isort.cfg` 
+
+```env
+known_first_party=gen3discoveryai
 ```
 
 Now run super linter:
@@ -171,7 +175,8 @@ Now run super linter:
 ```bash
 docker run --rm \
     -e RUN_LOCAL=true \
-    --env-file "$HOME/.gen3/linters/super-linter.env" \
-    -v "$HOME/.gen3/linters":"/tmp/lint/.github/linters" -v "$PWD":/tmp/lint \
+    --env-file "$HOME/.gen3/.github/.github/linters/super-linter.env" \
+    -v "$HOME/.cache/pypoetry/virtualenvs":"/home/runner/.cache/pypoetry/virtualenvs" \
+    -v "$HOME/.gen3/.github/.github/linters":"/tmp/lint/.github/linters" -v "$PWD":/tmp/lint \
     ghcr.io/super-linter/super-linter:slim-v5
 ```
