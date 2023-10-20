@@ -335,7 +335,7 @@ def test_ask_too_many_requests(has_user_exceeded_limits, endpoint, client, monke
     previous_config = config.DEBUG_SKIP_AUTH
     monkeypatch.setattr(config, "DEBUG_SKIP_AUTH", True)
 
-    has_user_exceeded_limits = True
+    has_user_exceeded_limits.return_value = True
 
     # call endpoint
     endpoint_string = f"{endpoint}"

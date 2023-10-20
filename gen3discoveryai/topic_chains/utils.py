@@ -22,7 +22,7 @@ def get_from_cfg_metadata(
     """
     try:
         configured_value = type_(metadata.get(field, default))
-    except (TypeError, ValueError) as exc:
+    except (TypeError, ValueError):
         configured_value = default
         logging.error(
             f"invalid configuration: "

@@ -98,11 +98,11 @@ DEFAULT_SYSTEM_PROMPT = config(
 #   )
 #
 
-# NOTE: when changing the `num_similar_docs_to_find` metadata you need to consider the token limits of the model you're using
-#       and potentially adjust the token size of the split documents in the vectorstore. This is tuned right now for
-#       4 documents around 1000 tokens to be sent alongside a max 97 token query (to hit the max tokens for gpt-3.5-turbo
-#       of 4097). So if you want to adjust this metadata, you need to consider adjusting them in tandem (e.g. you can't
-#       just bump the num_similar_docs_to_find to 10).
+# NOTE: when changing the `num_similar_docs_to_find` metadata you need to consider the token limits of the model you're
+# using and potentially adjust the token size of the split documents in the vectorstore. This is tuned right now for
+# 4 documents around 1000 tokens to be sent alongside a max 97 token query (to hit the max tokens for
+# gpt-3.5-turbo of 4097). So if you want to adjust this metadata, you need to consider adjusting them in tandem
+# (e.g. you can't just bump the num_similar_docs_to_find to 10).
 DEFAULT_RAW_METADATA = config(
     "DEFAULT_RAW_METADATA",
     cast=str,
@@ -144,6 +144,7 @@ for topic in TOPICS.split(","):
             f"Ensure that it's a comma-separated list of entries where each "
             "entry is a `{name}:{value}` with the colon."
         )
+        logging.debug(f"exc: {exc}")
         raise
 
     globals()[f"{topic.upper()}_METADATA"] = metadata

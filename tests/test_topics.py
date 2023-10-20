@@ -8,7 +8,7 @@ from gen3discoveryai.factory import Factory
 
 @pytest.mark.parametrize("endpoint", ["/topics", "/topics/"])
 @patch("gen3discoveryai.routes.authorize_request")
-def test_topics_list_all(mock_authorize_request, endpoint, client):
+def test_topics_list_all(_, endpoint, client):
     """
     Test listing all topics.
     """
@@ -68,9 +68,7 @@ def test_topics_unauthorized(arborist, endpoint, client):
 
 @pytest.mark.parametrize("endpoint", ["/topics/bdc", "/topics/bdc/"])
 @patch("gen3discoveryai.routes.authorize_request")
-def test_topics_specific_topic_with_configured_overrides(
-    mock_authorize_request, endpoint, client
-):
+def test_topics_specific_topic_with_configured_overrides(_, endpoint, client):
     """
     Test accessing a specific topic that has been configured with overrides to default configuration
     """
@@ -106,7 +104,7 @@ def test_topics_specific_topic_with_configured_overrides(
 
 @pytest.mark.parametrize("endpoint", ["/topics/usedefault", "/topics/usedefault/"])
 @patch("gen3discoveryai.routes.authorize_request")
-def test_topics_specific_topic_with_defaults(mock_authorize_request, endpoint, client):
+def test_topics_specific_topic_with_defaults(_, endpoint, client):
     """
     Test accessing a specific topic that has NOT been configured with overrides. So default configuration should exist
     """
@@ -125,7 +123,7 @@ def test_topics_specific_topic_with_defaults(mock_authorize_request, endpoint, c
     "endpoint", ["/topics/non_existent_topic", "/topics/non_existent_topic/"]
 )
 @patch("gen3discoveryai.routes.authorize_request")
-def test_topics_specific_topic_doesnt_exist(mock_authorize_request, endpoint, client):
+def test_topics_specific_topic_doesnt_exist(_, endpoint, client):
     """
     Test accessing a non-existent topic.
     """
@@ -139,7 +137,11 @@ def test_topic_chain_factory():
     Test that factory class can register classes and you can retrieve them
     """
 
-    class TestClassA(object):
+    class TestClassA:
+        """
+        Test class
+        """
+
         def __init__(self, some_arg):
             self.some_arg = some_arg
 
@@ -157,7 +159,11 @@ def test_topic_chain_factory_doesnt_exist():
     Test that factory class can register classes and you can retrieve them
     """
 
-    class TestClassA(object):
+    class TestClassA:
+        """
+        Test class
+        """
+
         def __init__(self, some_arg):
             self.some_arg = some_arg
 

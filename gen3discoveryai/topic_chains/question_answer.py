@@ -8,7 +8,6 @@ The overall RAG process is the following:
 4. Augment user query with relevant information from the knowledge library
    based on the previous relevancy search
 5. Send augmented prompt to the foundational model
-
 """
 from __future__ import annotations
 
