@@ -2,9 +2,7 @@ from gen3.auth import Gen3Auth
 from gen3.tools.metadata.discovery import output_expanded_discovery_metadata
 from gen3.utils import get_or_create_event_loop_for_thread
 from langchain.document_loaders.csv_loader import CSVLoader
-from langchain.embeddings.openai import OpenAIEmbeddings
-from langchain.text_splitter import CharacterTextSplitter, TokenTextSplitter
-from langchain.vectorstores import Chroma
+from langchain.text_splitter import TokenTextSplitter
 
 from gen3discoveryai.topic_chains.question_answer import TopicChainQuestionAnswerRAG
 

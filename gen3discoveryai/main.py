@@ -43,7 +43,7 @@ def _override_generated_openapi_spec():
     try:
         # TODO make sure Dockerfile puts this in the right spot
         openapi_filepath = os.path.abspath("./docs/openapi.yaml")
-        with open(openapi_filepath, "r") as yaml_in:
+        with open(openapi_filepath, "r", encoding="utf-8") as yaml_in:
             json_data = yaml.safe_load(yaml_in)
     except FileNotFoundError:
         logging.warning(
@@ -54,7 +54,7 @@ def _override_generated_openapi_spec():
 
 
 @asynccontextmanager
-async def lifespan(app: fastapi.FastAPI):
+async def lifespan(fastapi_app: fastapi.FastAPI):
     """
     Parse the configuration, setup and instantiate necessary classes.
 
@@ -64,7 +64,7 @@ async def lifespan(app: fastapi.FastAPI):
     https://fastapi.tiangolo.com/advanced/events/#lifespan
 
     Args:
-        app (fastapi.FastAPI): The FastAPI app object
+        fastapi_app (fastapi.FastAPI): The FastAPI app object
     """
     chain_factory = Factory()
     chain_factory.register(

@@ -1,7 +1,7 @@
 from typing import Any
 
 
-class Factory(object):
+class Factory:
     """
     Simple object-oriented factory to register classes and
     get instances based on a string name input.

@@ -13,7 +13,7 @@ arborist = ArboristClient()
 
 async def authorize_request(
     authz_access_method: str = "access",
-    authz_resources: list[str] = ["/gen3_discovery_ai"],
+    authz_resources: list[str] = None,
     token: HTTPAuthorizationCredentials = None,
     request: Request = None,
 ):
@@ -34,6 +34,8 @@ async def authorize_request(
         If `ALLOW_ANONYMOUS_ACCESS` is enabled, authorization check is bypassed. If `DEBUG_SKIP_AUTH` is enabled
         and no token is provided, the check is also bypassed.
     """
+    authz_resources = authz_resources or ["/gen3_discovery_ai"]
+
     if config.ALLOW_ANONYMOUS_ACCESS:
         logging.debug(
             "ALLOW_ANONYMOUS_ACCESS mode is on, BYPASSING authorization check"
@@ -158,8 +160,8 @@ async def _get_token_claims(
         # NOTE: token can be None if no Authorization header was provided, we expect
         #       this to cause a downstream exception since it is invalid
         token_claims = await access_token("user", "openid", purpose="access")(token)
-    except Exception as e:
-        logging.error(e.detail if hasattr(e, "detail") else e, exc_info=True)
+    except Exception as exc:
+        logging.error(exc.detail if hasattr(exc, "detail") else exc, exc_info=True)
         raise HTTPException(
             HTTP_401_UNAUTHENTICATED,
             "Could not verify, parse, and/or validate scope from provided access token.",
