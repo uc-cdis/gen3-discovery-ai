@@ -28,29 +28,31 @@ jobs:
   LintConfig:
     name: Get Lint Config
     uses: uc-cdis/.github/.github/workflows/lint-create-config.yaml@feat/lint
+    with:
+      python-module-path: "/gen3discoveryai"
 
-  # (optional) modify the linter configurations from above. You could omit this if you didn't need to do this
-  CustomizeLintConfig:
-    runs-on: ubuntu-latest
-    name: Customize Lint Config
-    needs: [LintConfig]
-    steps:
-      - uses: actions/download-artifact@v3
-        with:
-          # this is uploaded by the lint-create-config.yaml workflow
-          name: linters-config
-          path: .github/linters
-
-      # modify default isort to specify the module name for proper formatting
-      - run: echo "known_first_party=gen3discoveryai" >> .github/linters/.isort.cfg
-
-      # now we need to re-upload the artifacts with the changes
-      - uses: actions/upload-artifact@v3
-        with:
-          name: linters-config
-          path: |
-            .github/linters/
-          if-no-files-found: error
+#  # (optional) modify the linter configurations from above. You could omit this if you didn't need to do this
+#  CustomizeLintConfig:
+#    runs-on: ubuntu-latest
+#    name: Customize Lint Config
+#    needs: [LintConfig]
+#    steps:
+#      - uses: actions/download-artifact@v3
+#        with:
+#          # this is uploaded by the lint-create-config.yaml workflow
+#          name: linters-config
+#          path: .github/linters
+#
+#      # modify default isort to specify the module name for proper formatting
+#      - run: echo "known_first_party=gen3discoveryai" >> .github/linters/.isort.cfg
+#
+#      # now we need to re-upload the artifacts with the changes
+#      - uses: actions/upload-artifact@v3
+#        with:
+#          name: linters-config
+#          path: |
+#            .github/linters/
+#          if-no-files-found: error
 
   Lint:
     name: Python Lint
