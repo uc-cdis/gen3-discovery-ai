@@ -195,7 +195,7 @@ docker run --rm \
 
 #### What the heck was all that setup?
 
-Basically you just replicated what Github Actions is doing, except locally.
+Basically you just replicated what GitHub Actions is doing, except locally.
 
 The steps you took were making
 sure that the linter configurations are mounted so that the local docker run 
