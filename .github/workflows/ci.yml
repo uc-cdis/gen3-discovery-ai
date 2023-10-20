@@ -29,7 +29,7 @@ jobs:
     name: Get Lint Config
     uses: uc-cdis/.github/.github/workflows/lint-create-config.yaml@feat/lint
     with:
-      python-module-path: "/gen3discoveryai"
+      python-module-path: "$HOME/.cache/pypoetry/virtualenvs/"
 
 #  # (optional) modify the linter configurations from above. You could omit this if you didn't need to do this
 #  CustomizeLintConfig:
