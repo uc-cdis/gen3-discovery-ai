@@ -152,11 +152,33 @@ you don't integrate those with your editor/IDE:
 
 See how to set up with [Visual Studio Code](https://github.com/super-linter/super-linter/blob/main/README.md#codespaces-and-visual-studio-code).
 
-And/or use Docker to run locally:
+And/or use Docker to run locally.
+
+First get the same linter config that Github is using.
+
+```bash
+git git@github.com:uc-cdis/.github.git
+```
+
+Then move only the linter config to a user-global `.gen3` folder 
+
+```commandline
+cp -R .github/.github/linters ~/.gen3/linters
+```
+
+Now run super linter:
 
 ```bash
 docker run --rm \
     -e RUN_LOCAL=true \
-    --env-file ".github/super-linter.env" \
-    -v "$PWD":/tmp/lint ghcr.io/super-linter/super-linter:slim-v5
+    --env-file "$HOME/.gen3/linters/super-linter.env" \
+    -v "$HOME/.gen3/linters":"/tmp/lint/.github/linters" -v "$PWD":/tmp/lint \
+    ghcr.io/super-linter/super-linter:slim-v5
 ```
+
+- We're not really API first, but we're trying to get there
+- Might be worth emphasizing our involvement in global standardization
+  groups like GA4GH, where we pushed our GUID solution to heavily influence
+  GA4GH's DRS standard
+- Our policy engine support both ABAC and RBAC authorization architectures
+- May want to mention that a grouping of deployments of Gen3 have been Fedramp-moderate certified
