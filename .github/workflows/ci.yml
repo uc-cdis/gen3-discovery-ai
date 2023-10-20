@@ -37,7 +37,7 @@ jobs:
     steps:
       - uses: actions/download-artifact@v3
         with:
-          # this is uploaded by the lint-create-config.yaml workflow 
+          # this is uploaded by the lint-create-config.yaml workflow
           name: linters-config
           path: .github/linters
 
