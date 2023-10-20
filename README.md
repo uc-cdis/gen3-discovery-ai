@@ -188,9 +188,21 @@ Now run Super Linter locally with Docker:
 docker run --rm \
     -e RUN_LOCAL=true \
     --env-file "$HOME/.gen3/.github/.github/linters/super-linter.env" \
-    -v "$HOME/.cache/pypoetry/virtualenvs":"/home/runner/.cache/pypoetry/virtualenvs" \
+    -v "$HOME/.cache/pypoetry/virtualenvs":"$HOME/.cache/pypoetry/virtualenvs" \
     -v "$HOME/.gen3/.github/.github/linters":"/tmp/lint/.github/linters" -v "$PWD":/tmp/lint \
     ghcr.io/super-linter/super-linter:slim-v5
 ```
 
-This whole setup basically replicates what Github Actions is doing locally.
+#### What the heck was all that setup?
+
+Basically you just replicated what Github Actions is doing, except locally.
+
+The steps you took were making
+sure that the linter configurations are mounted so that the local docker run 
+of Super Linter uses those.
+
+Some linters require knowing the module name and
+location of imported packages (e.g. dependencies). This is done for pylint by using that
+utility to update pylint config with your virtual env path to the installed packages
+and then making that available (mounting it as a virtual directory) to local docker
+run of Super Linter.
