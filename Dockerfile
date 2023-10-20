@@ -45,7 +45,7 @@ USER root
 
 EXPOSE 80
 
-RUN pip3 install --upgrade poetry
+RUN pip3 install --no-cache-dir --upgrade poetry
 
 RUN yum update -y && yum install -y --setopt install_weak_deps=0 \
     postgresql-devel shadow-utils\
