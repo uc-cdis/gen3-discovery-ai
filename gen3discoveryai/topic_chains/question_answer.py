@@ -1,5 +1,5 @@
 """
-The overall RAG process is the following: 
+The overall RAG process is the following:
 
 1. Retrieve embeddings from knowledge library
 2. Create embedding from user query

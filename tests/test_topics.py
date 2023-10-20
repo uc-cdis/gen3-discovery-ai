@@ -150,7 +150,7 @@ def test_topic_chain_factory():
 
     test_class = factory.get("TestClassA", some_arg="foobar")
 
-    assert type(test_class) == TestClassA
+    assert isinstance(test_class) == TestClassA
     assert test_class.some_arg == "foobar"
 
 

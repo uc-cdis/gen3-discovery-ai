@@ -22,6 +22,9 @@ from gen3discoveryai.auth import _get_token
     ],
 )
 def test_debug_skip_auth_gets(monkeypatch, client, endpoint):
+    """
+    Test that DEBUG_SKIP_AUTH configuration allows access to endpoints without auth
+    """
     previous_config = config.DEBUG_SKIP_AUTH
 
     monkeypatch.setattr(config, "DEBUG_SKIP_AUTH", True)

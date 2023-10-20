@@ -8,7 +8,7 @@ from gen3discoveryai.main import _override_generated_openapi_spec
 from gen3discoveryai.topic_chains.utils import get_from_cfg_metadata
 
 
-def test_bad_config_metadata(client):
+def test_bad_config_metadata():
     """
     Test when invalid config is provided, an exception is raised
     """

@@ -174,6 +174,9 @@ def test_ask_invalid_token(
 @pytest.mark.parametrize("endpoint", ["/ask", "/ask/"])
 @pytest.mark.parametrize("topic", ["invalid", "!@(#*&$^&", "sys.exit(1)"])
 def test_ask_invalid_topic(topic, endpoint, client, monkeypatch):
+    """
+    Test ask with invalid topics and ensure error
+    """
     previous_config = config.DEBUG_SKIP_AUTH
     monkeypatch.setattr(config, "DEBUG_SKIP_AUTH", True)
 
@@ -203,6 +206,9 @@ def test_ask_invalid_topic(topic, endpoint, client, monkeypatch):
 @pytest.mark.parametrize("endpoint", ["/ask", "/ask/"])
 @patch("gen3discoveryai.routes.config")
 def test_ask_invalid_response_from_chain(mock_config, endpoint, client, monkeypatch):
+    """
+    Test that when the chain returns an error, the ask endpoint returns service unavailable
+    """
     previous_config = config.DEBUG_SKIP_AUTH
     monkeypatch.setattr(config, "DEBUG_SKIP_AUTH", True)
 
@@ -242,6 +248,10 @@ def test_ask_invalid_response_from_chain(mock_config, endpoint, client, monkeypa
     ],
 )
 def test_invalid_post_body(post_body, endpoint, client, monkeypatch):
+    """
+    Test when ask is sent with a body that doesn't appropriately contain
+    the `query`, we get an error
+    """
     previous_config = config.DEBUG_SKIP_AUTH
     monkeypatch.setattr(config, "DEBUG_SKIP_AUTH", True)
 

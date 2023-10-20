@@ -5,7 +5,7 @@ import pytest
 
 @pytest.mark.parametrize("endpoint", ["/_version", "/_version/"])
 @patch("gen3discoveryai.routes.authorize_request")
-def test_version(mock_authorize_request, endpoint, client):
+def test_version(_, endpoint, client):
     """
     Test that the version endpoint returns a non-empty version
     """
@@ -42,7 +42,7 @@ def test_version_unauthorized(arborist, endpoint, client):
 
 @pytest.mark.parametrize("endpoint", ["/_status", "/_status/"])
 @patch("gen3discoveryai.routes.authorize_request")
-def test_status(mock_authorize_request, endpoint, client):
+def test_status(_, endpoint, client):
     """
     Test that the status endpoint returns a non-empty status
     """

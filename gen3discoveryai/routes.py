@@ -71,7 +71,7 @@ async def ask_route(
         logging.debug("has_user_exceeded_limits is True")
         raise HTTPException(
             HTTP_429_TOO_MANY_REQUESTS,
-            f"You've reached a limit for your user. Please try again later.",
+            "You've reached a limit for your user. Please try again later.",
         )
 
     start_time = time.time()
@@ -82,12 +82,12 @@ async def ask_route(
         )
     except openai.error.RateLimitError:
         logging.debug("openai.error.RateLimitError")
-        raise HTTPException(HTTP_429_TOO_MANY_REQUESTS, f"Please try again later.")
+        raise HTTPException(HTTP_429_TOO_MANY_REQUESTS, "Please try again later.")
     except openai.error.InvalidRequestError:
         logging.debug("openai.error.InvalidRequestError")
         raise HTTPException(
             HTTP_400_BAD_REQUEST,
-            f"Invalid request, you may have too much text in your query.",
+            "Invalid request, you may have too much text in your query.",
         )
     except Exception as exc:
         logging.error(
@@ -95,7 +95,7 @@ async def ask_route(
         )
         raise HTTPException(
             HTTP_503_SERVICE_UNAVAILABLE,
-            f"Service unavailable.",
+            "Service unavailable.",
         )
 
     logging.info(f"user_query={query}")
