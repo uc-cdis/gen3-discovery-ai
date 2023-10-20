@@ -170,6 +170,18 @@ git clone git@github.com:uc-cdis/.github.git ~/.gen3/.github
 known_first_party=gen3discoveryai
 ```
 
+#### Edit the `~/.gen3/linters/.python-lint` 
+
+There's a utility to do this. Make sure you're in your virtual env
+or the root of this repo.
+
+> Ensure you've run `poetry install` before this so the virtual env exists
+
+```commandline
+cd repos/gen3-discovery-ai
+bash ~/.gen3/linters/update_pylint_config.sh
+```
+
 Now run Super Linter locally with Docker:
 
 ```bash
@@ -180,3 +192,5 @@ docker run --rm \
     -v "$HOME/.gen3/.github/.github/linters":"/tmp/lint/.github/linters" -v "$PWD":/tmp/lint \
     ghcr.io/super-linter/super-linter:slim-v5
 ```
+
+This whole setup basically replicates what Github Actions is doing locally.
