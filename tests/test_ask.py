@@ -1,6 +1,7 @@
 from unittest.mock import AsyncMock, MagicMock, patch
 from urllib.parse import urlencode
 
+import langchain.schema
 import pytest
 from fastapi import HTTPException
 from fastapi.security.http import HTTPAuthorizationCredentials
@@ -54,9 +55,13 @@ def test_ask(
     access_token.return_value = AsyncMock(return_value={"sub": 0})
 
     topic_chain_response = "yes"
+
+    test_a = langchain.schema.Document(page_content="fooA", metadata={"row": 120, "source": "phs000001.v1.p1.c1"})
+    test_b = langchain.schema.Document(page_content="barB", metadata={"row": 59, "source": "phs000002.v2.p2.c2"})
+
     source_documents = [
-        {"testA": "fooA", "test2A": "barA"},
-        {"testB": "fooB", "test2B": "barB"},
+        test_a,
+        test_b,
     ]
 
     mock_topic_chain = MagicMock()
@@ -97,7 +102,12 @@ def test_ask(
         assert "documents" in response.json()
 
         assert response.json()["response"] == topic_chain_response
-        assert response.json()["documents"] == source_documents
+        assert response.json()["documents"]
+
+        for doc in response.json()["documents"]:
+            assert doc.get("page_content") in ["fooA", "barB"]
+            assert doc.get("metadata", {}).get("row") in [120, 59]
+            assert doc.get("metadata", {}).get("source") in ["phs000001.v1.p1.c1", "phs000002.v2.p2.c2"]
     else:
         # if no user query, except an error
         assert response.status_code == 400

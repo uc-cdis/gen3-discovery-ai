@@ -103,9 +103,17 @@ async def ask_route(
     end_time = time.time()
     logging.info(f"ask_time={end_time - start_time}")
 
+    documents = []
+    for doc in raw_response.get("source_documents"):
+        parsed_doc = {
+            "page_content": doc.page_content,
+            "metadata": doc.metadata
+        }
+        documents.append(parsed_doc)
+
     response = {
         "response": raw_response.get("result"),
-        "documents": raw_response.get("source_documents"),
+        "documents": documents,
     }
 
     # TODO
