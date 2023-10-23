@@ -9,7 +9,8 @@ def test_version(_, endpoint, client):
     """
     Test that the version endpoint returns a non-empty version
     """
-    response = client.get(endpoint).raise_for_status()
+    response = client.get(endpoint)
+    response.raise_for_status()
     assert response
     assert response.json().get("version")
 
@@ -46,7 +47,8 @@ def test_status(_, endpoint, client):
     """
     Test that the status endpoint returns a non-empty status
     """
-    response = client.get(endpoint).raise_for_status()
+    response = client.get(endpoint)
+    response.raise_for_status()
     assert response
     assert response.json().get("status")
 

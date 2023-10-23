@@ -134,7 +134,7 @@ def test_topics_specific_topic_doesnt_exist(_, endpoint, client):
 
 def test_topic_chain_factory():
     """
-    Test that factory class can register classes and you can retrieve them
+    Test that factory class can register classes and retrieve them
     """
 
     class TestClassA:
@@ -150,13 +150,13 @@ def test_topic_chain_factory():
 
     test_class = factory.get("TestClassA", some_arg="foobar")
 
-    assert isinstance(test_class) == TestClassA
+    assert isinstance(test_class, TestClassA)
     assert test_class.some_arg == "foobar"
 
 
 def test_topic_chain_factory_doesnt_exist():
     """
-    Test that factory class can register classes and you can retrieve them
+    Test that factory class can register classes and retrieve them
     """
 
     class TestClassA:

@@ -212,7 +212,10 @@ async def get_version(request: Request) -> dict:
         authz_access_method="read",
         authz_resources=["/gen3_discovery_ai/service_info/version"],
     )
-    return {"version": version("gen3discoveryai")}
+
+    service_version = version("gen3discoveryai")
+
+    return {"version": service_version}
 
 
 @root_router.get("/_status/")
