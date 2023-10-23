@@ -105,10 +105,7 @@ async def ask_route(
 
     documents = []
     for doc in raw_response.get("source_documents"):
-        parsed_doc = {
-            "page_content": doc.page_content,
-            "metadata": doc.metadata
-        }
+        parsed_doc = {"page_content": doc.page_content, "metadata": doc.metadata}
         documents.append(parsed_doc)
 
     response = {

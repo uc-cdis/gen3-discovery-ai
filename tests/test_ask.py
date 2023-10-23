@@ -56,8 +56,12 @@ def test_ask(
 
     topic_chain_response = "yes"
 
-    test_a = langchain.schema.Document(page_content="fooA", metadata={"row": 120, "source": "phs000001.v1.p1.c1"})
-    test_b = langchain.schema.Document(page_content="barB", metadata={"row": 59, "source": "phs000002.v2.p2.c2"})
+    test_a = langchain.schema.Document(
+        page_content="fooA", metadata={"row": 120, "source": "phs000001.v1.p1.c1"}
+    )
+    test_b = langchain.schema.Document(
+        page_content="barB", metadata={"row": 59, "source": "phs000002.v2.p2.c2"}
+    )
 
     source_documents = [
         test_a,
@@ -107,7 +111,10 @@ def test_ask(
         for doc in response.json()["documents"]:
             assert doc.get("page_content") in ["fooA", "barB"]
             assert doc.get("metadata", {}).get("row") in [120, 59]
-            assert doc.get("metadata", {}).get("source") in ["phs000001.v1.p1.c1", "phs000002.v2.p2.c2"]
+            assert doc.get("metadata", {}).get("source") in [
+                "phs000001.v1.p1.c1",
+                "phs000002.v2.p2.c2",
+            ]
     else:
         # if no user query, except an error
         assert response.status_code == 400
