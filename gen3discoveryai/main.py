@@ -66,6 +66,9 @@ async def lifespan(fastapi_app: fastapi.FastAPI):
     Args:
         fastapi_app (fastapi.FastAPI): The FastAPI app object
     """
+    if not fastapi_app:
+        logging.debug("No app context passed to lifespan, setup may fail")
+
     chain_factory = Factory()
     chain_factory.register(
         TopicChainQuestionAnswerRAG.NAME,

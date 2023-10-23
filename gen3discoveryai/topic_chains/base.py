@@ -32,7 +32,7 @@ class TopicChain(ABC):
         with the provided documents.
 
         Args:
-            documents (dict{str:langchain.schema.document.Document}): IDs to Documents to store in the knowledge store
+            documents (list[langchain.schema.document.Document]): IDs to Documents to store in the knowledge store
         """
         raise NotImplementedError()
 

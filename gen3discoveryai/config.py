@@ -98,6 +98,9 @@ DEFAULT_SYSTEM_PROMPT = config(
 #   )
 #
 
+# this gets populated later by parsing the DEFAULT_RAW_METADATA
+DEFAULT_METADATA = {}
+
 # NOTE: when changing the `num_similar_docs_to_find` metadata you need to consider the token limits of the model you're
 # using and potentially adjust the token size of the split documents in the vectorstore. This is tuned right now for
 # 4 documents around 1000 tokens to be sent alongside a max 97 token query (to hit the max tokens for
@@ -114,7 +117,7 @@ DEFAULT_DESCRIPTION = config(
     default="",
 )
 
-# set global var explicitly here so you can still do config.THING elsewhere
+# set global var explicitly here, so you can still do config.THING elsewhere
 for topic in TOPICS.split(","):
     globals()[f"{topic.upper()}_CHAIN_NAME"] = config(
         f"{topic.upper()}_CHAIN_NAME",
@@ -130,12 +133,12 @@ for topic in TOPICS.split(","):
 
     metadata = {}
     try:
-        raw_metadata = (
+        RAW_METADATA = (
             config(f"{topic.upper()}_METADATA", cast=str, default=DEFAULT_RAW_METADATA)
             or ""
         )
-        logging.debug(f"Metadata for: {topic.upper()}_METADATA: {raw_metadata}")
-        for metadata_entry in [item for item in raw_metadata.split(",") if item]:
+        logging.debug(f"Metadata for: {topic.upper()}_METADATA: {RAW_METADATA}")
+        for metadata_entry in [item for item in RAW_METADATA.split(",") if item]:
             name, value = metadata_entry.split(":")
             metadata[name] = value
     except Exception as exc:
@@ -148,3 +151,6 @@ for topic in TOPICS.split(","):
         raise
 
     globals()[f"{topic.upper()}_METADATA"] = metadata
+
+# Note: this gets populated in main
+topics = {}

@@ -121,9 +121,7 @@ class TopicChainQuestionAnswerRAG(TopicChain):
             return_source_documents=True,
         )
 
-        super(TopicChainQuestionAnswerRAG, self).__init__(
-            name=self.NAME, topic=topic, chain=retreival_qa_chain
-        )
+        super().__init__(name=self.NAME, topic=topic, chain=retreival_qa_chain)
 
     def store_knowledge(
         self, documents: list[langchain.schema.document.Document]

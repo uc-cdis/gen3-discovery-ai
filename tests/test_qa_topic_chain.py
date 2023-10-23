@@ -62,9 +62,7 @@ def test_qa_topic_chain_run():
 @pytest.mark.parametrize("does_chroma_collection_exist", [True, False])
 @patch("gen3discoveryai.topic_chains.question_answer.RetrievalQA")
 @patch("gen3discoveryai.topic_chains.question_answer.Chroma")
-def test_qa_topic_chain_store_knowledge(
-    chroma, retreival_qa_chain, does_chroma_collection_exist
-):
+def test_qa_topic_chain_store_knowledge(chroma, _, does_chroma_collection_exist):
     """
     Test storing documents into the vectorstore
     """

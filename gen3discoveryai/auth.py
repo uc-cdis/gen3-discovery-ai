@@ -112,6 +112,8 @@ async def has_user_exceeded_limits(
     """
     user_limit_exceeded = False
 
+    token = await _get_token(token, request)
+
     # TODO logic to determine if it's been exceeded
     #      make sure you try to handle the case where ALLOW_ANONYMOUS_ACCESS is on
 
@@ -165,7 +167,7 @@ async def _get_token_claims(
         raise HTTPException(
             HTTP_401_UNAUTHENTICATED,
             "Could not verify, parse, and/or validate scope from provided access token.",
-        )
+        ) from exc
 
     return token_claims
 

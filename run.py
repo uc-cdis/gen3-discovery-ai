@@ -1,7 +1,7 @@
 #!/usr/bin/sudo python
 """
 Usage:
-- Run app: python run.py
+- Run app: poetry run python run.py
 """
 import uvicorn
 

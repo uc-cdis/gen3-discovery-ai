@@ -1,3 +1,8 @@
+#!/usr/bin/sudo python
+"""
+Usage:
+- Run app: poetry run python run.py
+"""
 from gen3.auth import Gen3Auth
 from gen3.tools.metadata.discovery import output_expanded_discovery_metadata
 from gen3.utils import get_or_create_event_loop_for_thread
@@ -8,6 +13,12 @@ from gen3discoveryai.topic_chains.question_answer import TopicChainQuestionAnswe
 
 
 def main():
+    """
+    Get all discovery metadata and load into knowledge library based on GUID.
+
+    This relies on using the commons from whatever API Key you have configured. See the Gen3 SDK's `Gen3Auth` class
+    for info.
+    """
     auth = Gen3Auth()
     loop = get_or_create_event_loop_for_thread()
     output_file = loop.run_until_complete(
@@ -33,7 +44,7 @@ def main():
     documents = text_splitter.split_documents(data)
 
     topic_chain = TopicChainQuestionAnswerRAG(
-        topic="bdc",
+        topic="default",
         metadata={"model_name": "gpt-3.5-turbo", "model_temperature": 0.33},
     )
 

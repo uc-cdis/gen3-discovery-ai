@@ -42,6 +42,9 @@ def test_ask(
     client,
     monkeypatch,
 ):
+    """
+    Test the ask endpoint given variable valid input from the user.
+    """
     # setup
     if skip_auth:
         previous_config = config.DEBUG_SKIP_AUTH
@@ -153,6 +156,9 @@ def test_ask_invalid_token(
     get_token_returns_none,
     client,
 ):
+    """
+    Test the ask endpoint when provided an invalid token.
+    """
     # setup
     headers = {"Authorization": "Bearer a.valid.token"}
     arborist.auth_request.return_value = True

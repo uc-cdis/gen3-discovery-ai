@@ -67,6 +67,8 @@ async def ask_route(
         conversation = await _get_conversation_for_user(conversation_id, user_id)
         # TODO handle conversation
 
+    logging.debug(f"conversation: {conversation}")
+
     if await has_user_exceeded_limits(request=request):
         logging.debug("has_user_exceeded_limits is True")
         raise HTTPException(
@@ -80,15 +82,17 @@ async def ask_route(
         raw_response = topic_config["topic_chain"].run(
             query=query, callbacks=[CustomCallbackHandlerForLogging()]
         )
-    except openai.error.RateLimitError:
+    except openai.error.RateLimitError as exc:
         logging.debug("openai.error.RateLimitError")
-        raise HTTPException(HTTP_429_TOO_MANY_REQUESTS, "Please try again later.")
-    except openai.error.InvalidRequestError:
+        raise HTTPException(
+            HTTP_429_TOO_MANY_REQUESTS, "Please try again later."
+        ) from exc
+    except openai.error.InvalidRequestError as exc:
         logging.debug("openai.error.InvalidRequestError")
         raise HTTPException(
             HTTP_400_BAD_REQUEST,
             "Invalid request, you may have too much text in your query.",
-        )
+        ) from exc
     except Exception as exc:
         logging.error(
             f"Returning service unavailable. Got unexpected error from chain: {exc}"
@@ -96,7 +100,7 @@ async def ask_route(
         raise HTTPException(
             HTTP_503_SERVICE_UNAVAILABLE,
             "Service unavailable.",
-        )
+        ) from exc
 
     logging.info(f"user_query={query}")
 
@@ -250,13 +254,15 @@ async def _get_conversation_id() -> str:
 
 async def _store_conversation(user_id, conversation_id) -> None:
     # TODO
-    pass
+    logging.debug(f"storing conversation {conversation_id} for {user_id}")
 
 
 async def _get_conversation_for_user(conversation_id, user_id) -> Any:
     # TODO conversation for now
     #      should actually retrieve something based on conversation_id
     #      to see what user's conversation ID it is
+    logging.debug(f"getting conversation {conversation_id} for {user_id}")
+
     conversation = {"user_id": user_id}
 
     # you can't continue another user's conversation
