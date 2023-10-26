@@ -1,7 +1,7 @@
 # To build:
 #   docker build -t gen3discoveryai:latest .
 # To run:
-#   docker run --name gen3discoveryai -p 8089:80 gen3discoveryai:latest
+#   docker run --name gen3discoveryai -p 8089:8089 gen3discoveryai:latest
 # To exec into a bash shell in running container:
 #   docker exec -it gen3discoveryai /bin/bash
 # To kill running container:

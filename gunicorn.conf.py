@@ -41,10 +41,10 @@ class CDISLogger(gunicorn.glogging.Logger):
 logger_class = CDISLogger
 
 wsgi_app = "gen3discoveryai.main:app"
-bind = "0.0.0.0:80"
+bind = "0.0.0.0:8089"
 workers = 1
-# user = "appuser"
-# group = "appuser"
+user = "appuser"
+group = "appuser"
 
 # OpenAI API can take a while
 # default was `30`
