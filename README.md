@@ -1,7 +1,7 @@
 # Gen3 Discovery AI Service
 
 Information discovery using generative artificial intelligence (AI). This service allows for configuring multiple topics
-for users to send queries and get intelligent AI-generated responses.
+for users, so they can send queries and get intelligent AI-generated responses.
 
 ## Overview
 
@@ -9,18 +9,19 @@ Provides an API for querying about specific pre-configured topics.
 
 Most topics will augment queries with relevant information from a 
 knowledge library for that topic. Augmented queries will then be sent 
-to a foundational large language model for a response. 
+to a foundational large language model (LLM) for a response. 
 
 ## Details
 
-As of today, this is intended to support a [Retrieval Augmented Generation (RAG) architecture](https://arxiv.org/abs/2005.11401), where there is a
+This is intended to primarily support a [Retrieval Augmented Generation (RAG) architecture](https://arxiv.org/abs/2005.11401), where there is a
 knowledge library related to a topic.
 
 > The API itself is flexible per topic, so if a RAG architecture doesn't make sense, there are options to support others in the future.
 
 In RAG, upon receiving a query, additional information is retrieved from a knowledge library, relevancy compared to
-user query, and prompt to a foundational AI LLM model is augmented with the 
-additional context from the knowledge library (along with a system prompt).
+user query, and prompt to a foundational LLM model is augmented with the 
+additional context from the knowledge library (alongside a configured system prompt
+to guide the LLM on how it should interpret the context and response).
 
 ### Initial support
 
@@ -38,11 +39,11 @@ additional context from the knowledge library (along with a system prompt).
 ### Background
 
 Gen3 builds on other open source libraries, specifications, and tools when we can, and we tend to lean
-towards the best tools in the community and research space as it evolves (especially in 
+towards the best tools in the community or research space as it evolves (especially in 
 cases where we're on the bleeding edge).
 
 In the case of generative AI and LLMs,
-there is a lot of excellent work out there. We are building this on top of the
+there is a lot of excellent work out there. We are building this on the
 shoulders of giants for many of the knowledge libraries and foundational model 
 interactions. We're using `langchain`, `chromadb`, `OpenAI`, among others.
 
@@ -50,7 +51,7 @@ interactions. We're using `langchain`, `chromadb`, `OpenAI`, among others.
 
 ### Setup
 
-This all relies on our `TopicChainQuestionAnswerRAG` Topic Chain, which is the default as of now.
+This documented setup all relies on our `TopicChainQuestionAnswerRAG` Topic Chain, which is the default as of now.
 
 #### OpenAI Key
 
@@ -110,7 +111,7 @@ The topic configurations are flexible to support arbitrary new names `{{TOPIC NA
 
 #### Knowledge Library Population
 
-Store some data in the knowledge library. You can write your own script or modify the following to get all the public metadata from a Gen3 instance using the Discovery Metadata API.
+Now you need to store some data in the knowledge library. You can write your own script or modify the following to get all the public metadata from a Gen3 instance using the Discovery Metadata API.
 
 ```bash
 poetry run python ./bin/load_from_gen3_into_knowledge_store.py
@@ -118,7 +119,7 @@ poetry run python ./bin/load_from_gen3_into_knowledge_store.py
 
 The `TopicChain` class includes a `store_knowledge` method which expects a list of `langchain` documents. This is the default output of  `langchain.text_splitter.TokenTextSplitter`. Langchain has numerous document loaders that can be fed into the splitter already, so [check out the langchain documentation](https://python.langchain.com/docs/modules/data_connection/document_loaders).
 
-#### Running locally
+### Running locally
 
 Install and run service locally:
 
@@ -129,7 +130,7 @@ poetry run python run.py
 
 Hit the API:
 
-```commandline
+```bash
 curl --location 'http://0.0.0.0:8089/ask/' \
 --header 'Content-Type: application/json' \
 --header 'Accept: application/json' \
@@ -140,12 +141,14 @@ curl --location 'http://0.0.0.0:8089/ask/' \
 
 Ask for configured topics:
 
-```commandline
+```bash
 curl --location 'http://0.0.0.0:8089/topics/' \
 --header 'Accept: application/json'
 ```
 
 ## Authz
+
+Relies on Gen3 Framework Service's Policy Engine.
 
 - For `/topics` endpoints, requires `read` on `/gen3_discovery_ai/topics`
 - For `/ask` endpoint, requires `read` on `/gen3_discovery_ai/ask/{topic}`
@@ -166,6 +169,8 @@ See how to set up with [Visual Studio Code](https://github.com/super-linter/supe
 
 And/or use Docker to run locally.
 
+#### Run Super Linter Docker Locally
+
 First we need to get the same linter config that GitHub is using. It's 
 stored alongside our other global workflows and defaults in 
 our `.github` repo. Let's clone that and move to a local, central location in `~/.gen3/.github`:
@@ -176,7 +181,7 @@ git clone git@github.com:uc-cdis/.github.git ~/.gen3/.github
 
 #### Modifying the Linter configs
 
-Some linters require per-service/library configuration to properly format/parse. 
+Some linters require per-service/library configuration to properly format and parse. 
 
 #### Edit the `~/.gen3/linters/.isort.cfg` 
 
