@@ -31,11 +31,6 @@ RUN poetry config virtualenvs.in-project true \
 # copy source code ONLY after installing dependencies
 COPY . /$appname
 
-# install gen3discoveryai
-RUN poetry config virtualenvs.in-project true \
-    && poetry install -vv --no-dev --no-interaction \
-    && poetry show -v
-
 #Creating the runtime image
 FROM quay.io/cdis/amazonlinux:python3.9-master
 
