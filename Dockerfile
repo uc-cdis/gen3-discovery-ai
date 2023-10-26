@@ -21,7 +21,7 @@ RUN yum update -y && yum install -y --setopt install_weak_deps=0 \
 WORKDIR /$appname
 
 # copy ONLY poetry artifact, install the dependencies but not gen3discoveryai
-# this will make sure that the dependencies is cached
+# this will make sure that the dependencies are cached
 COPY poetry.lock pyproject.toml /$appname/
 COPY ./docs/openapi.yaml /$appname/docs/openapi.yaml
 RUN poetry config virtualenvs.in-project true \
@@ -30,6 +30,11 @@ RUN poetry config virtualenvs.in-project true \
 
 # copy source code ONLY after installing dependencies
 COPY . /$appname
+
+# install gen3discoveryai
+RUN poetry config virtualenvs.in-project true \
+    && poetry install -vv --no-dev --no-interaction \
+    && poetry show -v
 
 #Creating the runtime image
 FROM quay.io/cdis/amazonlinux:python3.9-master
