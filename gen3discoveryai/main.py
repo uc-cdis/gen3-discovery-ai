@@ -1,6 +1,7 @@
 import os
 from contextlib import asynccontextmanager
 from importlib.metadata import version
+import traceback
 
 import fastapi
 import yaml
@@ -119,8 +120,14 @@ async def lifespan(fastapi_app: fastapi.FastAPI):
 
         except Exception as exc:
             logging.error(
-                f"Unable to load `{topic}` configuration with: {topic_raw_cfg}. Exception: {exc}"
+                f"Unable to load `{topic}` configuration with: {topic_raw_cfg}. "
+                f"Exception: {exc}. Traceback: {traceback.format_exc()}"
             )
+
+            # we want to error early if this is the default topic, but if not, log the error and try to continue
+            if topic == "default":
+                raise
+
             continue
 
     yield
