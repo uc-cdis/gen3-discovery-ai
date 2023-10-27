@@ -136,7 +136,9 @@ class TopicChainQuestionAnswerRAG(TopicChain):
             documents (list[langchain.schema.document.Document]): documents to store in the knowledge store
         """
         try:
-            logging.debug("Deleting current knowledge store...")
+            logging.debug(
+                f"Deleting current knowledge store collection for {self.topic}..."
+            )
             self.vectorstore.delete_collection()
 
             self.vectorstore = Chroma(
@@ -154,11 +156,15 @@ class TopicChainQuestionAnswerRAG(TopicChain):
             # doesn't exist so just continue adding
             pass
 
-        logging.info("Recreating knowledge store from documents...")
+        logging.info(
+            f"Recreating knowledge store collection for {self.topic} from documents..."
+        )
         self.vectorstore.add_documents(documents)
 
         # force persist to disk
-        logging.info("Persisting knowledge store to disk...")
+        logging.info(
+            f"Persisting knowledge store collection for {self.topic} to disk..."
+        )
         self.vectorstore.persist()
 
     def run(self, query: str, *args, **kwargs):

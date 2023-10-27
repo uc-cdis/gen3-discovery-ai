@@ -134,10 +134,12 @@ for topic in TOPICS.split(","):
     metadata = {}
     try:
         RAW_METADATA = (
-            config(f"{topic.upper()}_METADATA", cast=str, default=DEFAULT_RAW_METADATA)
+            config(
+                f"{topic.upper()}_RAW_METADATA", cast=str, default=DEFAULT_RAW_METADATA
+            )
             or ""
         )
-        logging.debug(f"Metadata for: {topic.upper()}_METADATA: {RAW_METADATA}")
+        logging.debug(f"Metadata for: {topic.upper()}_RAW_METADATA: {RAW_METADATA}")
         for metadata_entry in [item for item in RAW_METADATA.split(",") if item]:
             name, value = metadata_entry.split(":")
             metadata[name] = value

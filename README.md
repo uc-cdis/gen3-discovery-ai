@@ -90,7 +90,7 @@ DEFAULT_DESCRIPTION=Ask about available datasets, powered by public dataset meta
 
 # Additional topic configurations
 ANOTHERTOPIC_DESCRIPTION=Ask about available datasets, powered by public dataset metadata like study descriptions
-ANOTHERTOPIC_METADATA=model_name:gpt-3.5-turbo,model_temperature:0.45,num_similar_docs_to_find:6,similarity_score_threshold:0.75
+ANOTHERTOPIC_RAW_METADATA=model_name:gpt-3.5-turbo,model_temperature:0.45,num_similar_docs_to_find:6,similarity_score_threshold:0.75
 ANOTHERTOPIC_SYSTEM_PROMPT=You answer questions about datasets that are available in the system. You'll be given relevant dataset descriptions for every dataset that's been ingested into the system. You are acting as a search assistant for a biomedical researcher (who will be asking you questions). The researcher is likely trying to find datasets of interest for a particular research question. You should recommend datasets that may be of interest to that researcher.
 ANOTHERTOPIC_CHAIN_NAME=TopicChainQuestionAnswerRAG
 
