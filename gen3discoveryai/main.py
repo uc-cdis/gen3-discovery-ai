@@ -1,7 +1,7 @@
 import os
+import traceback
 from contextlib import asynccontextmanager
 from importlib.metadata import version
-import traceback
 
 import fastapi
 import yaml
@@ -105,19 +105,14 @@ async def lifespan(fastapi_app: fastapi.FastAPI):
             }
             config.topics[topic].update(topic_raw_cfg["metadata"])
 
-            chain_instance = chain_factory.get(
-                topic_raw_cfg["topic_chain"],
+            _create_and_register_topic_chain(
                 topic=topic,
-                metadata=config.topics[topic],
+                topic_raw_cfg=topic_raw_cfg,
+                chain_factory=chain_factory,
             )
-            config.topics[topic].update(
-                {
-                    "topic_chain": chain_instance,
-                }
-            )
+
             logging.info(f"Added topic `{topic}`")
             logging.debug(f"`{topic}` configuration: `{topic_raw_cfg}`")
-
         except Exception as exc:
             logging.error(
                 f"Unable to load `{topic}` configuration with: {topic_raw_cfg}. "
@@ -133,6 +128,22 @@ async def lifespan(fastapi_app: fastapi.FastAPI):
     yield
 
     config.topics.clear()
+
+
+def _create_and_register_topic_chain(topic, topic_raw_cfg, chain_factory):
+    """
+    Small helper function to create instance of the topic chain and add to the config
+    """
+    chain_instance = chain_factory.get(
+        topic_raw_cfg["topic_chain"],
+        topic=topic,
+        metadata=config.topics[topic],
+    )
+    config.topics[topic].update(
+        {
+            "topic_chain": chain_instance,
+        }
+    )
 
 
 app = get_app()

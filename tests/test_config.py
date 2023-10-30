@@ -1,10 +1,11 @@
 import importlib
 import os
+from unittest.mock import patch
 
 import pytest
 
-from gen3discoveryai import config
-from gen3discoveryai.main import _override_generated_openapi_spec
+from gen3discoveryai import config, main
+from gen3discoveryai.main import _override_generated_openapi_spec, lifespan
 from gen3discoveryai.topic_chains.utils import get_from_cfg_metadata
 
 
@@ -19,6 +20,38 @@ def test_bad_config_metadata():
         importlib.reload(config)
 
     os.chdir(os.path.dirname(os.path.abspath(__file__)).rstrip("/") + "/..")
+
+
+@pytest.mark.asyncio
+@patch("gen3discoveryai.main._create_and_register_topic_chain")
+async def test_bad_config_default_topic(create_and_register_topic_chain):
+    """
+    Test when config loading raises an error, either it's reraised if it's the default topic
+    """
+    create_and_register_topic_chain.side_effect = Exception("some expection")
+
+    with pytest.raises(Exception):
+        async with lifespan(main.app):
+            pass
+
+
+@pytest.mark.asyncio
+@patch("gen3discoveryai.main._create_and_register_topic_chain")
+async def test_bad_config_non_default_topic(create_and_register_topic_chain):
+    """
+    Test when config loading raises an error, either it's reraised if it's the default topic
+    """
+
+    def _exception_if_default(*args, **kwargs):
+        # simulate default topic being okay, e.g. don't raise error here
+        if kwargs.get("topic") == "default":
+            pass
+
+    create_and_register_topic_chain.side_effect = _exception_if_default
+
+    async with lifespan(main.app):
+        # we don't expect an exception for non default topics
+        assert True
 
 
 def test_metadata_cfg_util():
