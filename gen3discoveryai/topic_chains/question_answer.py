@@ -161,6 +161,8 @@ class TopicChainQuestionAnswerRAG(TopicChain):
         )
         self.vectorstore.add_documents(documents)
 
+        logging.debug(f"Added {len(documents)} documents")
+
         # force persist to disk
         logging.info(
             f"Persisting knowledge store collection for {self.topic} to disk..."

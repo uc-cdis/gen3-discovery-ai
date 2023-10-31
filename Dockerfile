@@ -25,7 +25,7 @@ WORKDIR /$appname
 COPY poetry.lock pyproject.toml /$appname/
 COPY ./docs/openapi.yaml /$appname/docs/openapi.yaml
 RUN poetry config virtualenvs.in-project true \
-    && poetry install -vv --no-root --only main --no-interaction \
+    && poetry install -vv --no-root --no-interaction \
     && poetry show -v
 
 # copy source code ONLY after installing dependencies
@@ -33,7 +33,7 @@ COPY . /$appname
 
 # install gen3discoveryai
 RUN poetry config virtualenvs.in-project true \
-    && poetry install -vv --no-dev --no-interaction \
+    && poetry install -vv --no-interaction \
     && poetry show -v
 
 #Creating the runtime image
