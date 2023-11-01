@@ -5,6 +5,7 @@ Usage:
 """
 import glob
 import os
+import sys
 
 from gen3.auth import Gen3Auth
 from gen3.tools.metadata.discovery import output_expanded_discovery_metadata
@@ -41,6 +42,11 @@ def load_tsvs_from_dir(
         token_splitter_chunk_size: how many tokens to chunk the content into per doc
         delimiter: \t or , or whatever else is delimited the TSV/CSV-like file
     """
+    logging.info(f"Loading TSVs for directory: {directory}")
+    logging.info(f"TSV source_column_name: {source_column_name}")
+    logging.info(f"token_splitter_chunk_size: {token_splitter_chunk_size}")
+    logging.info(f"delimiter: {delimiter}")
+
     files = glob.glob(f"{directory.rstrip('/')}/**/*.*", recursive=True)
     topics = config.TOPICS.split(",")
 
@@ -93,12 +99,9 @@ def _store_documents_in_chain(topic_chain, topic_documents):
     topic_chain.store_knowledge(topic_documents)
 
 
-def main():
+def get_metadata():
     """
-    Get all discovery metadata and load into knowledge library based on GUID.
-
-    This relies on using the commons from whatever API Key you have configured. See the Gen3 SDK's `Gen3Auth` class
-    for info.
+    Get all discovery metadata
     """
     auth = Gen3Auth()
     loop = get_or_create_event_loop_for_thread()
@@ -106,77 +109,17 @@ def main():
         output_expanded_discovery_metadata(auth, output_format="tsv")
     )
 
-    # Load the document, split it into chunks, embed each chunk and load it into the vector store.
-    loader = CSVLoader(
-        source_column="guid",
-        file_path=output_file,
-        csv_args={
-            "delimiter": "\t",
-            "quotechar": '"',
-        },
-    )
-    data = loader.load()
 
-    # 4097 is OpenAI's max, so if we split into 1000, we can get 4 results with
-    # 97 tokens left for the query?
-    text_splitter = TokenTextSplitter.from_tiktoken_encoder(
-        chunk_size=1000, chunk_overlap=0
-    )
-    documents = text_splitter.split_documents(data)
-    #
-    # output_docs = [doc.to_json() for doc in documents]
-    #
-    # # could output
-    #
-    # input_docs = [doc for doc in output_docs]
-
-    topic_chain = TopicChainQuestionAnswerRAG(
-        topic="bdc",
-        metadata={"model_name": "gpt-3.5-turbo", "model_temperature": 0.33},
-    )
-
-    topic_chain.store_knowledge(documents)
-
-
-def aggmds():
+def get_aggmds_metadata():
     """
-    Use aggregate MDS
+    Use aggregate MDS metadata
     """
     auth = Gen3Auth()
-    # loop = get_or_create_event_loop_for_thread()
-    # output_file = loop.run_until_complete(
-    #     output_expanded_discovery_metadata(auth, output_format="tsv", use_agg_mds=True)
-    # )
-
-    # TODO remove __manifest column
-    output_file = "brh-data-commons-org-discovery_metadata.tsv"
-
-    # Load the document, split it into chunks, embed each chunk and load it into the vector store.
-    loader = CSVLoader(
-        source_column="guid",
-        file_path=output_file,
-        csv_args={
-            "delimiter": "\t",
-            "quotechar": '"',
-        },
+    loop = get_or_create_event_loop_for_thread()
+    output_file = loop.run_until_complete(
+        output_expanded_discovery_metadata(auth, output_format="tsv", use_agg_mds=True)
     )
-    data = loader.load()
-
-    # 4097 is OpenAI's max, so if we split into 1000, we can get 4 results with
-    # 97 tokens left for the query?
-    text_splitter = TokenTextSplitter.from_tiktoken_encoder(
-        chunk_size=1000, chunk_overlap=0
-    )
-    documents = text_splitter.split_documents(data)
-
-    topic_chain = TopicChainQuestionAnswerRAG(
-        topic="default",
-        metadata={"model_name": "gpt-3.5-turbo", "model_temperature": 0.33},
-    )
-
-    topic_chain.store_knowledge(documents)
 
 
 if __name__ == "__main__":
-    main()
-    # aggmds()
+    load_tsvs_from_dir(*sys.argv[1:])
