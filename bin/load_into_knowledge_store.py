@@ -7,9 +7,6 @@ import glob
 import os
 import sys
 
-from gen3.auth import Gen3Auth
-from gen3.tools.metadata.discovery import output_expanded_discovery_metadata
-from gen3.utils import get_or_create_event_loop_for_thread
 from langchain.document_loaders.csv_loader import CSVLoader
 from langchain.text_splitter import TokenTextSplitter
 
@@ -70,6 +67,8 @@ def load_tsvs_from_dir(
     for topic, files in topics_files.items():
         topic_documents = []
         for file in files:
+            logging.info(f"Loading data from file: {file}, for topic: {topic}")
+
             # Load the document, split it into chunks, embed each chunk and load it into the vector store.
             loader = CSVLoader(
                 source_column=source_column_name,
@@ -97,6 +96,7 @@ def load_tsvs_from_dir(
             metadata={"model_name": "gpt-3.5-turbo", "model_temperature": 0.33},
         )
 
+        logging.info(f"Storing {len(topic_documents)} documents for topic: {topic}")
         _store_documents_in_chain(topic_chain, topic_documents)
 
 
@@ -105,28 +105,6 @@ def _store_documents_in_chain(topic_chain, topic_documents):
     Tiny helper to store documents in the provided chain. This makes the testing/mocking simpler in unit tests
     """
     topic_chain.store_knowledge(topic_documents)
-
-
-def get_metadata():
-    """
-    Get all discovery metadata
-    """
-    auth = Gen3Auth()
-    loop = get_or_create_event_loop_for_thread()
-    loop.run_until_complete(
-        output_expanded_discovery_metadata(auth, output_format="tsv")
-    )
-
-
-def get_aggmds_metadata():
-    """
-    Use aggregate MDS metadata
-    """
-    auth = Gen3Auth()
-    loop = get_or_create_event_loop_for_thread()
-    loop.run_until_complete(
-        output_expanded_discovery_metadata(auth, output_format="tsv", use_agg_mds=True)
-    )
 
 
 if __name__ == "__main__":
