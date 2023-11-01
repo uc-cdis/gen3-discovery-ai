@@ -7,8 +7,8 @@ from load_into_knowledge_store import load_tsvs_from_dir
 
 
 @patch("load_into_knowledge_store._store_documents_in_chain")
-@patch("load_into_knowledge_store.TopicChainQuestionAnswerRAG")
-def test_load_from_tsvs(topic_chain, store_documents_in_chain):
+@patch("load_into_knowledge_store.get_topic_chain_factory")
+def test_load_from_tsvs(chain_factory, store_documents_in_chain):
     """
     Test that the loading from TSVs pulls the correct information from various files and
     aggregates files that begin with the same topic name.
@@ -26,12 +26,10 @@ def test_load_from_tsvs(topic_chain, store_documents_in_chain):
         delimiter="\t",
     )
 
-    config.TOPICS = "default"
-
-    topic_chain.store_knowledge.return_value = True
-
-    assert topic_chain.call_count == 2
+    assert chain_factory.called
     assert store_documents_in_chain.call_count == 2
 
     for item in store_documents_in_chain.call_args_list:
         assert len(item.args[1]) > 0  # documents
+
+    config.TOPICS = "default"

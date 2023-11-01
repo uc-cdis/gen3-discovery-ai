@@ -14,11 +14,15 @@ from langchain.document_loaders.csv_loader import CSVLoader
 from langchain.text_splitter import TokenTextSplitter
 
 from gen3discoveryai import config, logging
-from gen3discoveryai.topic_chains.question_answer import TopicChainQuestionAnswerRAG
+from gen3discoveryai.utils import get_topic_chain_factory
 
 
 def load_tsvs_from_dir(
-    directory, source_column_name="guid", token_splitter_chunk_size=1000, delimiter="\t"
+    directory,
+    topic_chain_name="TopicChainQuestionAnswerRAG",
+    source_column_name="guid",
+    token_splitter_chunk_size=1000,
+    delimiter="\t",
 ):
     """
     Load TSVs from specified directory in the knowledge database.
@@ -38,6 +42,7 @@ def load_tsvs_from_dir(
 
     Args:
         directory: path to directory where relevant TSVs are
+        topic_chain_name: name for an available TopicChain
         source_column_name: what column to get the "source" information from for the document
         token_splitter_chunk_size: how many tokens to chunk the content into per doc
         delimiter: \t or , or whatever else is delimited the TSV/CSV-like file
@@ -46,6 +51,8 @@ def load_tsvs_from_dir(
     logging.info(f"TSV source_column_name: {source_column_name}")
     logging.info(f"token_splitter_chunk_size: {token_splitter_chunk_size}")
     logging.info(f"delimiter: {delimiter}")
+
+    topic_chain_factory = get_topic_chain_factory()
 
     files = glob.glob(f"{directory.rstrip('/')}/**/*.*", recursive=True)
     topics = config.TOPICS.split(",")
@@ -83,7 +90,8 @@ def load_tsvs_from_dir(
 
             topic_documents.extend(documents)
 
-        topic_chain = TopicChainQuestionAnswerRAG(
+        topic_chain = topic_chain_factory.get(
+            topic_chain_name,
             topic=topic,
             # metadata shouldn't matter much here, we just need the topic chain initialized so we can store the data
             metadata={"model_name": "gpt-3.5-turbo", "model_temperature": 0.33},
@@ -105,7 +113,7 @@ def get_metadata():
     """
     auth = Gen3Auth()
     loop = get_or_create_event_loop_for_thread()
-    output_file = loop.run_until_complete(
+    loop.run_until_complete(
         output_expanded_discovery_metadata(auth, output_format="tsv")
     )
 
@@ -116,7 +124,7 @@ def get_aggmds_metadata():
     """
     auth = Gen3Auth()
     loop = get_or_create_event_loop_for_thread()
-    output_file = loop.run_until_complete(
+    loop.run_until_complete(
         output_expanded_discovery_metadata(auth, output_format="tsv", use_agg_mds=True)
     )
 

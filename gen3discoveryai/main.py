@@ -8,11 +8,8 @@ import yaml
 from fastapi import FastAPI
 
 from gen3discoveryai import config, logging
-from gen3discoveryai.factory import Factory
 from gen3discoveryai.routes import root_router
-from gen3discoveryai.topic_chains.question_answer import (
-    TopicChainQuestionAnswerRAG,  # ... import more here as implemented
-)
+from gen3discoveryai.utils import get_topic_chain_factory
 
 
 def get_app() -> fastapi.FastAPI:
@@ -70,12 +67,7 @@ async def lifespan(fastapi_app: fastapi.FastAPI):
     if not fastapi_app:
         logging.debug("No app context passed to lifespan, setup may fail")
 
-    chain_factory = Factory()
-    chain_factory.register(
-        TopicChainQuestionAnswerRAG.NAME,
-        TopicChainQuestionAnswerRAG,
-    )
-    # ... register more here as implemented
+    chain_factory = get_topic_chain_factory()
 
     # read from config to get more options
     config.topics = {}
