@@ -114,7 +114,7 @@ The topic configurations are flexible to support arbitrary new names `{{TOPIC NA
 Now you need to store some data in the knowledge library. You can write your own script or modify the following to get all the public metadata from a Gen3 instance using the Discovery Metadata API.
 
 ```bash
-poetry run python ./bin/load_from_gen3_into_knowledge_store.py
+poetry run python ./bin/load_into_knowledge_store.py
 ```
 
 The `TopicChain` class includes a `store_knowledge` method which expects a list of `langchain` documents. This is the default output of  `langchain.text_splitter.TokenTextSplitter`. Langchain has numerous document loaders that can be fed into the splitter already, so [check out the langchain documentation](https://python.langchain.com/docs/modules/data_connection/document_loaders).
@@ -247,3 +247,37 @@ Here's the command:
 #### Testing Docker Build
 
 The `Dockerfile` has some comments at the top with commands. Check that out.
+
+#### Persisting Knowledge locally from an Image
+
+Modify the Dockerfile to remove `--no-dev` from installation.
+
+Then build a new image locally.
+
+Then run the new image:
+
+```bash
+docker run --rm \
+-v "$HOME/tmp/knowledge":"/gen3discoveryai/knowledge" \
+-v "$HOME/.gen3":"/home/appuser/.gen3" \
+--name gen3discoveryai -p 8089:8089 gen3discoveryai:latest
+```
+
+Now get inside the running container:
+
+```bash
+docker exec -it gen3discoveryai bash
+```
+
+In the docker bash shell:
+
+```bash
+poetry run python ./bin/load_into_knowledge_store.py
+```
+
+Move the generated files from the mounted volume on your host machine
+to the data commons.
+
+```bash
+rsync -re ssh --progress ~/tmp/knowledge/ avantol@cdistest_dev.csoc:~/cdis-manifest/avantol.planx-pla.net/gen3-discovery-ai/knowledge/chromadb
+```
