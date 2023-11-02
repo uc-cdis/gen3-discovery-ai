@@ -1,5 +1,5 @@
 from gen3discoveryai.factory import Factory
-from gen3discoveryai.topic_chains import TopicChainQuestionAnswerRAG
+from gen3discoveryai.topic_chains import TopicChainGoogleQuestionAnswerRAG, TopicChainQuestionAnswerRAG
 
 # ... import more here as implemented
 
@@ -15,6 +15,10 @@ def get_topic_chain_factory():
     chain_factory.register(
         TopicChainQuestionAnswerRAG.NAME,
         TopicChainQuestionAnswerRAG,
+    )
+    chain_factory.register(
+        TopicChainGoogleQuestionAnswerRAG.NAME,
+        TopicChainGoogleQuestionAnswerRAG,
     )
     # ... register more here as implemented
     return chain_factory

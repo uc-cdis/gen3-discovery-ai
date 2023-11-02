@@ -3,10 +3,12 @@ from unittest.mock import MagicMock, patch
 import chromadb
 import pytest
 
-from gen3discoveryai.topic_chains.question_answer import TopicChainQuestionAnswerRAG
+from gen3discoveryai.topic_chains.question_answer_openai import (
+    TopicChainQuestionAnswerRAG,
+)
 
 
-def test_qa_topic_chain_init_defaults():
+def test_qa_topic_chain_openai_init_defaults():
     """
     Ensure that initialization happens successfully with all defaults
     """
@@ -60,8 +62,8 @@ def test_qa_topic_chain_run():
 
 
 @pytest.mark.parametrize("does_chroma_collection_exist", [True, False])
-@patch("gen3discoveryai.topic_chains.question_answer.RetrievalQA")
-@patch("gen3discoveryai.topic_chains.question_answer.Chroma")
+@patch("gen3discoveryai.topic_chains.question_answer_openai.RetrievalQA")
+@patch("gen3discoveryai.topic_chains.question_answer_openai.Chroma")
 def test_qa_topic_chain_store_knowledge(chroma, _, does_chroma_collection_exist):
     """
     Test storing documents into the vectorstore

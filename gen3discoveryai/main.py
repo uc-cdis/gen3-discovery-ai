@@ -39,7 +39,6 @@ def get_app() -> fastapi.FastAPI:
 def _override_generated_openapi_spec():
     json_data = None
     try:
-        # TODO make sure Dockerfile puts this in the right spot
         openapi_filepath = os.path.abspath("./docs/openapi.yaml")
         with open(openapi_filepath, "r", encoding="utf-8") as yaml_in:
             json_data = yaml.safe_load(yaml_in)
@@ -67,10 +66,32 @@ async def lifespan(fastapi_app: fastapi.FastAPI):
     if not fastapi_app:
         logging.debug("No app context passed to lifespan, setup may fail")
 
+    # read from config to get more options
+    config.topics = get_topics_from_config()
+
+    yield
+
+    config.topics.clear()
+
+
+def get_topics_from_config():
+    """
+    Get topics from configuration.
+
+    Returns Dict: {
+        "topicA": {
+            "description": "description_config_value",
+            "topic_chain": TopicChainInstance,
+            "system_prompt": "system_prompt_config_value",
+            "metadata_field_a": "foo",
+            "metadata_field_b": "bar",
+        },
+        ...
+    }
+    """
     chain_factory = get_topic_chain_factory()
 
-    # read from config to get more options
-    config.topics = {}
+    config_topics = {}
 
     for topic in config.TOPICS.split(","):
         description_config_key = f"{topic.upper()}_DESCRIPTION"
@@ -91,16 +112,17 @@ async def lifespan(fastapi_app: fastapi.FastAPI):
         }
 
         try:
-            config.topics[topic] = {
+            config_topics[topic] = {
                 "description": topic_raw_cfg["description"],
                 "system_prompt": topic_raw_cfg["system_prompt"],
             }
-            config.topics[topic].update(topic_raw_cfg["metadata"])
+            config_topics[topic].update(topic_raw_cfg["metadata"])
 
             _create_and_register_topic_chain(
                 topic=topic,
                 topic_raw_cfg=topic_raw_cfg,
                 chain_factory=chain_factory,
+                config_topics=config_topics,
             )
 
             logging.info(f"Added topic `{topic}`")
@@ -117,21 +139,21 @@ async def lifespan(fastapi_app: fastapi.FastAPI):
 
             continue
 
-    yield
-
-    config.topics.clear()
+    return config_topics
 
 
-def _create_and_register_topic_chain(topic, topic_raw_cfg, chain_factory):
+def _create_and_register_topic_chain(
+    topic, topic_raw_cfg, chain_factory, config_topics
+):
     """
     Small helper function to create instance of the topic chain and add to the config
     """
     chain_instance = chain_factory.get(
         topic_raw_cfg["topic_chain"],
         topic=topic,
-        metadata=config.topics[topic],
+        metadata=config_topics[topic],
     )
-    config.topics[topic].update(
+    config_topics[topic].update(
         {
             "topic_chain": chain_instance,
         }

@@ -10,13 +10,12 @@ import sys
 from langchain.document_loaders.csv_loader import CSVLoader
 from langchain.text_splitter import TokenTextSplitter
 
-from gen3discoveryai import config, logging
-from gen3discoveryai.utils import get_topic_chain_factory
+from gen3discoveryai import logging
+from gen3discoveryai.main import get_topics_from_config
 
 
 def load_tsvs_from_dir(
     directory,
-    topic_chain_name="TopicChainQuestionAnswerRAG",
     source_column_name="guid",
     token_splitter_chunk_size=1000,
     delimiter="\t",
@@ -39,7 +38,6 @@ def load_tsvs_from_dir(
 
     Args:
         directory: path to directory where relevant TSVs are
-        topic_chain_name: name for an available TopicChain
         source_column_name: what column to get the "source" information from for the document
         token_splitter_chunk_size: how many tokens to chunk the content into per doc
         delimiter: \t or , or whatever else is delimited the TSV/CSV-like file
@@ -49,10 +47,9 @@ def load_tsvs_from_dir(
     logging.info(f"token_splitter_chunk_size: {token_splitter_chunk_size}")
     logging.info(f"delimiter: {delimiter}")
 
-    topic_chain_factory = get_topic_chain_factory()
-
     files = glob.glob(f"{directory.rstrip('/')}/**/*.*", recursive=True)
-    topics = config.TOPICS.split(",")
+    config_topics = get_topics_from_config()
+    topics = config_topics.keys()
 
     logging.info(f"Loading TSVs for topics: {topics}")
 
@@ -89,15 +86,12 @@ def load_tsvs_from_dir(
 
             topic_documents.extend(documents)
 
-        topic_chain = topic_chain_factory.get(
-            topic_chain_name,
-            topic=topic,
-            # metadata shouldn't matter much here, we just need the topic chain initialized so we can store the data
-            metadata={"model_name": "gpt-3.5-turbo", "model_temperature": 0.33},
-        )
-
         logging.info(f"Storing {len(topic_documents)} documents for topic: {topic}")
-        _store_documents_in_chain(topic_chain, topic_documents)
+
+        if topic_documents:
+            _store_documents_in_chain(
+                config_topics[topic]["topic_chain"], topic_documents
+            )
 
 
 def _store_documents_in_chain(topic_chain, topic_documents):

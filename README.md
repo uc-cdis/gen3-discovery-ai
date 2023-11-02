@@ -26,12 +26,18 @@ to guide the LLM on how it should interpret the context and response).
 ### Initial support
 
     Knowledge Library:
-        - Chromadb in-mem vector database with OpenAI Embedding
-        - (TBD) AWS Aurora Postgres with pgvector w/ OpenAI Embeddings
+        - Chromadb in-mem vector database
+        - (TBD) Google Vertex AI Vector Search
+        - (TBD) AWS Aurora Postgres with pgvector
         - (TBD) Others?
 
+    Knowledge Library Embeddings:
+        - Google Vertex AI PaLM Embeddings 
+        - OpenAI Embeddings
+
     Foundational Model:
-        - OpenAI's Models (configurable, default: `gpt-3.5-turbo`)
+        - Google PaLM API Models (configurable, model:`chat-bison`)
+        - OpenAI's Models (configurable, model: `gpt-3.5-turbo`)
         - (TBD) CTDS trained/tuned model
         - (TBD) AWS Bedrock?
         - (TBD) Others?
@@ -45,7 +51,7 @@ cases where we're on the bleeding edge).
 In the case of generative AI and LLMs,
 there is a lot of excellent work out there. We are building this on the
 shoulders of giants for many of the knowledge libraries and foundational model 
-interactions. We're using `langchain`, `chromadb`, `OpenAI`, among others.
+interactions. We're using `langchain`, `chromadb`, among others.
 
 ## Quickstart
 

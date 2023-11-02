@@ -40,6 +40,7 @@ langchain = ">=0.0.302"
 chromadb = ">=0.4.13"
 gen3authz = ">=2.1.0"
 authutils = ">=6.2.2"
+google-cloud-aiplatform = "^1.36.0"
 
 
 [tool.poetry.group.dev.dependencies]

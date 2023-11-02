@@ -1,19 +1,22 @@
 import os
-from unittest.mock import patch, MagicMock
-
-from gen3discoveryai import config
+from unittest.mock import MagicMock, patch
 
 from load_into_knowledge_store import load_tsvs_from_dir
 
+from gen3discoveryai import config
+
 
 @patch("load_into_knowledge_store._store_documents_in_chain")
-@patch("load_into_knowledge_store.get_topic_chain_factory")
-def test_load_from_tsvs(chain_factory, store_documents_in_chain):
+@patch("load_into_knowledge_store.get_topics_from_config")
+def test_load_from_tsvs(config_topics, store_documents_in_chain):
     """
     Test that the loading from TSVs pulls the correct information from various files and
     aggregates files that begin with the same topic name.
     """
-    config.TOPICS = "default,bdc"
+    config_topics.return_value = {
+        "default": {"topic_chain": MagicMock()},
+        "bdc": {"topic_chain": MagicMock()},
+    }
 
     directory = os.path.abspath(
         os.path.dirname(os.path.abspath(__file__)).rstrip("/") + "/../tests/tsvs"
@@ -26,7 +29,7 @@ def test_load_from_tsvs(chain_factory, store_documents_in_chain):
         delimiter="\t",
     )
 
-    assert chain_factory.called
+    assert config_topics.called
     assert store_documents_in_chain.call_count == 2
 
     for item in store_documents_in_chain.call_args_list:

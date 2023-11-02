@@ -16,21 +16,22 @@ from typing import Any, Dict
 import chromadb
 import langchain
 from langchain.chains import RetrievalQA
-from langchain.chat_models import ChatOpenAI
-from langchain.embeddings.openai import OpenAIEmbeddings
+from langchain.chat_models import ChatVertexAI
+from langchain.embeddings import VertexAIEmbeddings
 from langchain.prompts import PromptTemplate
 from langchain.vectorstores.chroma import Chroma
 
 from gen3discoveryai import config, logging
-from gen3discoveryai.topic_chains.base import TopicChain
+from gen3discoveryai.topic_chains.base import (
+    TopicChain,
+)
 from gen3discoveryai.topic_chains.utils import get_from_cfg_metadata
 
 
-class TopicChainQuestionAnswerRAG(TopicChain):
+class TopicChainGoogleQuestionAnswerRAG(TopicChain):
     """
     This implementation uses `langchain`'s abstraction of `chromadb`.
     `chromadb` implements an in-mem vector database with local file(s) for persistence.
-    This class uses OpenAI's embedding capabilities.
 
     NOTE: vectorstore is a `langchain.vectorstores.chroma.Chroma`
           and inherits from `langchain.vectorstores.base.VectorStore`
@@ -48,28 +49,37 @@ class TopicChainQuestionAnswerRAG(TopicChain):
             initialization after the vectorstore and llm
     """
 
-    NAME = "TopicChainQuestionAnswerRAG"
+    NAME = "TopicChainGoogleQuestionAnswerRAG"
 
     def __init__(self, topic: str, metadata: Dict[str, Any] = None) -> None:
         logging.debug(f"initializing topic chain {self.NAME} for topic: {topic}")
 
         metadata = metadata or {}
-        # gpt-3.5-turbo-instruct is double the price but instead of 4K context
-        # you get 16K (as of 6 OCT 2023, see https://openai.com/pricing)
-        llm_model_name = get_from_cfg_metadata(
-            "model_name", metadata, default="gpt-3.5-turbo", type_=str
-        )
 
-        llm_model_temperature = get_from_cfg_metadata(
-            "model_temperature", metadata, default=0.3, type_=float
+        llm_model_name = get_from_cfg_metadata(
+            "model_name", metadata, default="chat-bison", type_=str
         )
+        llm_model_temperature = get_from_cfg_metadata(
+            "model_temperature", metadata, default=0, type_=float
+        )
+        llm_location = get_from_cfg_metadata(
+            "location", metadata, default="us-central1", type_=str
+        )
+        llm_max_output_tokens = get_from_cfg_metadata(
+            "max_output_tokens", metadata, default=128, type_=int
+        )
+        llm_top_p = get_from_cfg_metadata("top_p", metadata, default=0.95, type_=float)
+        llm_top_k = get_from_cfg_metadata("top_k", metadata, default=0, type_=int)
 
         system_prompt = metadata.get("system_prompt", "")
 
-        self.llm = ChatOpenAI(
-            openai_api_key=str(config.OPENAI_API_KEY),
-            model_name=llm_model_name,
+        self.llm = ChatVertexAI(
+            model_name=llm_model_name,  # codechat-bison: for code assistance
             temperature=llm_model_temperature,
+            location=llm_location,
+            max_output_tokens=llm_max_output_tokens,
+            top_p=llm_top_p,
+            top_k=llm_top_k,
         )
 
         template = (
@@ -91,12 +101,9 @@ class TopicChainQuestionAnswerRAG(TopicChain):
         )
         # langchain/chroma recommend a separate client per persisted path
         # to avoid potential collisions. We will separate on topic
-        self.vectorstore = Chroma(
-            # client=chromadb.Client(Settings(anonymized_telemetry=False)),
+        vectorstore = Chroma(
             collection_name=topic,
-            embedding_function=OpenAIEmbeddings(
-                openai_api_key=str(config.OPENAI_API_KEY)
-            ),
+            embedding_function=VertexAIEmbeddings(),
             # We've heard the `cosine` distance function performs better
             # https://docs.trychroma.com/usage-guide#changing-the-distance-function
             collection_metadata={"hnsw:space": "cosine"},
@@ -113,7 +120,7 @@ class TopicChainQuestionAnswerRAG(TopicChain):
 
         retreival_qa_chain = RetrievalQA.from_chain_type(
             self.llm,
-            retriever=self.vectorstore.as_retriever(
+            retriever=vectorstore.as_retriever(
                 search_type="similarity_score_threshold",
                 search_kwargs=retriever_cfg,
             ),
@@ -121,7 +128,12 @@ class TopicChainQuestionAnswerRAG(TopicChain):
             return_source_documents=True,
         )
 
-        super().__init__(name=self.NAME, topic=topic, chain=retreival_qa_chain)
+        super().__init__(
+            name=self.NAME,
+            topic=topic,
+            chain=retreival_qa_chain,
+            vectorstore=vectorstore,
+        )
 
     def store_knowledge(
         self, documents: list[langchain.schema.document.Document]
@@ -142,9 +154,8 @@ class TopicChainQuestionAnswerRAG(TopicChain):
             self.vectorstore.delete_collection()
 
             self.vectorstore = Chroma(
-                # client=chromadb.Client(Settings(anonymized_telemetry=False)),
                 collection_name=self.topic,
-                embedding_function=OpenAIEmbeddings(
+                embedding_function=VertexAIEmbeddings(
                     openai_api_key=str(config.OPENAI_API_KEY)
                 ),
                 # We've heard the `cosine` distance function performs better
@@ -156,34 +167,4 @@ class TopicChainQuestionAnswerRAG(TopicChain):
             # doesn't exist so just continue adding
             pass
 
-        logging.info(
-            f"Recreating knowledge store collection for {self.topic} from documents..."
-        )
-        self.vectorstore.add_documents(documents)
-
-        logging.debug(f"Added {len(documents)} documents")
-
-        # force persist to disk
-        logging.info(
-            f"Persisting knowledge store collection for {self.topic} to disk..."
-        )
-        self.vectorstore.persist()
-
-    def run(self, query: str, *args, **kwargs):
-        """
-        Call the underlying langchain `chain`
-
-        Args:
-            query (str): Query for the chain
-            *args: arbitrary arguments for the chain
-            **kwargs: arbitrary keyword arguments for the chain
-
-        Returns:
-            TYPE: Description
-        """
-        return self.chain(
-            {"query": query},
-            *args,
-            include_run_info=True,
-            **kwargs,
-        )
+        self.insert_documents_into_vectorstore(documents, persist=True)

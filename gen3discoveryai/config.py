@@ -32,6 +32,13 @@ if ALLOW_ANONYMOUS_ACCESS:
         "ENSURE THIS IS ACCEPTABLE!!"
     )
 
+# ensure you set this env var with the path to the .json Google application credentials
+# https://cloud.google.com/docs/authentication/application-default-credentials#GAC
+#
+GOOGLE_APPLICATION_CREDENTIALS = config(
+    "GOOGLE_APPLICATION_CREDENTIALS", cast=Secret, default="credentials.json"
+)
+
 OPENAI_API_KEY = config("OPENAI_API_KEY", cast=Secret, default=None)
 URL_PREFIX = config("URL_PREFIX", default="/")
 
@@ -50,7 +57,7 @@ TOPICS = config("TOPICS", cast=str, default="default")
 DEFAULT_CHAIN_NAME = config(
     "DEFAULT_CHAIN_NAME",
     cast=str,
-    default="TopicChainQuestionAnswerRAG",
+    default="TopicChainGoogleQuestionAnswerRAG",
 )
 # you can configure other topics like this: {{`topic_name`.upper()}}_CHAIN_NAME
 # requests to /ask?topic=gen3docs will use these instead of the default
