@@ -22,9 +22,7 @@ from langchain.prompts import PromptTemplate
 from langchain.vectorstores.chroma import Chroma
 
 from gen3discoveryai import config, logging
-from gen3discoveryai.topic_chains.base import (
-    TopicChain,
-)
+from gen3discoveryai.topic_chains.base import TopicChain
 from gen3discoveryai.topic_chains.utils import get_from_cfg_metadata
 
 

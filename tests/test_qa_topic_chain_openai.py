@@ -3,9 +3,7 @@ from unittest.mock import MagicMock, patch
 import chromadb
 import pytest
 
-from gen3discoveryai.topic_chains.question_answer_openai import (
-    TopicChainQuestionAnswerRAG,
-)
+from gen3discoveryai.topic_chains.question_answer_openai import TopicChainQuestionAnswerRAG
 
 
 def test_qa_topic_chain_openai_init_defaults():

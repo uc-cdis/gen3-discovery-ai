@@ -5,8 +5,8 @@ Super simple wrapper over langchain chain to:
  - preconfigure the llm and prompt
 """
 from langchain.chains.base import Chain
-from langchain.vectorstores.base import VectorStore
 from langchain.schema.document import Document
+from langchain.vectorstores.base import VectorStore
 
 from gen3discoveryai import logging
 
