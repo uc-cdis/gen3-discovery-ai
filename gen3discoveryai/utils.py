@@ -1,5 +1,8 @@
 from gen3discoveryai.factory import Factory
-from gen3discoveryai.topic_chains import TopicChainGoogleQuestionAnswerRAG, TopicChainQuestionAnswerRAG
+from gen3discoveryai.topic_chains import (
+    TopicChainGoogleQuestionAnswerRAG,
+    TopicChainQuestionAnswerRAG,
+)
 
 # ... import more here as implemented
 
