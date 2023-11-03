@@ -169,70 +169,6 @@ For testing, you can `poetry run pytest`. The default `pytest` options specified
 in the `pyproject.toml` additionally 
 runs coverage and will error if it falls below >95% that it's at now.
 
-### Linting with GitHub's Super Linter Locally
-
-See how to set up with [Visual Studio Code](https://github.com/super-linter/super-linter/blob/main/README.md#codespaces-and-visual-studio-code).
-
-And/or use Docker to run locally.
-
-#### Run Super Linter Docker Locally
-
-First we need to get the same linter config that GitHub is using. It's 
-stored alongside our other global workflows and defaults in 
-our `.github` repo. Let's clone that and move to a local, central location in `~/.gen3/.github`:
-
-```bash
-git clone git@github.com:uc-cdis/.github.git ~/.gen3/.github
-```
-
-#### Modifying the Linter configs
-
-Some linters require per-service/library configuration to properly format and parse. 
-
-#### Edit the `~/.gen3/linters/.isort.cfg` 
-
-Add the module name to the bottom of the config:
-
-```env
-known_first_party=gen3discoveryai
-```
-
-#### Edit the `~/.gen3/linters/.python-lint` 
-
-There's a utility to modify this appropriately. Make sure you're in your virtual env
-or the root of the repo you're trying to lint.
-
-> Ensure you've run `poetry install` before this so your virtual env exists
-
-```bash
-cd repos/gen3-discovery-ai  # this repo
-bash ~/.gen3/.github/.github/linters/update_pylint_config.sh
-```
-
-Now run Super Linter locally with Docker:
-
-```bash
-docker run --rm \
-    -e RUN_LOCAL=true \
-    --env-file "$HOME/.gen3/.github/.github/linters/super-linter.env" \
-    -v "$HOME/.cache/pypoetry/virtualenvs":"$HOME/.cache/pypoetry/virtualenvs" \
-    -v "$HOME/.gen3/.github/.github/linters":"/tmp/lint/.github/linters" -v "$PWD":/tmp/lint \
-    ghcr.io/super-linter/super-linter:slim-v5
-```
-
-#### What the heck was all that setup?
-
-Basically you just replicated what GitHub Actions is doing, except locally.
-
-The steps you took were making
-sure that the linter configurations are available. Then your local docker run 
-of Super Linter uses those by mounting them as a virtual directory. Your virtual env
-also gets mounted.
-
-Some linters require knowing the module name and
-location of imported packages (e.g. dependencies). This is done for pylint by using that
-utility. It updates pylint config with your virtual env path to the installed packages.
-
 #### Automatically format code and run pylint
 
 Quick script to run `isort` and `black` over everything if 
@@ -248,42 +184,8 @@ Here's the command:
 ./clean.sh
 ```
 
-> NOTE: Super Linter runs more than just `pylint` so it's worth setting that up locally to run before pushing large changes. Then you can run pylint more frequently as you develop.
+> NOTE: GitHub's Super Linter runs more than just `pylint` so it's worth setting that up locally to run before pushing large changes. See [this](https://github.com/uc-cdis/.github/blob/master/.github/workflows/README.md#L7) for instructions. Then you can run pylint more frequently as you develop.
 
 #### Testing Docker Build
 
 The `Dockerfile` has some comments at the top with commands. Check that out.
-
-#### Persisting Knowledge locally from an Image
-
-Modify the Dockerfile to remove `--no-dev` from installation.
-
-Then build a new image locally.
-
-Then run the new image:
-
-```bash
-docker run --rm \
--v "$HOME/tmp/knowledge":"/gen3discoveryai/knowledge" \
--v "$HOME/.gen3":"/home/appuser/.gen3" \
---name gen3discoveryai -p 8089:8089 gen3discoveryai:latest
-```
-
-Now get inside the running container:
-
-```bash
-docker exec -it gen3discoveryai bash
-```
-
-In the docker bash shell:
-
-```bash
-poetry run python ./bin/load_into_knowledge_store.py
-```
-
-Move the generated files from the mounted volume on your host machine
-to the data commons.
-
-```bash
-rsync -re ssh --progress ~/tmp/knowledge/ avantol@cdistest_dev.csoc:~/cdis-manifest/avantol.planx-pla.net/gen3-discovery-ai/knowledge/chromadb
-```
