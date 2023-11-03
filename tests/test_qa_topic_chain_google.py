@@ -3,7 +3,9 @@ from unittest.mock import MagicMock, patch
 import chromadb
 import pytest
 
-from gen3discoveryai.topic_chains.question_answer_google import TopicChainGoogleQuestionAnswerRAG
+from gen3discoveryai.topic_chains.question_answer_google import (
+    TopicChainGoogleQuestionAnswerRAG,
+)
 
 
 @patch("gen3discoveryai.topic_chains.question_answer_google.RetrievalQA")

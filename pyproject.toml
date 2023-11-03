@@ -76,7 +76,7 @@ addopts = """
 [tool.isort]
 known_first_party = ["gen3discoveryai"]
 profile = "black"
-line_length = 120
+line_length = 88
 
 [build-system]
 requires = ["poetry-core"]
