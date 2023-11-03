@@ -54,17 +54,24 @@ jobs:
 #            .github/linters/
 #          if-no-files-found: error
 
-  Lint:
-    name: Run Linters
+  RequiredLint:
+    name: Run Required Linters
     needs: [LintConfig]
-    uses: uc-cdis/.github/.github/workflows/lint.yaml@feat/lint
+    uses: uc-cdis/.github/.github/workflows/required_lint_check.yaml@feat/lint
+    with:
+       python-version: '3.9'
+
+  InformationalLint:
+    name: Run Informational Linters
+    needs: [LintConfig]
+    uses: uc-cdis/.github/.github/workflows/optional_lint_check.yaml@feat/lint
     with:
        python-version: '3.9'
 
   ImageBuildAndPush:
     name: Build Image and Push
     uses: uc-cdis/.github/.github/workflows/image_build_push.yaml@master
-    needs: [Security, UnitTest]
+    needs: [RequiredLint, Security, UnitTest]
     secrets:
       ECR_AWS_ACCESS_KEY_ID: ${{ secrets.ECR_AWS_ACCESS_KEY_ID }}
       ECR_AWS_SECRET_ACCESS_KEY: ${{ secrets.ECR_AWS_SECRET_ACCESS_KEY }}

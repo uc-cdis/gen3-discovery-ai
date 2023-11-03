@@ -33,9 +33,11 @@ class CustomCallbackHandlerForLogging(BaseCallbackHandler):
             )
 
     def on_llm_new_token(self, token: str, **kwargs: Any) -> None:
+        """Log if verbose on new token"""
         logging.debug(f"on_llm_new_token: {token}")
 
     def on_llm_end(self, response: LLMResult, **kwargs: Any) -> None:
+        """Log if verbose on llm end"""
         if config.VERBOSE_LLM_LOGS:
             logging.debug(f"End of LLM. Response: {response}")
 
