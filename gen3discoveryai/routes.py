@@ -160,7 +160,7 @@ async def topics_route(request: Request, provided_topic: str = None) -> dict:
               "topics": {
                 "bdc": {
                   "description": "Ask about available BDC datasets...",
-                  "topic_chain": "TopicChainQuestionAnswerRAG",
+                  "topic_chain": "TopicChainOpenAiQuestionAnswerRAG",
                   "system_prompt": "You answer questions about datasets...",
                   "metadata": {
                     "model_name": "gpt-3.5-turbo",

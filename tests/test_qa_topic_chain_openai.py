@@ -4,7 +4,7 @@ import chromadb
 import pytest
 
 from gen3discoveryai.topic_chains.question_answer_openai import (
-    TopicChainQuestionAnswerRAG,
+    TopicChainOpenAiQuestionAnswerRAG,
 )
 
 
@@ -12,9 +12,9 @@ def test_qa_topic_chain_openai_init_defaults():
     """
     Ensure that initialization happens successfully with all defaults
     """
-    topic_chain = TopicChainQuestionAnswerRAG("test")
+    topic_chain = TopicChainOpenAiQuestionAnswerRAG("test")
     assert topic_chain.topic == "test"
-    assert topic_chain.NAME == "TopicChainQuestionAnswerRAG"
+    assert topic_chain.NAME == "TopicChainOpenAiQuestionAnswerRAG"
     assert topic_chain.vectorstore
     assert topic_chain.chain
     assert topic_chain.llm
@@ -30,9 +30,9 @@ def test_qa_topic_chain_init_provided_metadata():
         "num_similar_docs_to_find": "5",
         "similarity_score_threshold": "0.75",
     }
-    topic_chain = TopicChainQuestionAnswerRAG("test", metadata=metadata)
+    topic_chain = TopicChainOpenAiQuestionAnswerRAG("test", metadata=metadata)
     assert topic_chain.topic == "test"
-    assert topic_chain.NAME == "TopicChainQuestionAnswerRAG"
+    assert topic_chain.NAME == "TopicChainOpenAiQuestionAnswerRAG"
     assert topic_chain.vectorstore
     assert topic_chain.chain
 
@@ -50,7 +50,7 @@ def test_qa_topic_chain_run():
     """
     Test that topic chain .run calls the chain with the query, args, and kwargs provided
     """
-    topic_chain = TopicChainQuestionAnswerRAG("test")
+    topic_chain = TopicChainOpenAiQuestionAnswerRAG("test")
     topic_chain.chain = MagicMock()
 
     query = "some query"
@@ -68,7 +68,7 @@ def test_qa_topic_chain_store_knowledge(chroma, _, does_chroma_collection_exist)
     """
     Test storing documents into the vectorstore
     """
-    topic_chain = TopicChainQuestionAnswerRAG("test")
+    topic_chain = TopicChainOpenAiQuestionAnswerRAG("test")
     topic_chain.vectorstore = MagicMock()
 
     # even if it already exists, the chromadb library may error, but the code should

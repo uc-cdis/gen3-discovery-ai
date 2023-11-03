@@ -26,7 +26,7 @@ from gen3discoveryai.topic_chains.base import TopicChain
 from gen3discoveryai.topic_chains.utils import get_from_cfg_metadata
 
 
-class TopicChainQuestionAnswerRAG(TopicChain):
+class TopicChainOpenAiQuestionAnswerRAG(TopicChain):
     """
     This implementation uses `langchain`'s abstraction of `chromadb`.
     `chromadb` implements an in-mem vector database with local file(s) for persistence.
@@ -48,7 +48,7 @@ class TopicChainQuestionAnswerRAG(TopicChain):
             initialization after the vectorstore and llm
     """
 
-    NAME = "TopicChainQuestionAnswerRAG"
+    NAME = "TopicChainOpenAiQuestionAnswerRAG"
 
     def __init__(self, topic: str, metadata: Dict[str, Any] = None) -> None:
         logging.debug(f"initializing topic chain {self.NAME} for topic: {topic}")
