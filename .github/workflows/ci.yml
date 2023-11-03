@@ -14,7 +14,7 @@ jobs:
     name: Security Pipeline
     uses: uc-cdis/.github/.github/workflows/securitypipeline.yaml@master
     with:
-       python-poetry: 'false'
+       python-poetry: 'true'
     secrets: inherit
 
   UnitTest:

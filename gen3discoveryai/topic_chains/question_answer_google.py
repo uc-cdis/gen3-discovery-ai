@@ -54,7 +54,7 @@ class TopicChainGoogleQuestionAnswerRAG(TopicChain):
 
         metadata = metadata or {}
 
-        llm_modelName = get_from_cfg_metadata(
+        llm_model_name = get_from_cfg_metadata(
             "model_name", metadata, default="chat-bison", type_=str
         )
         llm_model_temperature = get_from_cfg_metadata(
@@ -72,7 +72,7 @@ class TopicChainGoogleQuestionAnswerRAG(TopicChain):
         system_prompt = metadata.get("system_prompt", "")
 
         self.llm = ChatVertexAI(
-            model_name=llm_modelName,  # codechat-bison: for code assistance
+            model_name=llm_model_name,  # codechat-bison: for code assistance
             temperature=llm_model_temperature,
             location=llm_location,
             max_output_tokens=llm_max_output_tokens,
