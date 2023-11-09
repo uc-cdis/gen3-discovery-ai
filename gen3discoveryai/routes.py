@@ -82,16 +82,16 @@ async def ask_route(
         raw_response = topic_config["topic_chain"].run(
             query=query, callbacks=[CustomCallbackHandlerForLogging()]
         )
-    except openai.error.RateLimitError as exc:
-        logging.debug("openai.error.RateLimitError")
+    except openai.RateLimitError as exc:
+        logging.debug("openai.RateLimitError")
         raise HTTPException(
             HTTP_429_TOO_MANY_REQUESTS, "Please try again later."
         ) from exc
-    except openai.error.InvalidRequestError as exc:
-        logging.debug("openai.error.InvalidRequestError")
+    except openai.OpenAIError as exc:
+        logging.debug("openai.OpenAIError")
         raise HTTPException(
             HTTP_400_BAD_REQUEST,
-            "Invalid request, you may have too much text in your query.",
+            "Error. You may have too much text in your query.",
         ) from exc
     except Exception as exc:
         logging.error(
