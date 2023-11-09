@@ -216,9 +216,9 @@ To exec into a bash shell in running container:
 docker exec -it gen3discoveryai bash
 ```
 
-To remove and kill running container:
+To kill and remove running container:
 
 ```bash
-docker remove gen3discoveryai
 docker kill gen3discoveryai
+docker remove gen3discoveryai
 ```

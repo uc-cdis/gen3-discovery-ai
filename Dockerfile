@@ -51,6 +51,4 @@ WORKDIR /$appname
 
 USER appuser
 
-RUN poetry add gunicorn
-
 CMD ["poetry", "run", "gunicorn", "gen3discoveryai.main:app", "-k", "uvicorn.workers.UvicornWorker", "-c", "gunicorn.conf.py"]

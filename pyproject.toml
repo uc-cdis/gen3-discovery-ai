@@ -9,6 +9,9 @@ packages = [{include = "gen3discoveryai"}]
 
 [tool.poetry.dependencies]
 python = ">=3.9,<3.10.dev0"
+# TODO: REMOVE WHEN onnxruntime bug is resolved https://github.com/microsoft/onnxruntime/issues/18065
+onnxruntime = "==1.16.1"
+
 aiohttp = ">=3.8.4"
 aiosignal = ">=1.3.1"
 async = ">=0.6.2"
