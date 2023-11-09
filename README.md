@@ -57,7 +57,14 @@ interactions. We're using `langchain`, `chromadb`, among others.
 
 ### Setup
 
-This documented setup all relies on our `TopicChainOpenAiQuestionAnswerRAG` Topic Chain, which is the default as of now.
+This documented setup relies on both our Google Vertex AI support **and** OpenAI support.
+
+> OpenAI is **NOT** intended for production use in Gen3 (due to FedRAMP requirements). 
+
+#### Google Application Credentials
+
+Set the `GOOGLE_APPLICATION_CREDENTIALS` environment variable as the path to 
+a valid credentials JSON file (likely a service account key). 
 
 #### OpenAI Key
 
