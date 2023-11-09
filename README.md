@@ -188,4 +188,30 @@ Here's the command:
 
 #### Testing Docker Build
 
-The `Dockerfile` has some comments at the top with commands. Check that out.
+To build:
+
+```bash
+docker build -t gen3discoveryai:latest .
+```
+
+To run:
+
+```bash
+docker run --name gen3discoveryai \
+--env-file "./.env" \
+-v "$GOOGLE_APPLICATION_CREDENTIALS":"$GOOGLE_APPLICATION_CREDENTIALS" -p 8089:8089 \
+gen3discoveryai:latest
+```
+
+To exec into a bash shell in running container:
+
+```bash
+docker exec -it gen3discoveryai bash
+```
+
+To remove and kill running container:
+
+```bash
+docker remove gen3discoveryai
+docker kill gen3discoveryai
+```

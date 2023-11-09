@@ -1,9 +1,3 @@
-"""
-Super simple wrapper over langchain chain to:
- - force a high-level name and topic for the chain
- - provide an easier interface for storing documents in the appropriately name-spaced vectorstore (likely by topic)
- - preconfigure the llm and prompt
-"""
 from langchain.chains.base import Chain
 from langchain.schema.document import Document
 from langchain.vectorstores.base import VectorStore
@@ -12,6 +6,13 @@ from gen3discoveryai import logging
 
 
 class TopicChain:
+    """
+    Super simple wrapper over langchain chain to:
+     - force a high-level name and topic for the chain
+     - provide an easier interface for storing documents in the appropriately name-spaced vectorstore (likely by topic)
+     - preconfigure the llm and prompt
+    """
+
     def __init__(
         self,
         name: str,
