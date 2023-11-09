@@ -3,6 +3,8 @@ from starlette.config import Config
 from starlette.datastructures import Secret
 
 config = Config(".env")
+if not config.file_values:
+    config = Config("env")
 
 DEBUG = config("DEBUG", cast=bool, default=False)
 VERBOSE_LLM_LOGS = config("VERBOSE_LLM_LOGS", cast=bool, default=False)
