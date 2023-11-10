@@ -106,6 +106,7 @@ class TopicChainGoogleQuestionAnswerRAG(TopicChain):
             # https://docs.trychroma.com/usage-guide#changing-the-distance-function
             collection_metadata={"hnsw:space": "cosine"},
             persist_directory=f"./knowledge/{topic}",
+            client_settings=chromadb.Settings(migrations_hash_algorithm="sha256"),
         )
 
         logging.debug("chroma vectorstore initialized")
@@ -158,6 +159,7 @@ class TopicChainGoogleQuestionAnswerRAG(TopicChain):
                 # https://docs.trychroma.com/usage-guide#changing-the-distance-function
                 collection_metadata={"hnsw:space": "cosine"},
                 persist_directory=f"./knowledge/{self.topic}",
+                client_settings=chromadb.Settings(migrations_hash_algorithm="sha256"),
             )
         except Exception as exc:
             logging.debug(

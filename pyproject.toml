@@ -31,7 +31,6 @@ six = ">=1.16.0"
 tiktoken = ">=0.4.0"
 tqdm = ">=4.65.0"
 tzdata = ">=2023.3"
-urllib3 = ">=2.0.3"
 yarl = ">=1.9.2"
 scipy = ">=1.10.1"
 fastapi = ">=0.97.0"
@@ -40,7 +39,8 @@ pyyaml = ">=6.0"
 setuptools = ">=67.8.0"
 gunicorn = ">=20.1.0"
 langchain = ">=0.0.302"
-chromadb = ">=0.4.13"
+# replace with ">={{version}}" whenever https://github.com/chroma-core/chroma/pull/1383 is merged
+chromadb = { git = "https://github.com/Avantol13/chroma.git", branch = "feat/cfg-hash-alg" }
 gen3authz = ">=2.1.0"
 authutils = ">=6.2.2"
 google-cloud-aiplatform = "^1.36.0"
@@ -55,7 +55,6 @@ pytest-asyncio = ">=0.21.1"
 isort = ">=5.12.0"
 black = ">=23.10.0"
 pylint = ">=3.0.1"
-gen3 = ">=4.21.1"
 
 [tool.pytest.ini_options]
 # Better default `pytest` command which adds coverage
