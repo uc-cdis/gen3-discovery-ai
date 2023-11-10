@@ -226,7 +226,7 @@ You can `poetry run python run.py` after install to run the app locally.
 
 For testing, you can `poetry run pytest`. The default `pytest` options specified 
 in the `pyproject.toml` additionally 
-runs coverage and will error if it falls below >95% that it's at now.
+runs coverage and will error if it falls below the threshold.
 
 #### Automatically format code and run pylint
 

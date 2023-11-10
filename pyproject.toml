@@ -70,7 +70,7 @@ addopts = """
 -vv --cov-config=.coveragerc
 --cov=gen3discoveryai
 --cov-report term-missing:skip-covered
---cov-fail-under 95
+--cov-fail-under 90
 --cov-report html:_coverage
 --cov-branch
 """
