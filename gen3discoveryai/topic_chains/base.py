@@ -45,15 +45,12 @@ class TopicChain:
         """
         raise NotImplementedError()
 
-    def insert_documents_into_vectorstore(
-        self, documents: list[Document], persist: bool = True
-    ) -> None:
+    def insert_documents_into_vectorstore(self, documents: list[Document]) -> None:
         """
         Update vectorstore under the topic provided with the provided documents. This is lower-level than store_knowledge
         and requires that the `self.vectorstore` be configured.
 
         Args:
-            persist: whether or not to persist to disk if the vectorstore supports it
             documents (list[langchain.schema.document.Document]): IDs to Documents to store in the knowledge store
         """
         if not self.vectorstore:
@@ -69,12 +66,6 @@ class TopicChain:
         self.vectorstore.add_documents(documents)
 
         logging.debug(f"Added {len(documents)} documents")
-
-        if persist and "persist" in dir(self.vectorstore):
-            logging.info(
-                f"Persisting knowledge store collection for {self.topic} to disk..."
-            )
-            self.vectorstore.persist()
 
     def run(self, query: str, *args, **kwargs):
         """

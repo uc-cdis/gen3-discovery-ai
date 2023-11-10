@@ -1,7 +1,28 @@
-# Gen3 Discovery AI Service
+
+# Gen3 Discovery AI
 
 Information discovery using generative artificial intelligence (AI). This service allows for configuring multiple topics
 for users, so they can send queries and get intelligent AI-generated responses.
+
+**Table of Contents**
+
+- [Overview](#overview)
+- [Details](#details)
+  - [Currently Supported Backends, Embeddings, and Models](#currently-supported-backends-embeddings-and-models)
+  - [Background](#background)
+- [Quickstart](#quickstart)
+  - [Setup](#setup)
+    - [Google Application Credentials](#google-application-credentials)
+    - [OpenAI Key](#openai-key)
+    - [Configuration](#configuration)
+    - [Knowledge Library Population](#knowledge-library-population)
+    - [Non-TSV Knowledge Loading](#non-tsv-knowledge-loading)
+  - [Running locally](#running-locally)
+- [Authz](#authz)
+- [Local Dev](#local-dev)
+    - [Automatically format code and run pylint](#automatically-format-code-and-run-pylint)
+    - [Testing Docker Build](#testing-docker-build)
+
 
 ## Overview
 
@@ -16,17 +37,17 @@ to a foundational large language model (LLM) for a response.
 This is intended to primarily support a [Retrieval Augmented Generation (RAG) architecture](https://arxiv.org/abs/2005.11401), where there is a
 knowledge library related to a topic.
 
-> The API itself is flexible per topic, so if a RAG architecture doesn't make sense, there are options to support others in the future.
+> The API itself is configurable *per* topic, so if a RAG architecture doesn't make sense for all topics, there is flexibility to support others.
 
 In RAG, upon receiving a query, additional information is retrieved from a knowledge library, relevancy compared to
 user query, and prompt to a foundational LLM model is augmented with the 
 additional context from the knowledge library (alongside a configured system prompt
 to guide the LLM on how it should interpret the context and response).
 
-### Initial support
+### Currently Supported Backends, Embeddings, and Models
 
     Knowledge Library:
-        - Chromadb in-mem vector database
+        - Chroma in-memory vector database
         - (TBD) Google Vertex AI Vector Search
         - (TBD) AWS Aurora Postgres with pgvector
         - (TBD) Others?
@@ -46,7 +67,7 @@ to guide the LLM on how it should interpret the context and response).
 
 Gen3 builds on other open source libraries, specifications, and tools when we can, and we tend to lean
 towards the best tools in the community or research space as it evolves (especially in 
-cases where we're on the bleeding edge).
+cases where we're on the bleeding edge like this).
 
 In the case of generative AI and LLMs,
 there is a lot of excellent work out there. We are building this on the
@@ -75,7 +96,7 @@ Create [OpenAI API](https://platform.openai.com) Account and get OpenAI API key 
 #### Configuration
 
 Topics are a combination of system prompt, description, what topic chain to use, and additional metadata (usually used by the topic chain). This service
-can support multiple topics at once.
+can support multiple topics at once with different topic chains.
 
 You can have a topic of "Gen3 Documentation" and "Data Commons Datasets" at the same
 time.
@@ -98,7 +119,7 @@ TOPICS=default,anothertopic
 # when a configuration is not provided. e.g. if you don't provide FOOBAR_SYSTEM_PROMPT then the DEFAULT_SYSTEM_PROMPT
 # will be used
 DEFAULT_SYSTEM_PROMPT=You are acting as a search assistant for a researcher who will be asking you questions about data available in a particular system. If you believe the question is not relevant to data in the system, do not answer. The researcher is likely trying to find data of interest for a particular reason or with specific criteria. You answer and recommend datasets that may be of interest to that researcher based on the context you're provided. If you are using any particular context to answer, you should cite that and tell the user where they can find more information. The user may not be able to see the documents you are citing, so provide the relevant information in your response. If you don't know the answer, just say that you don't know, don't try to make up an answer. If you don't believe what the user is looking for is available in the system based on the context, say so instead of trying to explain how to go somewhere else.
-DEFAULT_RAW_METADATA=model_name:gpt-3.5-turbo,model_temperature:0.33,num_similar_docs_to_find:5,similarity_score_threshold:0.75
+DEFAULT_RAW_METADATA=model_name:chat-bison,model_temperature:0,max_output_tokens:512,num_similar_docs_to_find:7,similarity_score_threshold:0.75
 DEFAULT_DESCRIPTION=Ask about available datasets, powered by public dataset metadata like study descriptions
 
 # Additional topic configurations
@@ -124,13 +145,44 @@ The topic configurations are flexible to support arbitrary new names `{{TOPIC NA
 
 #### Knowledge Library Population
 
-Now you need to store some data in the knowledge library. You can write your own script or modify the following to get all the public metadata from a Gen3 instance using the Discovery Metadata API.
+In order to utilize the topic chains effectively, you likely need to store some data in the knowledge library.
+You can write your own script or utilize the following.
+This script currently supports loading from arbitrary TSVs in a directory.
 
-```bash
-poetry run python ./bin/load_into_knowledge_store.py
+If you're using this for Gen3 Metadata, you can easily download public metadata
+from Gen3 to a TSV and use that as input (see our Gen3 SDK Metadata functionality
+for details).
+
+Here's the knowledge load script which takes a single argument, being a directory where TSVs are.
+
+> NOTE: This expects that filenames for a specific topic start with that topic name.
+> You *can* have multiple files per topic but they need to start with the topic name.
+> You can also have nested directories, this will search recursively.
+
+An example `/tsvs` directory:
+
+```commandline
+- default.tsv
+- bdc/
+    - bdc1.tsv
+    - bdc2.tsv
 ```
 
-The `TopicChain` class includes a `store_knowledge` method which expects a list of `langchain` documents. This is the default output of  `langchain.text_splitter.TokenTextSplitter`. Langchain has numerous document loaders that can be fed into the splitter already, so [check out the langchain documentation](https://python.langchain.com/docs/modules/data_connection/document_loaders).
+Example run:
+
+```bash
+poetry run python ./bin/load_into_knowledge_store.py /tsvs
+```
+
+#### Non-TSV Knowledge Loading
+
+If loading from TSVs doesn't work easily for you, you should be able to 
+easily modify the `./bin/load_into_knowledge_store.py` script to your needs by using a different langchain document loader.
+
+The base `TopicChain` class includes a `store_knowledge` method which expects a list
+of `langchain` documents. This is the default output of  
+`langchain.text_splitter.TokenTextSplitter`. Langchain has numerous document loaders that can be
+fed into the splitter already, so [check out the langchain documentation](https://python.langchain.com/docs/modules/data_connection/document_loaders).
 
 ### Running locally
 
@@ -178,20 +230,22 @@ runs coverage and will error if it falls below >95% that it's at now.
 
 #### Automatically format code and run pylint
 
-Quick script to run `isort` and `black` over everything if 
+This quick `clean.sh` script is used to run `isort` and `black` over everything if 
 you don't integrate those with your editor/IDE.
 
-> NOTE: This requires the beginning of the setup for using Super Linter locally. You must have the global linter configs in `~/.gen3/.github/.github/linters`
+> NOTE: This requires the beginning of the setup for using Super 
+> Linter locally. You must have the global linter configs in 
+> `~/.gen3/.github/.github/linters`. See [Gen3's linter setup docs](https://github.com/uc-cdis/.github/blob/master/.github/workflows/README.md#L1).
 
-This also runs just `pylint` to check Python code for lint.
+`clean.sh` also runs just `pylint` to check Python code for lint.
 
-Here's the command:
+Here's how you can run it:
 
 ```bash
 ./clean.sh
 ```
 
-> NOTE: GitHub's Super Linter runs more than just `pylint` so it's worth setting that up locally to run before pushing large changes. See [this](https://github.com/uc-cdis/.github/blob/master/.github/workflows/README.md#L7) for instructions. Then you can run pylint more frequently as you develop.
+> NOTE: GitHub's Super Linter runs more than just `pylint` so it's worth setting that up locally to run before pushing large changes. See [Gen3's linter setup docs](https://github.com/uc-cdis/.github/blob/master/.github/workflows/README.md#L1) for full instructions. Then you can run pylint more frequently as you develop.
 
 #### Testing Docker Build
 
@@ -206,7 +260,8 @@ To run:
 ```bash
 docker run --name gen3discoveryai \
 --env-file "./.env" \
--v "$GOOGLE_APPLICATION_CREDENTIALS":"$GOOGLE_APPLICATION_CREDENTIALS" -p 8089:8089 \
+-v "$GOOGLE_APPLICATION_CREDENTIALS":"$GOOGLE_APPLICATION_CREDENTIALS" \
+-p 8089:8089 \
 gen3discoveryai:latest
 ```
 

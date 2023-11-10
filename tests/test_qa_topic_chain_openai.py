@@ -75,7 +75,7 @@ def test_qa_topic_chain_store_knowledge(chroma, _, does_chroma_collection_exist)
     # handle this gracefully and just reuse the existing collection
     # in other words, this shouldn't have any result on the assertion made
     if does_chroma_collection_exist:
-        chroma.side_effect = chromadb.errors.InvalidCollectionException
+        chroma.side_effect = Exception
 
     topic_chain.store_knowledge(documents=["doc1", "doc2"])
 

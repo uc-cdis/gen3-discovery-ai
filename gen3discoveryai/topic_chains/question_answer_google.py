@@ -153,16 +153,18 @@ class TopicChainGoogleQuestionAnswerRAG(TopicChain):
 
             self.vectorstore = Chroma(
                 collection_name=self.topic,
-                embedding_function=VertexAIEmbeddings(
-                    openai_api_key=str(config.OPENAI_API_KEY)
-                ),
+                embedding_function=VertexAIEmbeddings(),
                 # We've heard the `cosine` distance function performs better
                 # https://docs.trychroma.com/usage-guide#changing-the-distance-function
                 collection_metadata={"hnsw:space": "cosine"},
                 persist_directory=f"./knowledge/{self.topic}",
             )
-        except chromadb.errors.InvalidCollectionException:
+        except Exception as exc:
+            logging.debug(
+                "Exception while deleting collection and recreating client, "
+                "assume the collection just didn't exist and continue. Exc: {exc}"
+            )
             # doesn't exist so just continue adding
             pass
 
-        self.insert_documents_into_vectorstore(documents, persist=True)
+        self.insert_documents_into_vectorstore(documents)
