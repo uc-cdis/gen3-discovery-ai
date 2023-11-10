@@ -40,28 +40,28 @@ knowledge library related to a topic.
 > The API itself is configurable *per* topic, so if a RAG architecture doesn't make sense for all topics, there is flexibility to support others.
 
 In RAG, upon receiving a query, additional information is retrieved from a knowledge library, relevancy compared to
-user query, and prompt to a foundational LLM model is augmented with the 
+user query, and prompt to a foundational LLM is augmented with the 
 additional context from the knowledge library (alongside a configured system prompt
 to guide the LLM on how it should interpret the context and response).
 
 ### Currently Supported Backends, Embeddings, and Models
 
-    Knowledge Library:
-        - Chroma in-memory vector database
-        - (TBD) Google Vertex AI Vector Search
-        - (TBD) AWS Aurora Postgres with pgvector
-        - (TBD) Others?
+Knowledge Library:
+  - :white_check_mark: Chroma in-memory vector database
+  - :grey_question: Google Vertex AI Vector Search
+  - :grey_question: AWS Aurora Postgres with pgvector
+  - :grey_question: Others
 
-    Knowledge Library Embeddings:
-        - Google Vertex AI PaLM Embeddings 
-        - OpenAI Embeddings
+Knowledge Library Embeddings:
+  - :white_check_mark: Google Vertex AI PaLM Embeddings 
+  - :white_check_mark: OpenAI Embeddings
 
-    Foundational Model:
-        - Google PaLM API Models (configurable, model:`chat-bison`)
-        - OpenAI's Models (configurable, model: `gpt-3.5-turbo`)
-        - (TBD) CTDS trained/tuned model
-        - (TBD) AWS Bedrock?
-        - (TBD) Others?
+Foundational Model:
+  - :white_check_mark: Google PaLM API Models (configurable, model:`chat-bison`)
+  - :white_check_mark: OpenAI's Models (configurable, model: `gpt-3.5-turbo`)
+  - :grey_question: CTDS trained/tuned model
+  - :grey_question: AWS Bedrock
+  - :grey_question: Others
 
 ### Background
 
