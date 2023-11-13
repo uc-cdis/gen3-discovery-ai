@@ -40,7 +40,7 @@ setuptools = ">=67.8.0"
 gunicorn = ">=20.1.0"
 langchain = ">=0.0.302"
 # replace with ">={{version}}" whenever https://github.com/chroma-core/chroma/pull/1383 is merged
-chromadb = { git = "https://github.com/Avantol13/chroma.git", branch = "feat/cfg-hash-alg" }
+chromadb = { git = "https://github.com/Avantol13/chroma.git", rev = "8f62951" }
 gen3authz = ">=2.1.0"
 authutils = ">=6.2.2"
 google-cloud-aiplatform = "^1.36.0"
