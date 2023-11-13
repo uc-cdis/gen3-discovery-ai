@@ -99,14 +99,22 @@ class TopicChainGoogleQuestionAnswerRAG(TopicChain):
         )
         # langchain/chroma recommend a separate client per persisted path
         # to avoid potential collisions. We will separate on topic
+        settings = chromadb.Settings(
+            migrations_hash_algorithm="sha256",
+        )
+
+        persistent_client = chromadb.PersistentClient(
+            path=f"./knowledge/{topic}", settings=settings
+        )
         vectorstore = Chroma(
+            client=persistent_client,
             collection_name=topic,
             embedding_function=VertexAIEmbeddings(),
             # We've heard the `cosine` distance function performs better
             # https://docs.trychroma.com/usage-guide#changing-the-distance-function
             collection_metadata={"hnsw:space": "cosine"},
             persist_directory=f"./knowledge/{topic}",
-            client_settings=chromadb.Settings(migrations_hash_algorithm="sha256"),
+            client_settings=settings,
         )
 
         logging.debug("chroma vectorstore initialized")
@@ -147,26 +155,18 @@ class TopicChainGoogleQuestionAnswerRAG(TopicChain):
             documents (list[langchain.schema.document.Document]): documents to store in the knowledge store
         """
         try:
-            logging.debug(
-                f"Deleting current knowledge store collection for {self.topic}..."
-            )
-            self.vectorstore.delete_collection()
-
-            self.vectorstore = Chroma(
-                collection_name=self.topic,
-                embedding_function=VertexAIEmbeddings(),
-                # We've heard the `cosine` distance function performs better
-                # https://docs.trychroma.com/usage-guide#changing-the-distance-function
-                collection_metadata={"hnsw:space": "cosine"},
-                persist_directory=f"./knowledge/{self.topic}",
-                client_settings=chromadb.Settings(migrations_hash_algorithm="sha256"),
-            )
+            # get all docs but don't include anything other than ids
+            docs = self.vectorstore.get(include=[])
+            if docs["ids"]:
+                logging.debug(
+                    f"Deleting current knowledge store collection for {self.topic}..."
+                )
+                self.vectorstore.delete(ids=docs["ids"])
         except Exception as exc:
             logging.debug(
                 "Exception while deleting collection and recreating client, "
                 "assume the collection just didn't exist and continue. Exc: {exc}"
             )
             # doesn't exist so just continue adding
-            pass
 
         self.insert_documents_into_vectorstore(documents)

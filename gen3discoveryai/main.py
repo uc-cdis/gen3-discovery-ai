@@ -89,6 +89,9 @@ def get_topics_from_config():
         ...
     }
     """
+    if config.topics:
+        return config.topics
+
     chain_factory = get_topic_chain_factory()
 
     config_topics = {}
