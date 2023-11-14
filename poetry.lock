@@ -669,9 +669,9 @@ uvicorn = {version = ">=0.18.3", extras = ["standard"]}
 
 [package.source]
 type = "git"
-url = "https://github.com/Avantol13/chroma.git"
-reference = "8f62951"
-resolved_reference = "8f629512ba33ed23420a06da15c3de3fe9d093ad"
+url = "git@github.com:chroma-core/chroma.git"
+reference = "10bdd3171ecabc641c9a077ab3ef580cc710db39"
+resolved_reference = "10bdd3171ecabc641c9a077ab3ef580cc710db39"
 
 [[package]]
 name = "click"
@@ -1912,14 +1912,14 @@ text-helpers = ["chardet (>=5.1.0,<6.0.0)"]
 
 [[package]]
 name = "langsmith"
-version = "0.0.63"
+version = "0.0.64"
 description = "Client library to connect to the LangSmith LLM Tracing and Evaluation Platform."
 category = "main"
 optional = false
 python-versions = ">=3.8.1,<4.0"
 files = [
-    {file = "langsmith-0.0.63-py3-none-any.whl", hash = "sha256:43a521dd10d8405ac21a0b959e3de33e2270e4abe6c73cc4036232a6990a0793"},
-    {file = "langsmith-0.0.63.tar.gz", hash = "sha256:ddb2dfadfad3e05151ed8ba1643d1c516024b80fbd0c6263024400ced06a3768"},
+    {file = "langsmith-0.0.64-py3-none-any.whl", hash = "sha256:461acdcd8332d1325c16dc57e8a2d5ec9d1578490a4eaabe14db74db74ceaf21"},
+    {file = "langsmith-0.0.64.tar.gz", hash = "sha256:e78c02501c2cff24fff7bd2d28ff3765b21675c7f0fcf6a09932bc218603c36e"},
 ]
 
 [package.dependencies]
@@ -2192,14 +2192,14 @@ sympy = "*"
 
 [[package]]
 name = "openai"
-version = "1.2.3"
+version = "1.2.4"
 description = "The official Python library for the openai API"
 category = "main"
 optional = false
 python-versions = ">=3.7.1"
 files = [
-    {file = "openai-1.2.3-py3-none-any.whl", hash = "sha256:d8d1221d777c3b2d12468f17410bf929ca0cb06e9556586e61f5a4255f0cf2b4"},
-    {file = "openai-1.2.3.tar.gz", hash = "sha256:800d206ec02c8310400f07b3bb52e158751f3a419e75d080117d913f358bf0d5"},
+    {file = "openai-1.2.4-py3-none-any.whl", hash = "sha256:53927a2ca276eec0a0efdc1ae829f74a51f49b7d3e14cc6f820aeafb0abfd802"},
+    {file = "openai-1.2.4.tar.gz", hash = "sha256:d99a474049376be431d9b4dec3a5c895dd76e19165748c5944e80b7905d1b1ff"},
 ]
 
 [package.dependencies]
@@ -4217,4 +4217,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.9,<3.10.dev0"
-content-hash = "ff339580fc1cd41f8ef08f31f705c222bead9fd01ea1681cd898dc4bdd2f7ac8"
+content-hash = "04abb550e76ee6f91b0517bae4372f51e774db28069d1761566ce765ac5a8039"
