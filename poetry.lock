@@ -664,12 +664,12 @@ tenacity = ">=8.2.3"
 tokenizers = ">=0.13.2"
 tqdm = ">=4.65.0"
 typer = ">=0.9.0"
-typing_extensions = ">=4.5.0"
+typing-extensions = ">=4.5.0"
 uvicorn = {version = ">=0.18.3", extras = ["standard"]}
 
 [package.source]
 type = "git"
-url = "git@github.com:chroma-core/chroma.git"
+url = "https://github.com/chroma-core/chroma.git"
 reference = "10bdd31"
 resolved_reference = "10bdd3171ecabc641c9a077ab3ef580cc710db39"
 
@@ -4221,4 +4221,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.9,<3.10.dev0"
-content-hash = "747028f7bd0098a6063c38daa404d1d7acfef587a299f4afd23d0fe3eb1a6fa5"
+content-hash = "8b62fddd9cb38cfad8e6b9afd40a803aa7d8034877c49de88fa61dde1ea76dfa"
