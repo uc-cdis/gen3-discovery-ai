@@ -670,7 +670,7 @@ uvicorn = {version = ">=0.18.3", extras = ["standard"]}
 [package.source]
 type = "git"
 url = "git@github.com:chroma-core/chroma.git"
-reference = "10bdd3171ecabc641c9a077ab3ef580cc710db39"
+reference = "10bdd31"
 resolved_reference = "10bdd3171ecabc641c9a077ab3ef580cc710db39"
 
 [[package]]
@@ -4221,4 +4221,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.9,<3.10.dev0"
-content-hash = "04abb550e76ee6f91b0517bae4372f51e774db28069d1761566ce765ac5a8039"
+content-hash = "747028f7bd0098a6063c38daa404d1d7acfef587a299f4afd23d0fe3eb1a6fa5"
