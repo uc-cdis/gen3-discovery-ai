@@ -167,7 +167,8 @@ async def _get_token_claims(
         raise HTTPException(status_code=HTTP_401_UNAUTHENTICATED)
 
     # This is what the Gen3 AuthN/Z service adds as the audience to represent Gen3 services
-    audience = f"{request.base_url}/user"
+    base_url = str(request.base_url).rstrip("/")
+    audience = f"{base_url}/user"
 
     try:
         # NOTE: token can be None if no Authorization header was provided, we expect
