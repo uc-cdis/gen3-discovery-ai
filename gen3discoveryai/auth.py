@@ -172,6 +172,9 @@ async def _get_token_claims(
     try:
         # NOTE: token can be None if no Authorization header was provided, we expect
         #       this to cause a downstream exception since it is invalid
+        logging.debug(
+            f"checking access token for scopes: `user` and `openid` and audience: `{audience}`"
+        )
         token_claims = await access_token(
             "user", "openid", audience=audience, purpose="access"
         )(token)
