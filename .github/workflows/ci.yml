@@ -63,7 +63,7 @@ jobs:
 
   InformationalLint:
     name: Run Informational Linters
-    needs: [LintConfig]
+    needs: [LintConfig, UnitTest]
     uses: uc-cdis/.github/.github/workflows/optional_lint_check.yaml@feat/lint
     with:
        python-version: '3.9'

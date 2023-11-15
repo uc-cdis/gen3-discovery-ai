@@ -54,13 +54,21 @@ async def authorize_request(
     if not token:
         raise HTTPException(status_code=HTTP_401_UNAUTHENTICATED)
 
-    if not await arborist.auth_request(
-        token.credentials,
-        service="gen3_discovery_ai",
-        methods=authz_access_method,
-        resources=authz_resources,
-    ):
-        raise HTTPException(status_code=HTTP_403_FORBIDDEN)
+    try:
+        if not await arborist.auth_request(
+            token.credentials,
+            service="gen3_discovery_ai",
+            methods=authz_access_method,
+            resources=authz_resources,
+        ):
+            logging.debug(
+                f"user does not have `{authz_access_method}` access "
+                f"on `{authz_resources}` for service `gen3_discovery_ai`"
+            )
+            raise HTTPException(status_code=HTTP_403_FORBIDDEN)
+    except Exception as exc:
+        logging.debug(f"arborist.auth_request failed, exc: {exc}")
+        raise HTTPException(status_code=HTTP_403_FORBIDDEN) from exc
 
 
 async def get_user_id(
@@ -158,10 +166,15 @@ async def _get_token_claims(
     if not token:
         raise HTTPException(status_code=HTTP_401_UNAUTHENTICATED)
 
+    # This is what the Gen3 AuthN/Z service adds as the audience to represent Gen3 services
+    audience = f"{request.base_url}/user"
+
     try:
         # NOTE: token can be None if no Authorization header was provided, we expect
         #       this to cause a downstream exception since it is invalid
-        token_claims = await access_token("user", "openid", purpose="access")(token)
+        token_claims = await access_token(
+            "user", "openid", audience=audience, purpose="access"
+        )(token)
     except Exception as exc:
         logging.error(exc.detail if hasattr(exc, "detail") else exc, exc_info=True)
         raise HTTPException(
