@@ -51,4 +51,7 @@ WORKDIR /$appname
 
 USER appuser
 
+# Cache the necessary tiktoken encoding file
+RUN poetry run python -c "from langchain.text_splitter import TokenTextSplitter; TokenTextSplitter.from_tiktoken_encoder(chunk_size=100, chunk_overlap=0)"
+
 CMD ["poetry", "run", "gunicorn", "gen3discoveryai.main:app", "-k", "uvicorn.workers.UvicornWorker", "-c", "gunicorn.conf.py"]

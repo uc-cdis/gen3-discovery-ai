@@ -79,9 +79,17 @@ def load_tsvs_from_dir(
 
             # 4097 is OpenAI's max, so if we split into 1000, we can get 4 results with
             # 97 tokens left for the query?
-            text_splitter = TokenTextSplitter.from_tiktoken_encoder(
-                chunk_size=token_splitter_chunk_size, chunk_overlap=0
-            )
+            try:
+                text_splitter = TokenTextSplitter.from_tiktoken_encoder(
+                    chunk_size=token_splitter_chunk_size, chunk_overlap=0
+                )
+            except Exception as exc:
+                logging.error(
+                    "Unable to get a token splitter, "
+                    "this could be b/c we couldn't find or download the necessary "
+                    f"encoding file. Original exc: {exc}"
+                )
+                raise
             documents = text_splitter.split_documents(data)
 
             topic_documents.extend(documents)
