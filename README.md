@@ -157,7 +157,7 @@ You can write your own script or utilize the following.
 This script currently supports loading from arbitrary TSVs in a directory.
 
 If you're using this for Gen3 Metadata, you can easily download public metadata
-from Gen3 to a TSV and use that as input (see our Gen3 SDK Metadata functionality
+from Gen3 to a TSV and use that as input (see our [Gen3 SDK Metadata functionality](https://github.com/uc-cdis/gen3sdk-python/blob/master/docs/howto/discoveryMetadataTools.md)
 for details).
 
 Here's the knowledge load script which takes a single argument, being a directory where TSVs are.
@@ -220,7 +220,7 @@ curl --location 'http://0.0.0.0:8089/topics/' \
 
 ## Authz
 
-Relies on Gen3 Framework Service's Policy Engine.
+Relies on Gen3's Policy Engine.
 
 - For `/topics` endpoints, requires `read` on `/gen3_discovery_ai/topics`
 - For `/ask` endpoint, requires `read` on `/gen3_discovery_ai/ask/{topic}`
