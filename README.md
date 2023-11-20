@@ -91,6 +91,9 @@ a valid credentials JSON file (likely a service account key).
 
 See [Google Cloud Platform docs](https://cloud.google.com/docs/authentication/application-default-credentials#GAC) for more info. 
 
+The credentials will need IAM permissions in a Google Project with Google Vertex AI enabled (which requires the setup 
+of a billing account). The IAM permissions required are captured in Google's predefined role: `Vertex AI User`.
+
 #### OpenAI Key
 
 Create [OpenAI API](https://platform.openai.com) Account and get OpenAI API key (you have to attach a credit card).
