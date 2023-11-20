@@ -1,4 +1,3 @@
-
 # Gen3 Discovery AI
 
 Information discovery using generative artificial intelligence (AI). This service allows for configuring multiple topics
@@ -57,9 +56,9 @@ to guide the LLM on how it should interpret the context and response).
   - :white_check_mark: OpenAI Embeddings
 
 **Foundational Model:**
-  - :white_check_mark: Google PaLM API Models (configurable, model:`chat-bison`)
-  - :white_check_mark: OpenAI's Models (configurable, model: `gpt-3.5-turbo`)
-  - :grey_question: CTDS trained/tuned model
+  - :white_check_mark: Google PaLM API Models (configurable, default model:`chat-bison`)
+  - :white_check_mark: OpenAI's Models (configurable, default model: `gpt-3.5-turbo`)
+  - :grey_question: Trained/tuned model
   - :grey_question: AWS Bedrock
   - :grey_question: Others
 
@@ -72,7 +71,10 @@ cases where we're on the bleeding edge like this).
 In the case of generative AI and LLMs,
 there is a lot of excellent work out there. We are building this on the
 shoulders of giants for many of the knowledge libraries and foundational model 
-interactions. We're using `langchain`, `chromadb`, among others.
+interactions. We're using `langchain`, `chromadb`, among others. 
+
+We've even contributed back to open source tools like `chromadb` to improve its ability to operate in a FIPS-compliant
+environment. :heart:
 
 ## Quickstart
 
@@ -86,6 +88,8 @@ This documented setup relies on both our Google Vertex AI support **and** OpenAI
 
 Set the `GOOGLE_APPLICATION_CREDENTIALS` environment variable as the path to 
 a valid credentials JSON file (likely a service account key). 
+
+See [Google Cloud Platform docs](https://cloud.google.com/docs/authentication/application-default-credentials#GAC) for more info. 
 
 #### OpenAI Key
 
@@ -119,7 +123,7 @@ TOPICS=default,anothertopic
 # when a configuration is not provided. e.g. if you don't provide FOOBAR_SYSTEM_PROMPT then the DEFAULT_SYSTEM_PROMPT
 # will be used
 DEFAULT_SYSTEM_PROMPT=You are acting as a search assistant for a researcher who will be asking you questions about data available in a particular system. If you believe the question is not relevant to data in the system, do not answer. The researcher is likely trying to find data of interest for a particular reason or with specific criteria. You answer and recommend datasets that may be of interest to that researcher based on the context you're provided. If you are using any particular context to answer, you should cite that and tell the user where they can find more information. The user may not be able to see the documents you are citing, so provide the relevant information in your response. If you don't know the answer, just say that you don't know, don't try to make up an answer. If you don't believe what the user is looking for is available in the system based on the context, say so instead of trying to explain how to go somewhere else.
-DEFAULT_RAW_METADATA=model_name:chat-bison,model_temperature:0,max_output_tokens:512,num_similar_docs_to_find:7,similarity_score_threshold:0.75
+DEFAULT_RAW_METADATA=model_name:chat-bison,model_temperature:0.3,max_output_tokens:512,num_similar_docs_to_find:7,similarity_score_threshold:0.6
 DEFAULT_DESCRIPTION=Ask about available datasets, powered by public dataset metadata like study descriptions
 
 # Additional topic configurations
