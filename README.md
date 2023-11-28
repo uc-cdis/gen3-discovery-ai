@@ -116,11 +116,12 @@ Here's an example `.env` file you can copy and modify:
 ########## Secrets ##########
 
 OPENAI_API_KEY=REDACTED
+GOOGLE_APPLICATION_CREDENTIALS=/home/user/creds.json
 
 ########## Topic Configuration ##########
 
 # you must have `default`, you can add others a comma-separated string
-TOPICS=default,anothertopic
+TOPICS=default,anothertopic,gen3docs
 
 # default setup. These will be used both for the actual default topic AND as the value for subsequent topics
 # when a configuration is not provided. e.g. if you don't provide FOOBAR_SYSTEM_PROMPT then the DEFAULT_SYSTEM_PROMPT
@@ -134,6 +135,10 @@ ANOTHERTOPIC_DESCRIPTION=Ask about available datasets, powered by public dataset
 ANOTHERTOPIC_RAW_METADATA=model_name:gpt-3.5-turbo,model_temperature:0.45,num_similar_docs_to_find:6,similarity_score_threshold:0.75
 ANOTHERTOPIC_SYSTEM_PROMPT=You answer questions about datasets that are available in the system. You'll be given relevant dataset descriptions for every dataset that's been ingested into the system. You are acting as a search assistant for a biomedical researcher (who will be asking you questions). The researcher is likely trying to find datasets of interest for a particular research question. You should recommend datasets that may be of interest to that researcher.
 ANOTHERTOPIC_CHAIN_NAME=TopicChainOpenAiQuestionAnswerRAG
+
+GEN3DOCS_SYSTEM_PROMPT=You will be given relevant context from all the public documentation surrounding an open source software called Gen3. You are acting as an assistant to a new Gen3 developer, who is going to ask a question. Try to answer their question based on the context, but know that some of the context may be out of date. Let the developer know where they can get more information if relevant and cite portions of the context.
+GEN3DOCS_RAW_METADATA=model_name:chat-bison,model_temperature:0.5,max_output_tokens:512,num_similar_docs_to_find:7,similarity_score_threshold:0.5
+GEN3DOCS_DESCRIPTION=Ask about Gen3, powered by public markdown files in the UChicago Center for Translational Data Science's GitHub
 
 ########## Debugging and Logging Configurations ##########
 
@@ -154,14 +159,22 @@ The topic configurations are flexible to support arbitrary new names `{{TOPIC NA
 
 In order to utilize the topic chains effectively, you likely need to store some data in the knowledge library.
 You can write your own script or utilize the following.
-This script currently supports loading from arbitrary TSVs in a directory.
+This script currently supports loading from arbitrary TSVs or Markdown files in a directory.
 
-If you're using this for Gen3 Metadata, you can easily download public metadata
-from Gen3 to a TSV and use that as input (see our [Gen3 SDK Metadata functionality](https://github.com/uc-cdis/gen3sdk-python/blob/master/docs/howto/discoveryMetadataTools.md)
-for details).
+> **IMPORTANT**: Make sure when using `/bin` scripts, the `.env` service configuration
+> is set up and appropriately loaded (e.g. execute the script from a directory where there is
+> a `.env` config). The `/bin` scripts REQUIRE loading the configuration in order to 
+> both load the available topics and to properly embed and load into the vectorstore.
 
-Here's the knowledge load script which takes a single argument, being a directory where TSVs are.
+##### Loading TSVs
 
+Here's the knowledge load script which takes a single required argument, being a directory where TSVs are.
+
+See other options with `--help`:
+
+```bash
+poetry run python ./bin/load_into_knowledge_store.py tsvs --help
+```
 > NOTE: This expects that filenames for a specific topic start with that topic name.
 > You *can* have multiple files per topic but they need to start with the topic name.
 > You can also have nested directories, this will search recursively.
@@ -178,12 +191,39 @@ An example `/tsvs` directory:
 Example run:
 
 ```bash
-poetry run python ./bin/load_into_knowledge_store.py /tsvs
+poetry run python ./bin/load_into_knowledge_store.py tsvs /tsvs
 ```
 
-#### Non-TSV Knowledge Loading
+> If you're using this for Gen3 Metadata, you can easily download public metadata
+> from Gen3 to a TSV and use that as input (see our [Gen3 SDK Metadata functionality](https://github.com/uc-cdis/gen3sdk-python/blob/master/docs/howto/discoveryMetadataTools.md)
+> for details).
 
-If loading from TSVs doesn't work easily for you, you should be able to 
+##### Loading Markdown
+
+There's an example script that downloads all the public markdown 
+files from our GitHub org. You can reference
+the `bin/download_files_from_github.py` example script if interested.
+
+Once you have Markdown files in a directory, you just need to use the
+`./bin/load_into_knowledge_store.py` utility and supply the directory and topic.
+
+See available options:
+
+```bash
+poetry run python ./bin/load_into_knowledge_store.py markdown --help
+```
+
+> **NOTE**: Unlike TSVs, loading from a Markdown directory requires specifying a single topic for all files in that directory.
+
+Example run:
+
+```bash
+poetry run python ./bin/load_into_knowledge_store.py markdown --topic anothertopic ./bin/library
+```
+
+#### Non-TSV and Non-Markdown Knowledge Loading
+
+If loading from TSVs or Markdown doesn't work easily for you, you should be able to 
 easily modify the `./bin/load_into_knowledge_store.py` script to your needs by using a different langchain document loader.
 
 The base `TopicChain` class includes a `store_knowledge` method which expects a list
