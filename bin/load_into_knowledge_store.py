@@ -1,8 +1,8 @@
 #!/usr/bin/env python
-import click
 import glob
 import os
 
+import click
 from langchain.document_loaders import UnstructuredMarkdownLoader
 from langchain.document_loaders.csv_loader import CSVLoader
 from langchain.text_splitter import TokenTextSplitter
