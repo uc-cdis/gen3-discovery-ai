@@ -10,9 +10,10 @@ import os
 import time
 
 import requests
+from werkzeug.utils import secure_filename
 
 URL = "https://api.github.com/search/code?q=org:uc-cdis+language:Markdown"
-GITHUB_TOKEN = os.environ.get("GH_TOKEN")
+GITHUB_TOKEN = str(os.environ.get("GH_TOKEN"))
 AUTH_HEADER = {"Authorization": f"Bearer {GITHUB_TOKEN}"}
 
 
@@ -81,7 +82,7 @@ def _download_items(items):
             logging.error(f"ERROR. Unable to download: {file_name}. Skipping...")
             continue
 
-        with open(f"{output_path}/{file_name}", "wb") as output_file:
+        with open(secure_filename(f"{output_path}/{file_name}"), "wb") as output_file:
             output_file.write(download_resp.content)
         print(f"File downloaded to: {output_path}/{file_name}")
         print("------")  # Print a separator for better readability
