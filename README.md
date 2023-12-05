@@ -46,18 +46,18 @@ to guide the LLM on how it should interpret the context and respond).
 ### Currently Supported Backends, Embeddings, and Models
 
 **Knowledge Library:**
-  - :white_check_mark: Chroma in-memory vector database
+  - ✅ Chroma in-memory vector database
   - :grey_question: Google Vertex AI Vector Search
   - :grey_question: AWS Aurora Postgres with pgvector
   - :grey_question: Others
 
 **Knowledge Library Embeddings:**
-  - :white_check_mark: Google Vertex AI PaLM Embeddings 
-  - :white_check_mark: OpenAI Embeddings
+  - ✅ Google Vertex AI PaLM Embeddings 
+  - ✅ OpenAI Embeddings
 
 **Foundational Model:**
-  - :white_check_mark: Google PaLM API Models (configurable, default model:`chat-bison`)
-  - :white_check_mark: OpenAI's Models (configurable, default model: `gpt-3.5-turbo`)
+  - ✅ Google PaLM API Models (configurable, default model:`chat-bison`)
+  - ✅ OpenAI's Models (configurable, default model: `gpt-3.5-turbo`)
   - :grey_question: Trained/tuned model
   - :grey_question: AWS Bedrock
   - :grey_question: Others
