@@ -41,7 +41,7 @@ knowledge library related to a topic.
 In RAG, upon receiving a query, additional information is retrieved from a knowledge library, relevancy compared to
 user query, and prompt to a foundational LLM is augmented with the 
 additional context from the knowledge library (alongside a configured system prompt
-to guide the LLM on how it should interpret the context and response).
+to guide the LLM on how it should interpret the context and respond).
 
 ### Currently Supported Backends, Embeddings, and Models
 
