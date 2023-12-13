@@ -102,20 +102,21 @@ async def ask_route(
             "Service unavailable.",
         ) from exc
 
-    logging.info(f"user_query={query}")
-
-    end_time = time.time()
-    logging.info(f"ask_time={end_time - start_time}")
-
     documents = []
     for doc in raw_response.get("source_documents"):
         parsed_doc = {"page_content": doc.page_content, "metadata": doc.metadata}
         documents.append(parsed_doc)
 
     response = {
-        "response": raw_response.get("result"),
+        "response": raw_response.get("result", "").strip(),
         "documents": documents,
     }
+
+    end_time = time.time()
+    logging.info(
+        "Gen3 Discovery AI Response. "
+        f"user_query={query}, topic={topic}, response={response['response']}, time_in_model={end_time - start_time}"
+    )
 
     # TODO
     if not conversation_id:
