@@ -52,7 +52,7 @@ async def ask_route(
     if not config.topics.get(topic, None):
         logging.debug(f"user provided topic not found: {topic}")
         raise HTTPException(
-            status_code=HTTP_404_NOT_FOUND, detail="invalid topic, not found"
+            status_code=HTTP_404_NOT_FOUND, detail=f"invalid topic {topic}, not found"
         )
 
     query = data.get("query")
