@@ -181,7 +181,7 @@ async def topics_route(request: Request, provided_topic: str = None) -> dict:
     )
 
     if provided_topic and not config.topics.get(provided_topic, None):
-        raise HTTPException(status_code=404, detail="invalid topic")
+        raise HTTPException(status_code=404, detail=f"{provided_topic} not found")
 
     output = {}
 
