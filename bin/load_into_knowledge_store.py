@@ -3,9 +3,9 @@ import glob
 import os
 
 import click
+from langchain.text_splitter import TokenTextSplitter
 from langchain_community.document_loaders import UnstructuredMarkdownLoader
 from langchain_community.document_loaders.csv_loader import CSVLoader
-from langchain.text_splitter import TokenTextSplitter
 
 from gen3discoveryai import logging
 from gen3discoveryai.main import get_topics_from_config

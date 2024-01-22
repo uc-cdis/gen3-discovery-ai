@@ -8,6 +8,7 @@ afterward and then the files themselves from each repo.
 import logging
 import os
 import time
+from urllib.parse import urlparse
 
 import requests
 from werkzeug.utils import secure_filename
@@ -62,7 +63,10 @@ def _download_items(items):
         repo = item["repository"]["name"]
         file_name = item["name"]
         output_path = f"library/{repo}"
-        url = item["url"]
+        url = str(item["url"])
+
+        _verify_github_api_url(url)
+
         print(f"Processing URL: {url}")
         try:
             search_res_resp = requests.get(
@@ -86,6 +90,16 @@ def _download_items(items):
             output_file.write(download_resp.content)
         print(f"File downloaded to: {output_path}/{file_name}")
         print("------")  # Print a separator for better readability
+
+
+def _verify_github_api_url(url):
+    expected_domain = "api.github.com"
+
+    parsed_url = urlparse(url)
+    domain = parsed_url.netloc
+
+    if domain != expected_domain:
+        raise ValueError(f"The URL domain is not {expected_domain}")
 
 
 if __name__ == "__main__":

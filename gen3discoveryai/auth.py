@@ -1,12 +1,12 @@
 from authutils.token.fastapi import access_token
-from fastapi import HTTPException, Request, Depends
+from fastapi import Depends, HTTPException, Request
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from gen3authz.client.arborist.async_client import ArboristClient
+from starlette.status import HTTP_401_UNAUTHORIZED as HTTP_401_UNAUTHENTICATED
 from starlette.status import (
-    HTTP_401_UNAUTHORIZED as HTTP_401_UNAUTHENTICATED,
     HTTP_403_FORBIDDEN,
-    HTTP_503_SERVICE_UNAVAILABLE,
     HTTP_429_TOO_MANY_REQUESTS,
+    HTTP_503_SERVICE_UNAVAILABLE,
 )
 
 from gen3discoveryai import config, logging

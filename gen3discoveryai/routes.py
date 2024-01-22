@@ -3,8 +3,7 @@ import uuid
 from importlib.metadata import version
 from typing import Any
 
-from fastapi import APIRouter, HTTPException, Request, Depends
-
+from fastapi import APIRouter, Depends, HTTPException, Request
 from starlette.status import (
     HTTP_400_BAD_REQUEST,
     HTTP_404_NOT_FOUND,
@@ -15,8 +14,8 @@ from gen3discoveryai import config, logging
 from gen3discoveryai.auth import (
     authorize_request,
     get_user_id,
-    raise_if_user_exceeded_limits,
     raise_if_global_ai_limit_exceeded,
+    raise_if_user_exceeded_limits,
 )
 from gen3discoveryai.topic_chains.logging import LoggingCallbackHandler
 

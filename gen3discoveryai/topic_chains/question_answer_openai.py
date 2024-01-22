@@ -14,18 +14,14 @@ from __future__ import annotations
 from typing import Any, Dict
 
 import chromadb
-from fastapi import HTTPException
 import langchain
+import openai
+from fastapi import HTTPException
 from langchain.chains import RetrievalQA
-from langchain_openai import ChatOpenAI, OpenAIEmbeddings
 from langchain.prompts import PromptTemplate
 from langchain.vectorstores.chroma import Chroma
-import openai
-from starlette.status import (
-    HTTP_400_BAD_REQUEST,
-    HTTP_429_TOO_MANY_REQUESTS,
-)
-
+from langchain_openai import ChatOpenAI, OpenAIEmbeddings
+from starlette.status import HTTP_400_BAD_REQUEST, HTTP_429_TOO_MANY_REQUESTS
 
 from gen3discoveryai import config, logging
 from gen3discoveryai.topic_chains.base import TopicChain
