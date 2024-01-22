@@ -6,7 +6,7 @@ from langchain.schema import AgentAction, AgentFinish, BaseMessage, LLMResult
 from gen3discoveryai import config, logging
 
 
-class CustomCallbackHandlerForLogging(BaseCallbackHandler):
+class LoggingCallbackHandler(BaseCallbackHandler):
     """
     Custom Callback handles all possible callbacks from chains and allows for our
     own handing. For now, this just ensures the use of our logging library

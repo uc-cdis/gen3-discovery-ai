@@ -3,8 +3,8 @@ import glob
 import os
 
 import click
-from langchain.document_loaders import UnstructuredMarkdownLoader
-from langchain.document_loaders.csv_loader import CSVLoader
+from langchain_community.document_loaders import UnstructuredMarkdownLoader
+from langchain_community.document_loaders.csv_loader import CSVLoader
 from langchain.text_splitter import TokenTextSplitter
 
 from gen3discoveryai import logging

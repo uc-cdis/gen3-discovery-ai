@@ -16,8 +16,7 @@ from typing import Any, Dict
 import chromadb
 import langchain
 from langchain.chains import RetrievalQA
-from langchain.chat_models import ChatVertexAI
-from langchain.embeddings import VertexAIEmbeddings
+from langchain_google_vertexai import ChatVertexAI, VertexAIEmbeddings
 from langchain.prompts import PromptTemplate
 from langchain.vectorstores.chroma import Chroma
 
@@ -69,6 +68,16 @@ class TopicChainGoogleQuestionAnswerRAG(TopicChain):
         llm_top_p = get_from_cfg_metadata("top_p", metadata, default=0.95, type_=float)
         llm_top_k = get_from_cfg_metadata("top_k", metadata, default=0, type_=int)
 
+        embedding_model_name = get_from_cfg_metadata(
+            "embedding_model_name",
+            metadata,
+            # NOTE: using latest here _could_ result in unexpected updates in behavior if
+            #       Google releases a new version. Recommended to use an explicit version by specifying
+            #       embedding_model_name in the configuration
+            default="textembedding-gecko@latest",
+            type_=str,
+        )
+
         system_prompt = metadata.get("system_prompt", "")
 
         self.llm = ChatVertexAI(
@@ -109,7 +118,7 @@ class TopicChainGoogleQuestionAnswerRAG(TopicChain):
         vectorstore = Chroma(
             client=persistent_client,
             collection_name=topic,
-            embedding_function=VertexAIEmbeddings(),
+            embedding_function=VertexAIEmbeddings(model_name=embedding_model_name),
             # We've heard the `cosine` distance function performs better
             # https://docs.trychroma.com/usage-guide#changing-the-distance-function
             collection_metadata={"hnsw:space": "cosine"},
@@ -154,19 +163,19 @@ class TopicChainGoogleQuestionAnswerRAG(TopicChain):
         Args:
             documents (list[langchain.schema.document.Document]): documents to store in the knowledge store
         """
-        try:
-            # get all docs but don't include anything other than ids
-            docs = self.vectorstore.get(include=[])
-            if docs["ids"]:
-                logging.debug(
-                    f"Deleting current knowledge store collection for {self.topic}..."
-                )
-                self.vectorstore.delete(ids=docs["ids"])
-        except Exception as exc:
+        # try:
+        # get all docs but don't include anything other than ids
+        docs = self.vectorstore.get(include=[])
+        if docs["ids"]:
             logging.debug(
-                "Exception while deleting collection and recreating client, "
-                "assume the collection just didn't exist and continue. Exc: {exc}"
+                f"Deleting current knowledge store collection for {self.topic}..."
             )
-            # doesn't exist so just continue adding
+            self.vectorstore.delete(ids=docs["ids"])
+        # except Exception as exc:
+        #     logging.debug(
+        #         "Exception while deleting collection and recreating client, "
+        #         "assume the collection just didn't exist and continue. Exc: {exc}"
+        #     )
+        #     # doesn't exist so just continue adding
 
         self.insert_documents_into_vectorstore(documents)

@@ -49,6 +49,9 @@ google-cloud-aiplatform = "^1.36.0"
 unstructured = "^0.11.0"
 markdown = "^3.5.1"
 werkzeug = "^3.0.1"
+langchain-community = "^0.0.14"
+langchain-google-vertexai = "^0.0.2"
+langchain-openai = "^0.0.3"
 
 
 [tool.poetry.group.dev.dependencies]
@@ -71,14 +74,14 @@ pylint = ">=3.0.1"
 #          manually if you want to see coverage
 #
 # see .coveragerc for what the coverage omits
-addopts = """
--vv --cov-config=.coveragerc
---cov=gen3discoveryai
---cov-report term-missing:skip-covered
---cov-fail-under 90
---cov-report html:_coverage
---cov-branch
-"""
+#addopts = """
+#-vv --cov-config=.coveragerc
+#--cov=gen3discoveryai
+#--cov-report term-missing:skip-covered
+#--cov-fail-under 90
+#--cov-report html:_coverage
+#--cov-branch
+#"""
 
 [tool.isort]
 known_first_party = ["gen3discoveryai"]

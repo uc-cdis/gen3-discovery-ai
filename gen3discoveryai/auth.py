@@ -1,9 +1,13 @@
 from authutils.token.fastapi import access_token
-from fastapi import HTTPException, Request
+from fastapi import HTTPException, Request, Depends
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from gen3authz.client.arborist.async_client import ArboristClient
-from starlette.status import HTTP_401_UNAUTHORIZED as HTTP_401_UNAUTHENTICATED
-from starlette.status import HTTP_403_FORBIDDEN, HTTP_503_SERVICE_UNAVAILABLE
+from starlette.status import (
+    HTTP_401_UNAUTHORIZED as HTTP_401_UNAUTHENTICATED,
+    HTTP_403_FORBIDDEN,
+    HTTP_503_SERVICE_UNAVAILABLE,
+    HTTP_429_TOO_MANY_REQUESTS,
+)
 
 from gen3discoveryai import config, logging
 
@@ -104,8 +108,9 @@ async def get_user_id(
     return token_claims["sub"]
 
 
-async def has_user_exceeded_limits(
-    token: HTTPAuthorizationCredentials = None, request: Request = None
+async def raise_if_user_exceeded_limits(
+    token: HTTPAuthorizationCredentials = Depends(get_bearer_token),
+    request: Request = None,
 ):
     """
     Checks if the user has exceeded certain limits which should prevent them from using the AI.
@@ -125,7 +130,12 @@ async def has_user_exceeded_limits(
     # TODO logic to determine if it's been exceeded
     #      make sure you try to handle the case where ALLOW_ANONYMOUS_ACCESS is on
 
-    return user_limit_exceeded
+    if user_limit_exceeded:
+        logging.debug("has_user_exceeded_limits is True")
+        raise HTTPException(
+            HTTP_429_TOO_MANY_REQUESTS,
+            "You've reached a limit for your user. Please try again later.",
+        )
 
 
 async def raise_if_global_ai_limit_exceeded():

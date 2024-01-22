@@ -14,12 +14,18 @@ from __future__ import annotations
 from typing import Any, Dict
 
 import chromadb
+from fastapi import HTTPException
 import langchain
 from langchain.chains import RetrievalQA
-from langchain.chat_models import ChatOpenAI
-from langchain.embeddings.openai import OpenAIEmbeddings
+from langchain_openai import ChatOpenAI, OpenAIEmbeddings
 from langchain.prompts import PromptTemplate
 from langchain.vectorstores.chroma import Chroma
+import openai
+from starlette.status import (
+    HTTP_400_BAD_REQUEST,
+    HTTP_429_TOO_MANY_REQUESTS,
+)
+
 
 from gen3discoveryai import config, logging
 from gen3discoveryai.topic_chains.base import TopicChain
@@ -164,3 +170,25 @@ class TopicChainOpenAiQuestionAnswerRAG(TopicChain):
             # doesn't exist so just continue adding
 
         self.insert_documents_into_vectorstore(documents)
+
+    def run(self, query: str, *args, **kwargs):
+        """
+        Run the query on the underlying chain, overriding base to add OpenAI specific
+        error catching.
+
+        Args:
+            query (str): query to provide to chain
+        """
+        try:
+            return self.run(query, *args, **kwargs)
+        except openai.RateLimitError as exc:
+            logging.debug("openai.RateLimitError")
+            raise HTTPException(
+                HTTP_429_TOO_MANY_REQUESTS, "Please try again later."
+            ) from exc
+        except openai.OpenAIError as exc:
+            logging.debug("openai.OpenAIError")
+            raise HTTPException(
+                HTTP_400_BAD_REQUEST,
+                "Error. You may have too much text in your query.",
+            ) from exc

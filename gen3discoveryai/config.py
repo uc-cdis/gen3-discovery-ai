@@ -42,7 +42,7 @@ GOOGLE_APPLICATION_CREDENTIALS = config(
 )
 
 OPENAI_API_KEY = config("OPENAI_API_KEY", cast=Secret, default=None)
-URL_PREFIX = config("URL_PREFIX", default="/")
+URL_PREFIX = config("URL_PREFIX", default=None)
 
 # csv strings for all topic names
 #

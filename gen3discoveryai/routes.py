@@ -3,12 +3,11 @@ import uuid
 from importlib.metadata import version
 from typing import Any
 
-import openai
-from fastapi import APIRouter, HTTPException, Request
+from fastapi import APIRouter, HTTPException, Request, Depends
+
 from starlette.status import (
     HTTP_400_BAD_REQUEST,
     HTTP_404_NOT_FOUND,
-    HTTP_429_TOO_MANY_REQUESTS,
     HTTP_503_SERVICE_UNAVAILABLE,
 )
 
@@ -16,16 +15,23 @@ from gen3discoveryai import config, logging
 from gen3discoveryai.auth import (
     authorize_request,
     get_user_id,
-    has_user_exceeded_limits,
+    raise_if_user_exceeded_limits,
     raise_if_global_ai_limit_exceeded,
 )
-from gen3discoveryai.topic_chains.logging import CustomCallbackHandlerForLogging
+from gen3discoveryai.topic_chains.logging import LoggingCallbackHandler
 
 root_router = APIRouter()
 
 
 @root_router.post("/ask/")
-@root_router.post("/ask", include_in_schema=False)
+@root_router.post(
+    "/ask",
+    include_in_schema=False,
+    dependencies=[
+        Depends(raise_if_global_ai_limit_exceeded),
+        Depends(raise_if_user_exceeded_limits),
+    ],
+)
 async def ask_route(
     request: Request, data: dict, topic: str = "default", conversation_id: str = None
 ) -> dict:
@@ -40,8 +46,6 @@ async def ask_route(
             existing conversation. Must match a valid conversation ID for this
             user AND topic must support conversation-based queries.
     """
-    await raise_if_global_ai_limit_exceeded()
-
     await authorize_request(
         request=request,
         authz_access_method="read",
@@ -65,34 +69,16 @@ async def ask_route(
     conversation = None
     if conversation_id:
         conversation = await _get_conversation_for_user(conversation_id, user_id)
-        # TODO handle conversation
+        # TODO (PXP-11239) handle conversation
 
     logging.debug(f"conversation: {conversation}")
-
-    if await has_user_exceeded_limits(request=request):
-        logging.debug("has_user_exceeded_limits is True")
-        raise HTTPException(
-            HTTP_429_TOO_MANY_REQUESTS,
-            "You've reached a limit for your user. Please try again later.",
-        )
 
     start_time = time.time()
     try:
         topic_config = config.topics[topic]
         raw_response = topic_config["topic_chain"].run(
-            query=query, callbacks=[CustomCallbackHandlerForLogging()]
+            query=query, callbacks=[LoggingCallbackHandler()]
         )
-    except openai.RateLimitError as exc:
-        logging.debug("openai.RateLimitError")
-        raise HTTPException(
-            HTTP_429_TOO_MANY_REQUESTS, "Please try again later."
-        ) from exc
-    except openai.OpenAIError as exc:
-        logging.debug("openai.OpenAIError")
-        raise HTTPException(
-            HTTP_400_BAD_REQUEST,
-            "Error. You may have too much text in your query.",
-        ) from exc
     except Exception as exc:
         logging.error(
             f"Returning service unavailable. Got unexpected error from chain: {exc}"
@@ -118,7 +104,7 @@ async def ask_route(
         f"user_query={query}, topic={topic}, response={response['response']}, response_time_seconds={end_time - start_time}"
     )
 
-    # TODO
+    # TODO (PXP-11239)
     if not conversation_id:
         conversation_id = await _get_conversation_id()
     await _store_conversation(user_id, conversation_id)
@@ -249,17 +235,17 @@ async def get_status(request: Request) -> dict:
 
 
 async def _get_conversation_id() -> str:
-    # TODO
+    # TODO (PXP-11239)
     return str(uuid.uuid4())
 
 
 async def _store_conversation(user_id, conversation_id) -> None:
-    # TODO
+    # TODO (PXP-11239)
     logging.debug(f"storing conversation {conversation_id} for {user_id}")
 
 
 async def _get_conversation_for_user(conversation_id, user_id) -> Any:
-    # TODO conversation for now
+    # TODO (PXP-11239) conversation for now
     #      should actually retrieve something based on conversation_id
     #      to see what user's conversation ID it is
     logging.debug(f"getting conversation {conversation_id} for {user_id}")

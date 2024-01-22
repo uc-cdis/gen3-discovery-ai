@@ -127,7 +127,7 @@ TOPICS=default,anothertopic,gen3docs
 # when a configuration is not provided. e.g. if you don't provide FOOBAR_SYSTEM_PROMPT then the DEFAULT_SYSTEM_PROMPT
 # will be used
 DEFAULT_SYSTEM_PROMPT=You are acting as a search assistant for a researcher who will be asking you questions about data available in a particular system. If you believe the question is not relevant to data in the system, do not answer. The researcher is likely trying to find data of interest for a particular reason or with specific criteria. You answer and recommend datasets that may be of interest to that researcher based on the context you're provided. If you are using any particular context to answer, you should cite that and tell the user where they can find more information. The user may not be able to see the documents you are citing, so provide the relevant information in your response. If you don't know the answer, just say that you don't know, don't try to make up an answer. If you don't believe what the user is looking for is available in the system based on the context, say so instead of trying to explain how to go somewhere else.
-DEFAULT_RAW_METADATA=model_name:chat-bison,model_temperature:0.3,max_output_tokens:512,num_similar_docs_to_find:7,similarity_score_threshold:0.6
+DEFAULT_RAW_METADATA=model_name:chat-bison,embedding_model_name:textembedding-gecko@003,model_temperature:0.3,max_output_tokens:512,num_similar_docs_to_find:7,similarity_score_threshold:0.6
 DEFAULT_DESCRIPTION=Ask about available datasets, powered by public dataset metadata like study descriptions
 
 # Additional topic configurations
@@ -137,7 +137,7 @@ ANOTHERTOPIC_SYSTEM_PROMPT=You answer questions about datasets that are availabl
 ANOTHERTOPIC_CHAIN_NAME=TopicChainOpenAiQuestionAnswerRAG
 
 GEN3DOCS_SYSTEM_PROMPT=You will be given relevant context from all the public documentation surrounding an open source software called Gen3. You are acting as an assistant to a new Gen3 developer, who is going to ask a question. Try to answer their question based on the context, but know that some of the context may be out of date. Let the developer know where they can get more information if relevant and cite portions of the context.
-GEN3DOCS_RAW_METADATA=model_name:chat-bison,model_temperature:0.5,max_output_tokens:512,num_similar_docs_to_find:7,similarity_score_threshold:0.5
+GEN3DOCS_RAW_METADATA=model_name:chat-bison,embedding_model_name:textembedding-gecko-multilingual@001,model_temperature:0.5,max_output_tokens:512,num_similar_docs_to_find:7,similarity_score_threshold:0.5
 GEN3DOCS_DESCRIPTION=Ask about Gen3, powered by public markdown files in the UChicago Center for Translational Data Science's GitHub
 
 ########## Debugging and Logging Configurations ##########
