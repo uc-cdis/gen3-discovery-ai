@@ -3,14 +3,14 @@ from urllib.parse import urlencode
 
 import langchain.schema
 import pytest
-from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from fastapi import Depends, HTTPException, Request
-from starlette.status import HTTP_503_SERVICE_UNAVAILABLE, HTTP_429_TOO_MANY_REQUESTS
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
+from starlette.status import HTTP_429_TOO_MANY_REQUESTS, HTTP_503_SERVICE_UNAVAILABLE
 
 from gen3discoveryai import config
 from gen3discoveryai.routes import (
-    raise_if_user_exceeded_limits,
     raise_if_global_ai_limit_exceeded,
+    raise_if_user_exceeded_limits,
 )
 
 get_bearer_token = HTTPBearer(auto_error=False)

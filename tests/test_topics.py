@@ -4,9 +4,7 @@ import pytest
 
 from gen3discoveryai import config
 from gen3discoveryai.factory import Factory
-from gen3discoveryai.main import (
-    lifespan,
-)
+from gen3discoveryai.main import lifespan
 
 
 @pytest.mark.asyncio
