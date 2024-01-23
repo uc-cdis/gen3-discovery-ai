@@ -3,6 +3,10 @@ knowledge/
 *.sqlite3
 chroma/
 cache/
+tests/prof/
+prof/
+bin/library
+tmp/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

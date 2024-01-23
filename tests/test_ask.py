@@ -3,11 +3,17 @@ from urllib.parse import urlencode
 
 import langchain.schema
 import pytest
-from fastapi import HTTPException
-from fastapi.security.http import HTTPAuthorizationCredentials
-from starlette.status import HTTP_503_SERVICE_UNAVAILABLE
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
+from fastapi import Depends, HTTPException, Request
+from starlette.status import HTTP_503_SERVICE_UNAVAILABLE, HTTP_429_TOO_MANY_REQUESTS
 
 from gen3discoveryai import config
+from gen3discoveryai.routes import (
+    raise_if_user_exceeded_limits,
+    raise_if_global_ai_limit_exceeded,
+)
+
+get_bearer_token = HTTPBearer(auto_error=False)
 
 
 @pytest.mark.parametrize("skip_auth", [True, False])
@@ -360,15 +366,20 @@ def test_ask_unauthorized(
 
 
 @pytest.mark.parametrize("endpoint", ["/ask", "/ask/"])
-@patch("gen3discoveryai.routes.has_user_exceeded_limits")
-def test_ask_too_many_requests(has_user_exceeded_limits, endpoint, client, monkeypatch):
+def test_ask_too_many_requests(endpoint, client, monkeypatch):
     """
     Tests the ask endpoint when a user exceeds request limits, expecting a 429 response.
     """
     previous_config = config.DEBUG_SKIP_AUTH
     monkeypatch.setattr(config, "DEBUG_SKIP_AUTH", True)
 
-    has_user_exceeded_limits.return_value = True
+    async def _override_raise_if_user_exceeded_limits():
+        raise HTTPException(status_code=HTTP_429_TOO_MANY_REQUESTS)
+
+    # ensure overriding for Depends() on routes
+    client.app.dependency_overrides[
+        raise_if_user_exceeded_limits
+    ] = _override_raise_if_user_exceeded_limits
 
     # call endpoint
     endpoint_string = f"{endpoint}"
@@ -386,21 +397,25 @@ def test_ask_too_many_requests(has_user_exceeded_limits, endpoint, client, monke
 
     monkeypatch.setattr(config, "DEBUG_SKIP_AUTH", previous_config)
 
+    # this reverts the override
+    client.app.dependency_overrides = {}
+
 
 @pytest.mark.parametrize("endpoint", ["/ask", "/ask/"])
-@patch("gen3discoveryai.routes.raise_if_global_ai_limit_exceeded")
-def test_ask_service_unavailable_due_to_global_limit(
-    raise_if_global_ai_limit_exceeded, endpoint, client, monkeypatch
-):
+def test_ask_service_unavailable_due_to_global_limit(endpoint, client, monkeypatch):
     """
     Tests the ask endpoint when a global limit has been exceeded, expecting a 503 response.
     """
     previous_config = config.DEBUG_SKIP_AUTH
     monkeypatch.setattr(config, "DEBUG_SKIP_AUTH", True)
 
-    raise_if_global_ai_limit_exceeded.side_effect = HTTPException(
-        HTTP_503_SERVICE_UNAVAILABLE
-    )
+    async def _override_raise_if_global_ai_limit_exceeded():
+        raise HTTPException(status_code=HTTP_503_SERVICE_UNAVAILABLE)
+
+    # ensure overriding for Depends() on routes
+    client.app.dependency_overrides[
+        raise_if_global_ai_limit_exceeded
+    ] = _override_raise_if_global_ai_limit_exceeded
 
     # call endpoint
     endpoint_string = f"{endpoint}"
@@ -417,3 +432,6 @@ def test_ask_service_unavailable_due_to_global_limit(
     assert "documents" not in response.json()
 
     monkeypatch.setattr(config, "DEBUG_SKIP_AUTH", previous_config)
+
+    # this reverts the override
+    client.app.dependency_overrides = {}

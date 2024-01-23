@@ -22,7 +22,13 @@ from gen3discoveryai.topic_chains.logging import LoggingCallbackHandler
 root_router = APIRouter()
 
 
-@root_router.post("/ask/")
+@root_router.post(
+    "/ask/",
+    dependencies=[
+        Depends(raise_if_global_ai_limit_exceeded),
+        Depends(raise_if_user_exceeded_limits),
+    ],
+)
 @root_router.post(
     "/ask",
     include_in_schema=False,
@@ -171,7 +177,9 @@ async def topics_route(request: Request, provided_topic: str = None) -> dict:
     output = {}
 
     for topic, values in config.topics.items():
-        output[topic] = {"topic_chain": values["topic_chain"].NAME}
+        output[topic] = {
+            "topic_chain": getattr(values.get("topic_chain"), "NAME", "Unknown")
+        }
         output[topic]["description"] = values.get("description", "")
         output[topic]["system_prompt"] = values.get("system_prompt", "")
 

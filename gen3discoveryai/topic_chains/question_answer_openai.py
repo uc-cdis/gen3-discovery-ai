@@ -176,7 +176,7 @@ class TopicChainOpenAiQuestionAnswerRAG(TopicChain):
             query (str): query to provide to chain
         """
         try:
-            return self.run(query, *args, **kwargs)
+            return super().run(query, *args, **kwargs)
         except openai.RateLimitError as exc:
             logging.debug("openai.RateLimitError")
             raise HTTPException(

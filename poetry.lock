@@ -944,6 +944,20 @@ files = [
 test = ["pytest (>=6)"]
 
 [[package]]
+name = "execnet"
+version = "2.0.2"
+description = "execnet: rapid multi-Python deployment"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "execnet-2.0.2-py3-none-any.whl", hash = "sha256:88256416ae766bc9e8895c76a87928c0012183da3cc4fc18016e6f050e025f41"},
+    {file = "execnet-2.0.2.tar.gz", hash = "sha256:cc59bc4423742fd71ad227122eb0dd44db51efb3dc4095b45ac9a08c770096af"},
+]
+
+[package.extras]
+testing = ["hatch", "pre-commit", "pytest", "tox"]
+
+[[package]]
 name = "fastapi"
 version = "0.109.0"
 description = "FastAPI framework, high performance, easy to learn, fast to code, ready for production"
@@ -1426,6 +1440,17 @@ protobuf = ">=3.19.5,<3.20.0 || >3.20.0,<3.20.1 || >3.20.1,<4.21.1 || >4.21.1,<4
 
 [package.extras]
 grpc = ["grpcio (>=1.44.0,<2.0.0.dev0)"]
+
+[[package]]
+name = "gprof2dot"
+version = "2022.7.29"
+description = "Generate a dot graph from the output of several profilers."
+optional = false
+python-versions = ">=2.7"
+files = [
+    {file = "gprof2dot-2022.7.29-py2.py3-none-any.whl", hash = "sha256:f165b3851d3c52ee4915eb1bd6cca571e5759823c2cd0f71a79bda93c2dc85d6"},
+    {file = "gprof2dot-2022.7.29.tar.gz", hash = "sha256:45b4d298bd36608fccf9511c3fd88a773f7a1abc04d6cd39445b11ba43133ec5"},
+]
 
 [[package]]
 name = "greenlet"
@@ -3357,6 +3382,45 @@ pytest = ">=4.6"
 testing = ["fields", "hunter", "process-tests", "pytest-xdist", "six", "virtualenv"]
 
 [[package]]
+name = "pytest-profiling"
+version = "1.7.0"
+description = "Profiling plugin for py.test"
+optional = false
+python-versions = "*"
+files = [
+    {file = "pytest-profiling-1.7.0.tar.gz", hash = "sha256:93938f147662225d2b8bd5af89587b979652426a8a6ffd7e73ec4a23e24b7f29"},
+    {file = "pytest_profiling-1.7.0-py2.py3-none-any.whl", hash = "sha256:999cc9ac94f2e528e3f5d43465da277429984a1c237ae9818f8cfd0b06acb019"},
+]
+
+[package.dependencies]
+gprof2dot = "*"
+pytest = "*"
+six = "*"
+
+[package.extras]
+tests = ["pytest-virtualenv"]
+
+[[package]]
+name = "pytest-xdist"
+version = "3.5.0"
+description = "pytest xdist plugin for distributed testing, most importantly across multiple CPUs"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "pytest-xdist-3.5.0.tar.gz", hash = "sha256:cbb36f3d67e0c478baa57fa4edc8843887e0f6cfc42d677530a36d7472b32d8a"},
+    {file = "pytest_xdist-3.5.0-py3-none-any.whl", hash = "sha256:d075629c7e00b611df89f490a5063944bee7a4362a5ff11c7cc7824a03dfce24"},
+]
+
+[package.dependencies]
+execnet = ">=1.1"
+pytest = ">=6.2.0"
+
+[package.extras]
+psutil = ["psutil (>=3.0)"]
+setproctitle = ["setproctitle"]
+testing = ["filelock"]
+
+[[package]]
 name = "python-dateutil"
 version = "2.8.2"
 description = "Extensions to the standard Python datetime module"
@@ -4951,4 +5015,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.9,<3.10.dev0"
-content-hash = "cd6d8a82fcc6a8474bbc051e59b5c4c10cdc8aa9c169ced85d6598b182945671"
+content-hash = "ff87d4fb3e0e5ec5a274313c157beef1556b99e1ef7fad34cd305aff11dbacab"

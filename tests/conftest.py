@@ -8,7 +8,7 @@ from gen3discoveryai import config
 from gen3discoveryai.main import get_app
 
 
-@pytest.fixture()
+@pytest.fixture(scope="session")
 def client():
     """
     Set up and yield a test client to send HTTP requests.

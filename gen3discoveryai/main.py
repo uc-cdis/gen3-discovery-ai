@@ -51,7 +51,7 @@ def _override_generated_openapi_spec():
 
 
 @asynccontextmanager
-async def lifespan(fastapi_app: fastapi.FastAPI):
+async def lifespan(fastapi_app: fastapi.FastAPI, force_reload_config=False):
     """
     Parse the configuration, setup and instantiate necessary classes.
 
@@ -62,19 +62,20 @@ async def lifespan(fastapi_app: fastapi.FastAPI):
 
     Args:
         fastapi_app (fastapi.FastAPI): The FastAPI app object
+        force_reload_config (bool): whether to force reloading config even if it looks like it already exists
     """
     if not fastapi_app:
         logging.debug("No app context passed to lifespan, setup may fail")
 
     # read from config to get more options
-    config.topics = get_topics_from_config()
+    config.topics = get_topics_from_config(force_reload_config)
 
     yield
 
     config.topics.clear()
 
 
-def get_topics_from_config():
+def get_topics_from_config(force_reload_config=False):
     """
     Get topics from configuration.
 
@@ -89,7 +90,7 @@ def get_topics_from_config():
         ...
     }
     """
-    if config.topics:
+    if config.topics and not force_reload_config:
         return config.topics
 
     chain_factory = get_topic_chain_factory()

@@ -111,14 +111,11 @@ DEFAULT_SYSTEM_PROMPT = config(
 DEFAULT_METADATA = {}
 
 # NOTE: when changing the `num_similar_docs_to_find` metadata you need to consider the token limits of the model you're
-# using and potentially adjust the token size of the split documents in the vectorstore. This is tuned right now for
-# 4 documents around 1000 tokens to be sent alongside a max 97 token query (to hit the max tokens for
-# gpt-3.5-turbo of 4097). So if you want to adjust this metadata, you need to consider adjusting them in tandem
-# (e.g. you can't just bump the num_similar_docs_to_find to 10).
+# using and potentially adjust the token size of the split documents in the vectorstore.
 DEFAULT_RAW_METADATA = config(
     "DEFAULT_RAW_METADATA",
     cast=str,
-    default="model_name:gpt-3.5-turbo,model_temperature:0.33,num_similar_docs_to_find:4,similarity_score_threshold:0.5",
+    default="model_name:chat-bison,model_temperature:0.33,num_similar_docs_to_find:4,similarity_score_threshold:0.5",
 )
 DEFAULT_DESCRIPTION = config(
     "DEFAULT_DESCRIPTION",

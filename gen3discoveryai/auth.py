@@ -131,7 +131,7 @@ async def raise_if_user_exceeded_limits(
     #      make sure you try to handle the case where ALLOW_ANONYMOUS_ACCESS is on
 
     if user_limit_exceeded:
-        logging.debug("has_user_exceeded_limits is True")
+        logging.error("User has exceeded limits!")
         raise HTTPException(
             HTTP_429_TOO_MANY_REQUESTS,
             "You've reached a limit for your user. Please try again later.",

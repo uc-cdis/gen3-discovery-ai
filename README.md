@@ -271,9 +271,17 @@ Relies on Gen3's Policy Engine.
 
 You can `poetry run python run.py` after install to run the app locally.
 
-For testing, you can `poetry run pytest`. The default `pytest` options specified 
-in the `pyproject.toml` additionally 
-runs coverage and will error if it falls below the threshold.
+For testing, you can `poetry run pytest`. 
+
+The default `pytest` options specified 
+in the `pyproject.toml` additionally:
+
+* runs coverage and will error if it falls below the threshold
+* utilizes `pytest-xdist` to run on multiple cores with `-n auto --dist loadfile` command
+  * [--dist loadfile](https://pytest-xdist.readthedocs.io/en/latest/distribution.html) sends groups of tests organized by file to available cores, effectively meaning that the different test files are run in parallel but the tests within a file are sequential
+* profiles using [pytest-profiling](https://pypi.org/project/pytest-profiling/) which outputs into `/prof`
+
+You can view profiling with 
 
 #### Automatically format code and run pylint
 
