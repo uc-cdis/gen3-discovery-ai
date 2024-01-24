@@ -5,7 +5,11 @@ Usage:
 """
 import uvicorn
 
-if __name__ == "__main__":
+
+def main():
+    """
+    Runs a local web app
+    """
     host = "0.0.0.0"
     port = 8089
     print(f"gen3discoveryai.main:app running at {host}:{port}")
@@ -16,3 +20,7 @@ if __name__ == "__main__":
         reload=True,
         log_config=None,
     )
+
+
+if __name__ == "__main__":
+    main()
