@@ -5,7 +5,7 @@ import pytest
 
 @pytest.mark.parametrize("endpoint", ["/_version", "/_version/"])
 @patch("gen3discoveryai.routes.authorize_request")
-def test_version(_, endpoint, client):
+def test_version(_, endpoint, client, mock_google_ai):
     """
     Test that the version endpoint returns a non-empty version
     """
@@ -16,7 +16,7 @@ def test_version(_, endpoint, client):
 
 
 @pytest.mark.parametrize("endpoint", ["/_version", "/_version/"])
-def test_version_no_token(endpoint, client):
+def test_version_no_token(endpoint, client, mock_google_ai):
     """
     Test that the version endpoint returns a 401 with details when no token is provided
     """
@@ -28,7 +28,7 @@ def test_version_no_token(endpoint, client):
 
 @pytest.mark.parametrize("endpoint", ["/_version", "/_version/"])
 @patch("gen3discoveryai.auth.arborist", new_callable=AsyncMock)
-def test_version_unauthorized(arborist, endpoint, client):
+def test_version_unauthorized(arborist, endpoint, client, mock_google_ai):
     """
     Test accessing the endpoint when authorized
     """
@@ -43,7 +43,7 @@ def test_version_unauthorized(arborist, endpoint, client):
 
 @pytest.mark.parametrize("endpoint", ["/_status", "/_status/"])
 @patch("gen3discoveryai.routes.authorize_request")
-def test_status(_, endpoint, client):
+def test_status(_, endpoint, client, mock_google_ai):
     """
     Test that the status endpoint returns a non-empty status
     """
@@ -54,7 +54,7 @@ def test_status(_, endpoint, client):
 
 
 @pytest.mark.parametrize("endpoint", ["/_status", "/_status/"])
-def test_status_no_token(endpoint, client):
+def test_status_no_token(endpoint, client, mock_google_ai):
     """
     Test that the status endpoint returns a 401 with details when no token is provided
     """
@@ -66,7 +66,7 @@ def test_status_no_token(endpoint, client):
 
 @pytest.mark.parametrize("endpoint", ["/_status", "/_status/"])
 @patch("gen3discoveryai.auth.arborist", new_callable=AsyncMock)
-def test_status_unauthorized(arborist, endpoint, client):
+def test_status_unauthorized(arborist, endpoint, client, mock_google_ai):
     """
     Test accessing the endpoint when authorized
     """

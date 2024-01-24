@@ -21,7 +21,7 @@ from gen3discoveryai.auth import _get_token
         "/_status/",
     ],
 )
-def test_debug_skip_auth_gets(monkeypatch, client, endpoint):
+def test_debug_skip_auth_gets(monkeypatch, client, endpoint, mock_google_ai):
     """
     Test that DEBUG_SKIP_AUTH configuration allows access to endpoints without auth
     """
@@ -40,7 +40,7 @@ def test_debug_skip_auth_gets(monkeypatch, client, endpoint):
 @pytest.mark.parametrize("token_param", [None, "something"])
 @pytest.mark.parametrize("request_param", [None, "something"])
 @patch("gen3discoveryai.auth.get_bearer_token", new_callable=AsyncMock)
-async def test_get_token(get_bearer_token, request_param, token_param):
+async def test_get_token(get_bearer_token, request_param, token_param, mock_google_ai):
     """
     Test helper function returns proper token
     """

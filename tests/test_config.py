@@ -24,7 +24,9 @@ def test_bad_config_metadata():
 
 @pytest.mark.asyncio
 @patch("gen3discoveryai.main._create_and_register_topic_chain")
-async def test_bad_config_default_topic(create_and_register_topic_chain, client):
+async def test_bad_config_default_topic(
+    create_and_register_topic_chain, client, mock_google_ai
+):
     """
     Test when config loading raises an error, it's reraised if it's the default topic
     """
@@ -37,7 +39,9 @@ async def test_bad_config_default_topic(create_and_register_topic_chain, client)
 
 @pytest.mark.asyncio
 @patch("gen3discoveryai.main._create_and_register_topic_chain")
-async def test_bad_config_non_default_topic(create_and_register_topic_chain, client):
+async def test_bad_config_non_default_topic(
+    create_and_register_topic_chain, client, mock_google_ai
+):
     """
     Test when config loading raises an error, it's NOT reraised if it's not the default topic
     """
@@ -90,14 +94,14 @@ def test_metadata_cfg_util_cant_cast():
 
 
 @pytest.mark.parametrize("endpoint", ["/docs", "/redoc"])
-def test_docs(endpoint, client):
+def test_docs(endpoint, client, mock_google_ai):
     """
     Test FastAPI docs endpoints
     """
     assert client.get(endpoint).status_code == 200
 
 
-def test_openapi():
+def test_openapi(mock_google_ai):
     """
     Test our override of FastAPI's default openAPI
     """

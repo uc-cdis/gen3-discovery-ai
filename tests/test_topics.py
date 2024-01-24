@@ -10,7 +10,7 @@ from gen3discoveryai.main import lifespan
 @pytest.mark.asyncio
 @pytest.mark.parametrize("endpoint", ["/topics", "/topics/"])
 @patch("gen3discoveryai.routes.authorize_request")
-async def test_topics_list_all(_, endpoint, client):
+async def test_topics_list_all(_, endpoint, client, mock_google_ai):
     """
     Test listing all topics.
     """
@@ -45,7 +45,7 @@ async def test_topics_list_all(_, endpoint, client):
 
 
 @pytest.mark.parametrize("endpoint", ["/topics", "/topics/"])
-def test_topics_no_token(endpoint, client):
+def test_topics_no_token(endpoint, client, mock_google_ai):
     """
     Test accessing topics without a token.
     """
@@ -56,7 +56,7 @@ def test_topics_no_token(endpoint, client):
 
 @pytest.mark.parametrize("endpoint", ["/topics", "/topics/"])
 @patch("gen3discoveryai.auth.arborist", new_callable=AsyncMock)
-def test_topics_unauthorized(arborist, endpoint, client):
+def test_topics_unauthorized(arborist, endpoint, client, mock_google_ai):
     """
     Test unauthorized access to topics.
     """
@@ -72,7 +72,9 @@ def test_topics_unauthorized(arborist, endpoint, client):
 @pytest.mark.asyncio
 @pytest.mark.parametrize("endpoint", ["/topics/bdc", "/topics/bdc/"])
 @patch("gen3discoveryai.routes.authorize_request")
-async def test_topics_specific_topic_with_configured_overrides(_, endpoint, client):
+async def test_topics_specific_topic_with_configured_overrides(
+    _, endpoint, client, mock_google_ai
+):
     """
     Test accessing a specific topic that has been configured with overrides to default configuration
     """
@@ -111,7 +113,7 @@ async def test_topics_specific_topic_with_configured_overrides(_, endpoint, clie
 @pytest.mark.asyncio
 @pytest.mark.parametrize("endpoint", ["/topics/usedefault", "/topics/usedefault/"])
 @patch("gen3discoveryai.routes.authorize_request")
-async def test_topics_specific_topic_with_defaults(_, endpoint, client):
+async def test_topics_specific_topic_with_defaults(_, endpoint, client, mock_google_ai):
     """
     Test accessing a specific topic that has NOT been configured with overrides. So default configuration should exist
     """
@@ -132,7 +134,7 @@ async def test_topics_specific_topic_with_defaults(_, endpoint, client):
     "endpoint", ["/topics/non_existent_topic", "/topics/non_existent_topic/"]
 )
 @patch("gen3discoveryai.routes.authorize_request")
-async def test_topics_specific_topic_doesnt_exist(_, endpoint, client):
+async def test_topics_specific_topic_doesnt_exist(_, endpoint, client, mock_google_ai):
     """
     Test accessing a non-existent topic.
     """
