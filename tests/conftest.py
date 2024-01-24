@@ -36,7 +36,7 @@ def mock_google_ai():
 
 
 @pytest.fixture(scope="session")
-def client():
+def client(mock_google_ai):
     """
     Set up and yield a test client to send HTTP requests.
     """

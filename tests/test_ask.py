@@ -47,7 +47,6 @@ def test_ask(
     skip_auth,
     client,
     monkeypatch,
-    mock_google_ai,
 ):
     """
     Test the ask endpoint given variable valid input from the user.
@@ -162,7 +161,6 @@ def test_ask_invalid_token(
     access_token_raises_error,
     get_token_returns_none,
     client,
-    mock_google_ai,
 ):
     """
     Test the ask endpoint when provided an invalid token.
@@ -204,7 +202,7 @@ def test_ask_invalid_token(
 
 @pytest.mark.parametrize("endpoint", ["/ask", "/ask/"])
 @pytest.mark.parametrize("topic", ["invalid", "!@(#*&$^&", "sys.exit(1)"])
-def test_ask_invalid_topic(topic, endpoint, client, monkeypatch, mock_google_ai):
+def test_ask_invalid_topic(topic, endpoint, client, monkeypatch):
     """
     Test ask with invalid topics and ensure error
     """
@@ -236,9 +234,7 @@ def test_ask_invalid_topic(topic, endpoint, client, monkeypatch, mock_google_ai)
 
 @pytest.mark.parametrize("endpoint", ["/ask", "/ask/"])
 @patch("gen3discoveryai.routes.config")
-def test_ask_invalid_response_from_chain(
-    mock_config, endpoint, client, monkeypatch, mock_google_ai
-):
+def test_ask_invalid_response_from_chain(mock_config, endpoint, client, monkeypatch):
     """
     Test that when the chain returns an error, the ask endpoint returns service unavailable
     """
@@ -280,7 +276,7 @@ def test_ask_invalid_response_from_chain(
         {"a": "foo", "b": "bar"},
     ],
 )
-def test_invalid_post_body(post_body, endpoint, client, monkeypatch, mock_google_ai):
+def test_invalid_post_body(post_body, endpoint, client, monkeypatch):
     """
     Test when ask is sent with a body that doesn't appropriately contain
     the `query`, we get an error
@@ -317,7 +313,7 @@ def test_invalid_post_body(post_body, endpoint, client, monkeypatch, mock_google
         "/ask/?topic=bdc",
     ],
 )
-def test_ask_no_token(endpoint, headers, client, mock_google_ai):
+def test_ask_no_token(endpoint, headers, client):
     """
     Test that the ask endpoint returns a 401 with details when no token is provided
     """
@@ -345,7 +341,7 @@ def test_ask_no_token(endpoint, headers, client, mock_google_ai):
 @patch("gen3discoveryai.auth._get_token")
 @patch("gen3discoveryai.auth.arborist", new_callable=AsyncMock)
 def test_ask_unauthorized(
-    arborist, get_token, get_user_id, access_token, endpoint, client, mock_google_ai
+    arborist, get_token, get_user_id, access_token, endpoint, client
 ):
     """
     Test accessing the endpoint when authorized
@@ -370,7 +366,7 @@ def test_ask_unauthorized(
 
 
 @pytest.mark.parametrize("endpoint", ["/ask", "/ask/"])
-def test_ask_too_many_requests(endpoint, client, monkeypatch, mock_google_ai):
+def test_ask_too_many_requests(endpoint, client, monkeypatch):
     """
     Tests the ask endpoint when a user exceeds request limits, expecting a 429 response.
     """
@@ -406,9 +402,7 @@ def test_ask_too_many_requests(endpoint, client, monkeypatch, mock_google_ai):
 
 
 @pytest.mark.parametrize("endpoint", ["/ask", "/ask/"])
-def test_ask_service_unavailable_due_to_global_limit(
-    endpoint, client, monkeypatch, mock_google_ai
-):
+def test_ask_service_unavailable_due_to_global_limit(endpoint, client, monkeypatch):
     """
     Tests the ask endpoint when a global limit has been exceeded, expecting a 503 response.
     """
