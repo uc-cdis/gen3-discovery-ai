@@ -150,20 +150,13 @@ class TopicChainOpenAiQuestionAnswerRAG(TopicChain):
         Args:
             documents (list[langchain.schema.document.Document]): documents to store in the knowledge store
         """
-        try:
-            # get all docs but don't include anything other than ids
-            docs = self.vectorstore.get(include=[])
-            if docs["ids"]:
-                logging.debug(
-                    f"Deleting current knowledge store collection for {self.topic}..."
-                )
-                self.vectorstore.delete(ids=docs["ids"])
-        except Exception as exc:
+        # get all docs but don't include anything other than ids
+        docs = self.vectorstore.get(include=[])
+        if docs["ids"]:
             logging.debug(
-                "Exception while deleting collection and recreating client, "
-                "assume the collection just didn't exist and continue. Exc: {exc}"
+                f"Deleting current knowledge store collection for {self.topic}..."
             )
-            # doesn't exist so just continue adding
+            self.vectorstore.delete(ids=docs["ids"])
 
         self.insert_documents_into_vectorstore(documents)
 

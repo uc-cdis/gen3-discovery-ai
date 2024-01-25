@@ -171,11 +171,5 @@ class TopicChainGoogleQuestionAnswerRAG(TopicChain):
                 f"Deleting current knowledge store collection for {self.topic}..."
             )
             self.vectorstore.delete(ids=docs["ids"])
-        # except Exception as exc:
-        #     logging.debug(
-        #         "Exception while deleting collection and recreating client, "
-        #         "assume the collection just didn't exist and continue. Exc: {exc}"
-        #     )
-        #     # doesn't exist so just continue adding
 
         self.insert_documents_into_vectorstore(documents)
