@@ -56,7 +56,9 @@ uvicorn = "^0.27.0"
 
 
 [tool.poetry.group.dev.dependencies]
-pytest = ">=7.3.2"
+# <8.0.0 is temporary, try removing. It was causing issues because the 
+# underlying pytest-* libraries hadn't updated yet to fix some breaking changes
+pytest = ">=7.3.2,<8.0.0"
 uvicorn = ">=0.22.0"
 coverage = ">=7.3.2"
 pytest-cov = ">=4.1.0"
