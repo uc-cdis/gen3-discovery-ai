@@ -4,6 +4,7 @@ from unittest.mock import patch
 
 import pytest
 
+from gen3discoveryai import config
 from gen3discoveryai.main import _override_generated_openapi_spec, lifespan
 from gen3discoveryai.topic_chains.utils import get_from_cfg_metadata
 
@@ -16,8 +17,6 @@ def test_bad_config_metadata():
     os.chdir(os.path.dirname(os.path.abspath(__file__)).rstrip("/") + "/badcfg")
 
     with pytest.raises(Exception):
-        from gen3discoveryai import config
-
         importlib.reload(config)
 
     os.chdir(os.path.dirname(os.path.abspath(__file__)).rstrip("/") + "/..")
