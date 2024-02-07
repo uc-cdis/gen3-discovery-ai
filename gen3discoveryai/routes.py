@@ -106,7 +106,7 @@ async def ask_route(
     end_time = time.time()
     logging.info(
         "Gen3 Discovery AI Response. "
-        f"user_query={query}, topic={topic}, response={response['response']}, response_time_seconds={end_time - start_time}"
+        f"user_query={query}, topic={topic}, response={response['response']}, response_time_seconds={end_time - start_time} user_id={user_id}"
     )
 
     # TODO (PXP-11239)
