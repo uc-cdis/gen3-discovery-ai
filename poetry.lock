@@ -1212,13 +1212,13 @@ requests = ["requests (>=2.20.0,<3.0.0.dev0)"]
 
 [[package]]
 name = "google-cloud-aiplatform"
-version = "1.40.0"
+version = "1.41.0"
 description = "Vertex AI API client library"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "google-cloud-aiplatform-1.40.0.tar.gz", hash = "sha256:1ee9aff2fa27c6852558a2abeaf0ffe0537bff90c5dc9f0e967762ac17291001"},
-    {file = "google_cloud_aiplatform-1.40.0-py2.py3-none-any.whl", hash = "sha256:9c67a2664e138387ea82d70dec4b54e081b7de6e1089ed23fdaf66900d00320a"},
+    {file = "google-cloud-aiplatform-1.41.0.tar.gz", hash = "sha256:ffd049cffa5b53e354a25a5c0b5560d8b2aa6ba30b1f93a4bd1d75a3338a667e"},
+    {file = "google_cloud_aiplatform-1.41.0-py2.py3-none-any.whl", hash = "sha256:0af867c0f175c2639f1b68eaf9293e2fe8435aaf3b261fde6ec11fb8243a0442"},
 ]
 
 [package.dependencies]
@@ -4997,4 +4997,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.9,<3.10.dev0"
-content-hash = "d467e0043ad1e2a2e73cf48a810891e930219a266ad69bc6be315c2690bca381"
+content-hash = "6d78acffb2a0deb2b37eae308126e2da8cd56fa33b7b76889f10321e4360ed5d"
