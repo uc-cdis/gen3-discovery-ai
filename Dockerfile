@@ -1,25 +1,57 @@
-FROM quay.io/cdis/python:python3.9-buster-2.0.0 as base
+FROM quay.io/cdis/amazonlinux:python3.9-master as build-deps
 
-FROM base as builder
-RUN pip install --upgrade pip poetry
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends \
-    build-essential gcc make musl-dev libffi-dev libssl-dev git curl bash
+USER root
 
-COPY . /cache/
-COPY . /gen3openai/
-WORKDIR /gen3openai
-RUN python -m venv /env && . /env/bin/activate && poetry install --no-interaction --no-dev
+ENV appname=gen3discoveryai
 
-FROM base
-COPY --from=builder /env /env
-COPY --from=builder /gen3openai /gen3openai
-COPY --from=builder /cache /cache
-ENV PATH="/env/bin/:${PATH}"
+RUN pip3 install --no-cache-dir --upgrade poetry
 
-# Use cache for the tiktoken encoding file
-ENV TIKTOKEN_CACHE_DIR="/cache"
+RUN yum update -y && yum install -y --setopt install_weak_deps=0 \
+    kernel-devel libffi-devel libxml2-devel libxslt-devel postgresql-devel python3-devel \
+    git && yum clean all
 
-WORKDIR /gen3openai
+WORKDIR /$appname
 
-CMD ["/env/bin/gunicorn", "gen3openai.main:app", "-b", "0.0.0.0:80", "-k", "uvicorn.workers.UvicornWorker", "-c", "gunicorn.conf.py"]
+# copy ONLY poetry artifact, install the dependencies but not gen3discoveryai
+# this will make sure that the dependencies are cached
+COPY poetry.lock pyproject.toml /$appname/
+COPY ./docs/openapi.yaml /$appname/docs/openapi.yaml
+RUN poetry config virtualenvs.in-project true \
+    && poetry install -vv --no-root --only main --no-interaction \
+    && poetry show -v
+
+# copy source code ONLY after installing dependencies
+COPY . /$appname
+
+# install gen3discoveryai
+RUN poetry config virtualenvs.in-project true \
+    && poetry install -vv --only main --no-interaction \
+    && poetry show -v
+
+#Creating the runtime image
+FROM quay.io/cdis/amazonlinux:python3.9-master
+
+ENV appname=gen3discoveryai
+
+USER root
+
+EXPOSE 80
+
+RUN pip3 install --no-cache-dir --upgrade poetry
+
+RUN yum update -y && yum install -y --setopt install_weak_deps=0 \
+    postgresql-devel shadow-utils\
+    bash && yum clean all
+
+RUN useradd -ms /bin/bash appuser
+
+COPY --from=build-deps --chown=appuser:appuser /$appname /$appname
+
+WORKDIR /$appname
+
+USER appuser
+
+# Cache the necessary tiktoken encoding file
+RUN poetry run python -c "from langchain.text_splitter import TokenTextSplitter; TokenTextSplitter.from_tiktoken_encoder(chunk_size=100, chunk_overlap=0)"
+
+CMD ["poetry", "run", "gunicorn", "gen3discoveryai.main:app", "-k", "uvicorn.workers.UvicornWorker", "-c", "gunicorn.conf.py"]
