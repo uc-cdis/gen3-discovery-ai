@@ -86,9 +86,9 @@ addopts = """
 --cov-fail-under 90
 --cov-report html:_coverage
 --cov-branch
--n auto --dist loadfile
---profile --profile-svg
 """
+# -n auto --dist loadfile
+# --profile --profile-svg
 
 [tool.isort]
 known_first_party = ["gen3discoveryai"]
