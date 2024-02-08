@@ -50,7 +50,7 @@ unstructured = "^0.11.0"
 markdown = "^3.5.1"
 werkzeug = "^3.0.1"
 langchain-community = "^0.0.14"
-langchain-google-vertexai = "^0.0.2"
+langchain-google-vertexai = "^0.0.5"
 langchain-openai = "^0.0.3"
 uvicorn = "^0.27.0"
 

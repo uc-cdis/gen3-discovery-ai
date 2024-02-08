@@ -2040,13 +2040,13 @@ extended-testing = ["jinja2 (>=3,<4)"]
 
 [[package]]
 name = "langchain-google-vertexai"
-version = "0.0.2"
+version = "0.0.5"
 description = "An integration package connecting GoogleVertexAI and LangChain"
 optional = false
 python-versions = ">=3.8.1,<4.0"
 files = [
-    {file = "langchain_google_vertexai-0.0.2-py3-none-any.whl", hash = "sha256:dcc15f07472b0af3e8f2c00fe9a94cbfff987c855e6de121128a9858faaba533"},
-    {file = "langchain_google_vertexai-0.0.2.tar.gz", hash = "sha256:ba94cdecf87c37badc845fc1ea2e1e93b6dc6bc9ecc0a33e2a8c39b0e32791ff"},
+    {file = "langchain_google_vertexai-0.0.5-py3-none-any.whl", hash = "sha256:7d20250a19262d8e7fc21ad63d891dde0b7b6362a117f182df428552289626fc"},
+    {file = "langchain_google_vertexai-0.0.5.tar.gz", hash = "sha256:40cd9d5238722af2ba3c072b489d2dc95b8d4a03267bd64a8edff49c2d2f82c2"},
 ]
 
 [package.dependencies]
@@ -2054,7 +2054,7 @@ google-cloud-aiplatform = ">=1.39.0,<2.0.0"
 google-cloud-storage = ">=2.14.0,<3.0.0"
 langchain-core = ">=0.1.7,<0.2"
 types-protobuf = ">=4.24.0.4,<5.0.0.0"
-types-requests = ">=2.31.0.20231231,<3.0.0.0"
+types-requests = ">=2.31.0,<3.0.0"
 
 [[package]]
 name = "langchain-openai"
@@ -4997,4 +4997,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.9,<3.10.dev0"
-content-hash = "d467e0043ad1e2a2e73cf48a810891e930219a266ad69bc6be315c2690bca381"
+content-hash = "c724b37d67089b1891b38fa0fb12ed12a67f6de7ec9872150e767c287397044c"
