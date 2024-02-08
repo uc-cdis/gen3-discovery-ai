@@ -1,6 +1,5 @@
-# push will run on every pushed commit to any branch (so this will rerun the tests
-# once a branch gets merged to main in addition to any new commits on any branch)
-on: push
+on:
+  pull_request
 
 name: Wool
 

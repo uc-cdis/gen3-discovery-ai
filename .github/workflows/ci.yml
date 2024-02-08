@@ -59,7 +59,8 @@ jobs:
     needs: [LintConfig]
     uses: uc-cdis/.github/.github/workflows/required_lint_check.yaml@feat/lint
     with:
-       python-version: '3.9'
+      python-version: '3.9'
+      use-cache: true
 
   InformationalLint:
     name: Run Informational Linters
@@ -67,7 +68,8 @@ jobs:
     if: github.ref != 'refs/heads/main'
     uses: uc-cdis/.github/.github/workflows/optional_lint_check.yaml@feat/lint
     with:
-       python-version: '3.9'
+      python-version: '3.9'
+      use-cache: true
 
   ImageBuildAndPush:
     name: Build Image and Push
