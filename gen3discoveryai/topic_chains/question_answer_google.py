@@ -68,15 +68,21 @@ class TopicChainGoogleQuestionAnswerRAG(TopicChain):
         llm_top_p = get_from_cfg_metadata("top_p", metadata, default=0.95, type_=float)
         llm_top_k = get_from_cfg_metadata("top_k", metadata, default=0, type_=int)
 
+        latest_embedding_model_name = "textembedding-gecko@latest"
         embedding_model_name = get_from_cfg_metadata(
             "embedding_model_name",
             metadata,
-            # NOTE: using latest here _could_ result in unexpected updates in behavior if
-            #       Google releases a new version. Recommended to use an explicit version by specifying
-            #       embedding_model_name in the configuration
-            default="textembedding-gecko@latest",
+            default=latest_embedding_model_name,
             type_=str,
         )
+
+        if embedding_model_name == latest_embedding_model_name:
+            logging.warning(
+                f"Using `embedding_model_name` or letting the default be `{latest_embedding_model_name}` "
+                "_could_ result in unexpected updates in behavior if Google releases a "
+                "new version and this service gets restarted. It is recommended to use an explicit version "
+                "such as `textembedding-gecko@003` in the configuration to ensure deterministic behavior."
+            )
 
         system_prompt = metadata.get("system_prompt", "")
 

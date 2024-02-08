@@ -6,6 +6,7 @@ from starlette.status import HTTP_401_UNAUTHORIZED as HTTP_401_UNAUTHENTICATED
 from starlette.status import (
     HTTP_403_FORBIDDEN,
     HTTP_429_TOO_MANY_REQUESTS,
+    HTTP_500_INTERNAL_SERVER_ERROR,
     HTTP_503_SERVICE_UNAVAILABLE,
 )
 
@@ -58,21 +59,33 @@ async def authorize_request(
     if not token:
         raise HTTPException(status_code=HTTP_401_UNAUTHENTICATED)
 
+    # try to get the ID so the debug log has more information
     try:
-        if not await arborist.auth_request(
+        user_id = await get_user_id(token, request)
+    except HTTPException as exc:
+        logging.debug(
+            f"Unable to determine user_id. Defaulting to `Unknown`. Exc: {exc}"
+        )
+        user_id = "Unknown"
+
+    is_authorized = False
+    try:
+        is_authorized = await arborist.auth_request(
             token.credentials,
             service="gen3_discovery_ai",
             methods=authz_access_method,
             resources=authz_resources,
-        ):
-            logging.debug(
-                f"user does not have `{authz_access_method}` access "
-                f"on `{authz_resources}` for service `gen3_discovery_ai`"
-            )
-            raise HTTPException(status_code=HTTP_403_FORBIDDEN)
+        )
     except Exception as exc:
-        logging.debug(f"arborist.auth_request failed, exc: {exc}")
-        raise HTTPException(status_code=HTTP_403_FORBIDDEN) from exc
+        logging.error(f"arborist.auth_request failed, exc: {exc}")
+        raise HTTPException(status_code=HTTP_500_INTERNAL_SERVER_ERROR) from exc
+
+    if not is_authorized:
+        logging.debug(
+            f"user `{user_id}` does not have `{authz_access_method}` access "
+            f"on `{authz_resources}` for service `gen3_discovery_ai`"
+        )
+        raise HTTPException(status_code=HTTP_403_FORBIDDEN)
 
 
 async def get_user_id(
@@ -177,7 +190,13 @@ async def _get_token_claims(
         raise HTTPException(status_code=HTTP_401_UNAUTHENTICATED)
 
     # This is what the Gen3 AuthN/Z service adds as the audience to represent Gen3 services
-    audience = f"https://{request.base_url.netloc}/user"
+    if request:
+        audience = f"https://{request.base_url.netloc}/user"
+    else:
+        logging.warning(
+            "Unable to determine expected audience b/c request context was not provided... setting audience to `None`."
+        )
+        audience = None
 
     try:
         # NOTE: token can be None if no Authorization header was provided, we expect
