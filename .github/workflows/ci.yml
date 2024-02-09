@@ -18,7 +18,7 @@ jobs:
 
   UnitTest:
     name: Python Unit Test with Postgres
-    uses: uc-cdis/.github/.github/workflows/python_unit_test.yaml@feat/lint
+    uses: uc-cdis/.github/.github/workflows/python_unit_test.yaml@master
     with:
        test-script: 'tests/ci_commands_script.sh'
        python-version: '3.9'
@@ -27,7 +27,7 @@ jobs:
   # this creates linter settings and uploads to an artifact so the configs can be pulled and used across jobs
   LintConfig:
     name: Get Lint Config
-    uses: uc-cdis/.github/.github/workflows/lint-create-config.yaml@feat/lint
+    uses: uc-cdis/.github/.github/workflows/lint-create-config.yaml@master
     with:
       python-module-name: "gen3discoveryai"
 
@@ -57,7 +57,7 @@ jobs:
   RequiredLint:
     name: Run Required Linters
     needs: [LintConfig]
-    uses: uc-cdis/.github/.github/workflows/required_lint_check.yaml@feat/lint
+    uses: uc-cdis/.github/.github/workflows/required_lint_check.yaml@master
     with:
       python-version: '3.9'
       use-cache: true
@@ -66,7 +66,7 @@ jobs:
     name: Run Informational Linters
     needs: [LintConfig, UnitTest]
     if: github.ref != 'refs/heads/main'
-    uses: uc-cdis/.github/.github/workflows/optional_lint_check.yaml@feat/lint
+    uses: uc-cdis/.github/.github/workflows/optional_lint_check.yaml@master
     with:
       python-version: '3.9'
       use-cache: true
