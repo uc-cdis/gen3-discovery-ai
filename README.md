@@ -25,7 +25,7 @@ for users, so they can send queries and get intelligent AI-generated responses.
 
 ## Overview
 
-Provides an API for querying about specific pre-configured topics. 
+Provides an API for asking about specific pre-configured topics. 
 
 Most topics will augment queries with relevant information from a 
 knowledge library for that topic. Augmented queries will then be sent 
@@ -278,8 +278,6 @@ in the `pyproject.toml` additionally:
 
 * runs coverage and will error if it falls below the threshold
 * profiles using [pytest-profiling](https://pypi.org/project/pytest-profiling/) which outputs into `/prof`
-
-You can view profiling with 
 
 #### Automatically format code and run pylint
 
