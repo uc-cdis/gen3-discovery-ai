@@ -138,7 +138,7 @@ class TopicChainGoogleQuestionAnswerRAG(TopicChain):
             "k": num_similar_docs_to_find,
             "score_threshold": similarity_score_threshold,
         }
-        logging.debug(f"retreiver search_kwargs: {retriever_cfg}")
+        logging.debug(f"retriever search_kwargs: {retriever_cfg}")
 
         retreival_qa_chain = RetrievalQA.from_chain_type(
             self.llm,
