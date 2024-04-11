@@ -79,15 +79,15 @@ pytest-profiling = "^1.7.0"
 #          manually if you want to see coverage
 #
 # see .coveragerc for what the coverage omits
-# addopts = """
-# -vv --cov-config=.coveragerc
-# --cov=gen3discoveryai
-# --cov-report term-missing:skip-covered
-# --cov-fail-under 90
-# --cov-report html:_coverage
-# --cov-branch
-# --profile --profile-svg
-# """
+addopts = """
+-vv --cov-config=.coveragerc
+--cov=gen3discoveryai
+--cov-report term-missing:skip-covered
+--cov-fail-under 90
+--cov-report html:_coverage
+--cov-branch
+--profile --profile-svg
+"""
 
 [tool.isort]
 known_first_party = ["gen3discoveryai"]
