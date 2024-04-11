@@ -18,7 +18,7 @@ def test_qa_topic_chain_google_init_defaults(vertexai, embeddings, _):
     topic_chain = TopicChainGoogleQuestionAnswerRAG("test")
     assert topic_chain.topic == "test"
     assert topic_chain.NAME == "TopicChainGoogleQuestionAnswerRAG"
-    assert topic_chain.vectorstore
+    assert topic_chain.vectorstore.embeddings
     assert topic_chain.chain
     assert topic_chain.llm
 
@@ -46,7 +46,7 @@ def test_qa_topic_chain_init_provided_metadata(vertexai, embeddings, retrievalqa
     topic_chain = TopicChainGoogleQuestionAnswerRAG("test", metadata=metadata)
     assert topic_chain.topic == "test"
     assert topic_chain.NAME == "TopicChainGoogleQuestionAnswerRAG"
-    assert topic_chain.vectorstore
+    assert topic_chain.vectorstore.embeddings
     assert topic_chain.chain
 
     assert vertexai.call_args.kwargs.get("model_name") == metadata["model_name"]
