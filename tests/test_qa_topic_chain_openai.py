@@ -15,7 +15,7 @@ def test_qa_topic_chain_openai_init_defaults():
     topic_chain = TopicChainOpenAiQuestionAnswerRAG("test")
     assert topic_chain.topic == "test"
     assert topic_chain.NAME == "TopicChainOpenAiQuestionAnswerRAG"
-    assert topic_chain.vectorstore
+    assert topic_chain.vectorstore.embeddings
     assert topic_chain.chain
     assert topic_chain.llm
 
@@ -33,7 +33,7 @@ def test_qa_topic_chain_init_provided_metadata():
     topic_chain = TopicChainOpenAiQuestionAnswerRAG("test", metadata=metadata)
     assert topic_chain.topic == "test"
     assert topic_chain.NAME == "TopicChainOpenAiQuestionAnswerRAG"
-    assert topic_chain.vectorstore
+    assert topic_chain.vectorstore.embeddings
     assert topic_chain.chain
 
     assert topic_chain.chain.retriever.search_kwargs.get("k") == int(
