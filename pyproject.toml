@@ -57,7 +57,7 @@ selenium = ">=4.18.1"
 
 
 [tool.poetry.group.dev.dependencies]
-# <8.0.0 is temporary, try removing. It was causing issues because the 
+# <8.0.0 is temporary, try removing. It was causing issues because the
 # underlying pytest-* libraries hadn't updated yet to fix some breaking changes
 pytest = ">=7.3.2,<8.0.0"
 uvicorn = ">=0.22.0"
@@ -72,7 +72,7 @@ pytest-profiling = "^1.7.0"
 [tool.pytest.ini_options]
 # Better default `pytest` command which adds coverage
 #
-# WARNING: overriding default `pytest` command to include all this coverage 
+# WARNING: overriding default `pytest` command to include all this coverage
 #          may interfere with some debuggers (like PyCharm's), so it may not stop
 #          on breakpoints. If you run into this issue, you can comment
 #          the addopts out below and then run the pytest command with all these options

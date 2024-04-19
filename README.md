@@ -25,11 +25,11 @@ for users, so they can send queries and get intelligent AI-generated responses.
 
 ## Overview
 
-Provides an API for asking about specific pre-configured topics. 
+Provides an API for asking about specific pre-configured topics.
 
-Most topics will augment queries with relevant information from a 
-knowledge library for that topic. Augmented queries will then be sent 
-to a foundational large language model (LLM) for a response. 
+Most topics will augment queries with relevant information from a
+knowledge library for that topic. Augmented queries will then be sent
+to a foundational large language model (LLM) for a response.
 
 ## Details
 
@@ -39,7 +39,7 @@ knowledge library related to a topic.
 > The API itself is configurable *per* topic, so if a RAG architecture doesn't make sense for all topics, there is flexibility to support others.
 
 In RAG, upon receiving a query, additional information is retrieved from a knowledge library, relevancy compared to
-user query, and prompt to a foundational LLM is augmented with the 
+user query, and prompt to a foundational LLM is augmented with the
 additional context from the knowledge library (alongside a configured system prompt
 to guide the LLM on how it should interpret the context and respond).
 
@@ -52,7 +52,7 @@ to guide the LLM on how it should interpret the context and respond).
   - :grey_question: Others
 
 **Knowledge Library Embeddings:**
-  - ✅ Google Vertex AI PaLM Embeddings 
+  - ✅ Google Vertex AI PaLM Embeddings
   - ✅ OpenAI Embeddings
 
 **Foundational Model:**
@@ -65,13 +65,13 @@ to guide the LLM on how it should interpret the context and respond).
 ### Background
 
 Gen3 builds on other open source libraries, specifications, and tools when we can, and we tend to lean
-towards the best tools in the community or research space as it evolves (especially in 
+towards the best tools in the community or research space as it evolves (especially in
 cases where we're on the bleeding edge like this).
 
 In the case of generative AI and LLMs,
 there is a lot of excellent work out there. We are building this on the
-shoulders of giants for many of the knowledge libraries and foundational model 
-interactions. We're using `langchain`, `chromadb`, among others. 
+shoulders of giants for many of the knowledge libraries and foundational model
+interactions. We're using `langchain`, `chromadb`, among others.
 
 We've even contributed back to open source tools like `chromadb` to improve its ability to operate in a FIPS-compliant
 environment. :heart:
@@ -82,16 +82,16 @@ environment. :heart:
 
 This documented setup relies on both our Google Vertex AI support **and** OpenAI support.
 
-> OpenAI is **NOT** intended for production use in Gen3 (due to FedRAMP requirements). 
+> OpenAI is **NOT** intended for production use in Gen3 (due to FedRAMP requirements).
 
 #### Google Application Credentials
 
-Set the `GOOGLE_APPLICATION_CREDENTIALS` environment variable as the path to 
-a valid credentials JSON file (likely a service account key). 
+Set the `GOOGLE_APPLICATION_CREDENTIALS` environment variable as the path to
+a valid credentials JSON file (likely a service account key).
 
-See [Google Cloud Platform docs](https://cloud.google.com/docs/authentication/application-default-credentials#GAC) for more info. 
+See [Google Cloud Platform docs](https://cloud.google.com/docs/authentication/application-default-credentials#GAC) for more info.
 
-The credentials will need IAM permissions in a Google Project with Google Vertex AI enabled (which requires the setup 
+The credentials will need IAM permissions in a Google Project with Google Vertex AI enabled (which requires the setup
 of a billing account). The IAM permissions required are captured in Google's predefined role: `Vertex AI User`.
 
 #### OpenAI Key
@@ -163,7 +163,7 @@ This script currently supports loading from arbitrary TSVs or Markdown files in 
 
 > **IMPORTANT**: Make sure when using `/bin` scripts, the `.env` service configuration
 > is set up and appropriately loaded (e.g. execute the script from a directory where there is
-> a `.env` config). The `/bin` scripts REQUIRE loading the configuration in order to 
+> a `.env` config). The `/bin` scripts REQUIRE loading the configuration in order to
 > both load the available topics and to properly embed and load into the vectorstore.
 
 ##### Loading TSVs
@@ -200,7 +200,7 @@ poetry run python ./bin/load_into_knowledge_store.py tsvs /tsvs
 
 ##### Loading Markdown
 
-There's an example script that downloads all the public markdown 
+There's an example script that downloads all the public markdown
 files from our GitHub org. You can reference
 the `bin/download_files_from_github.py` example script if interested.
 
@@ -223,11 +223,11 @@ poetry run python ./bin/load_into_knowledge_store.py markdown --topic anothertop
 
 #### Non-TSV and Non-Markdown Knowledge Loading
 
-If loading from TSVs or Markdown doesn't work easily for you, you should be able to 
+If loading from TSVs or Markdown doesn't work easily for you, you should be able to
 easily modify the `./bin/load_into_knowledge_store.py` script to your needs by using a different langchain document loader.
 
 The base `TopicChain` class includes a `store_knowledge` method which expects a list
-of `langchain` documents. This is the default output of  
+of `langchain` documents. This is the default output of
 `langchain.text_splitter.TokenTextSplitter`. Langchain has numerous document loaders that can be
 fed into the splitter already, so [check out the langchain documentation](https://python.langchain.com/docs/modules/data_connection/document_loaders).
 
@@ -271,9 +271,9 @@ Relies on Gen3's Policy Engine.
 
 You can `poetry run python run.py` after install to run the app locally.
 
-For testing, you can `poetry run pytest`. 
+For testing, you can `poetry run pytest`.
 
-The default `pytest` options specified 
+The default `pytest` options specified
 in the `pyproject.toml` additionally:
 
 * runs coverage and will error if it falls below the threshold
@@ -281,11 +281,11 @@ in the `pyproject.toml` additionally:
 
 #### Automatically format code and run pylint
 
-This quick `clean.sh` script is used to run `isort` and `black` over everything if 
+This quick `clean.sh` script is used to run `isort` and `black` over everything if
 you don't integrate those with your editor/IDE.
 
-> NOTE: This requires the beginning of the setup for using Super 
-> Linter locally. You must have the global linter configs in 
+> NOTE: This requires the beginning of the setup for using Super
+> Linter locally. You must have the global linter configs in
 > `~/.gen3/.github/.github/linters`. See [Gen3's linter setup docs](https://github.com/uc-cdis/.github/blob/master/.github/workflows/README.md#L1).
 
 `clean.sh` also runs just `pylint` to check Python code for lint.
