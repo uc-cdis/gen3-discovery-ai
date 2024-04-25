@@ -11,7 +11,7 @@ packages = [{include = "gen3discoveryai"}]
 python = ">=3.9,<3.10.dev0"
 
 # TODO: REMOVE WHEN onnxruntime bug is resolved https://github.com/microsoft/onnxruntime/issues/18065
-onnxruntime = "==1.16.1"
+onnxruntime = "==1.17.3"
 
 # TODO: Unpin when requests updates to include a version later than this
 certifi = ">=2023.7.22"
