@@ -53,12 +53,13 @@ class TopicChain:
         Args:
             documents (list[langchain.schema.document.Document]): IDs to Documents to store in the knowledge store
         """
-        if not self.vectorstore:
-            logging.warning(
+        if self.vectorstore is None:
+            msg = (
                 f"Attempted to insert documents into a TopicChain {self.name} "
-                f"for topic {self.topic} that doesn't have a configured vectorstore"
+                f"for topic '{self.topic}' which doesn't have a configured vectorstore"
             )
-            return
+            logging.error(msg)
+            raise Exception(msg)
 
         logging.info(
             f"Recreating knowledge store collection for {self.topic} from documents..."

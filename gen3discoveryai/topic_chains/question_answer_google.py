@@ -132,7 +132,9 @@ class TopicChainGoogleQuestionAnswerRAG(TopicChain):
             client_settings=settings,
         )
 
-        logging.debug("chroma vectorstore initialized")
+        logging.debug(
+            f"chroma vectorstore initialized from ./knowledge/{topic} with docs"
+        )
 
         retriever_cfg = {
             "k": num_similar_docs_to_find,
@@ -140,7 +142,7 @@ class TopicChainGoogleQuestionAnswerRAG(TopicChain):
         }
         logging.debug(f"retreiver search_kwargs: {retriever_cfg}")
 
-        retreival_qa_chain = RetrievalQA.from_chain_type(
+        retrieval_qa_chain = RetrievalQA.from_chain_type(
             self.llm,
             retriever=vectorstore.as_retriever(
                 search_type="similarity_score_threshold",
@@ -153,7 +155,7 @@ class TopicChainGoogleQuestionAnswerRAG(TopicChain):
         super().__init__(
             name=self.NAME,
             topic=topic,
-            chain=retreival_qa_chain,
+            chain=retrieval_qa_chain,
             vectorstore=vectorstore,
         )
 
