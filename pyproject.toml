@@ -47,9 +47,6 @@ langchain-community = ">=0.0.14"
 langchain-google-vertexai = ">=0.0.2"
 langchain-openai = ">=0.0.3"
 uvicorn = ">=0.27.0"
-selenium = ">=4.18.1"
-cryptography = "^42.0.8"
-protobuf = "^3.20.0"
 
 
 [tool.poetry.group.dev.dependencies]
@@ -63,7 +60,7 @@ pytest-asyncio = ">=0.21.1"
 isort = ">=5.12.0"
 black = ">=23.10.0"
 pylint = ">=3.0.1"
-pytest-profiling = "^1.7.0"
+pytest-profiling = ">=1.7.0"
 
 [tool.pytest.ini_options]
 # Better default `pytest` command which adds coverage
@@ -80,7 +77,6 @@ addopts = """
 --cov=gen3discoveryai
 --cov-report term-missing:skip-covered
 --cov-fail-under 90
---cov-report html:_coverage
 --cov-branch
 --profile --profile-svg
 """
