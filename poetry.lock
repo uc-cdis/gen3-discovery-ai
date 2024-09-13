@@ -2184,17 +2184,17 @@ mistral = ["langchain-mistralai (>=0.1.12,<1)"]
 
 [[package]]
 name = "langchain-openai"
-version = "0.1.23"
+version = "0.1.24"
 description = "An integration package connecting OpenAI and LangChain"
 optional = false
 python-versions = "<4.0,>=3.8.1"
 files = [
-    {file = "langchain_openai-0.1.23-py3-none-any.whl", hash = "sha256:8e3d215803e157f26480c6108eb4333629832b1a0e746723060c24f93b8b78f4"},
-    {file = "langchain_openai-0.1.23.tar.gz", hash = "sha256:ed7f16671ea0af177ac5f82d5645a746c5097c56f97b31798e5c07b5c84f0eed"},
+    {file = "langchain_openai-0.1.24-py3-none-any.whl", hash = "sha256:7dc27f1dd50090a409fb5e970b07aaf3ff32c027cc1e8da1d1272f950e93e02c"},
+    {file = "langchain_openai-0.1.24.tar.gz", hash = "sha256:3f7ef5c26d232685d3c367b7ec523799563c468725e4ca2e616d7c4a96bd16f3"},
 ]
 
 [package.dependencies]
-langchain-core = ">=0.2.35,<0.3.0"
+langchain-core = ">=0.2.39,<0.3.0"
 openai = ">=1.40.0,<2.0.0"
 tiktoken = ">=0.7,<1"
 
@@ -2228,13 +2228,13 @@ six = "*"
 
 [[package]]
 name = "langsmith"
-version = "0.1.118"
+version = "0.1.120"
 description = "Client library to connect to the LangSmith LLM Tracing and Evaluation Platform."
 optional = false
 python-versions = "<4.0,>=3.8.1"
 files = [
-    {file = "langsmith-0.1.118-py3-none-any.whl", hash = "sha256:f017127b3efb037da5e46ff4f8583e8192e7955191737240c327f3eadc144d7c"},
-    {file = "langsmith-0.1.118.tar.gz", hash = "sha256:ff1ca06c92c6081250244ebbce5d0bb347b9d898d2e9b60a13b11f0f0720f09f"},
+    {file = "langsmith-0.1.120-py3-none-any.whl", hash = "sha256:54d2785e301646c0988e0a69ebe4d976488c87b41928b358cb153b6ddd8db62b"},
+    {file = "langsmith-0.1.120.tar.gz", hash = "sha256:25499ca187b41bd89d784b272b97a8d76f60e0e21bdf20336e8a2aa6a9b23ac9"},
 ]
 
 [package.dependencies]
@@ -4813,13 +4813,13 @@ files = [
 
 [[package]]
 name = "unstructured"
-version = "0.15.10"
+version = "0.15.12"
 description = "A library that prepares raw documents for downstream ML tasks."
 optional = false
 python-versions = "<3.13,>=3.9.0"
 files = [
-    {file = "unstructured-0.15.10-py3-none-any.whl", hash = "sha256:7bc9a300f6ec7c9f0cc61305c0765f17dd8a6fff77460fcb0ada94a0a0358406"},
-    {file = "unstructured-0.15.10.tar.gz", hash = "sha256:d77abe8bd12ae645b23ae04c5e6089acdd7fa5bc4005da1d0f2f88809cca5008"},
+    {file = "unstructured-0.15.12-py3-none-any.whl", hash = "sha256:a789c8bfde6da99bb9985301b19a8ed06e1c226f447921683a939d3412f72403"},
+    {file = "unstructured-0.15.12.tar.gz", hash = "sha256:22af44a9c949f9239d2eab2826e002fbbbbdb534a1698d3319a107f982feac2b"},
 ]
 
 [package.dependencies]
@@ -5453,13 +5453,13 @@ multidict = ">=4.0"
 
 [[package]]
 name = "zipp"
-version = "3.20.1"
+version = "3.20.2"
 description = "Backport of pathlib-compatible object wrapper for zip files"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "zipp-3.20.1-py3-none-any.whl", hash = "sha256:9960cd8967c8f85a56f920d5d507274e74f9ff813a0ab8889a5b5be2daf44064"},
-    {file = "zipp-3.20.1.tar.gz", hash = "sha256:c22b14cc4763c5a5b04134207736c107db42e9d3ef2d9779d465f5f1bcba572b"},
+    {file = "zipp-3.20.2-py3-none-any.whl", hash = "sha256:a817ac80d6cf4b23bf7f2828b7cabf326f15a001bea8b1f9b49631780ba28350"},
+    {file = "zipp-3.20.2.tar.gz", hash = "sha256:bc9eb26f4506fda01b81bcde0ca78103b6e62f991b381fec825435c836edbc29"},
 ]
 
 [package.extras]

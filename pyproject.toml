@@ -78,6 +78,7 @@ addopts = """
 --cov=gen3discoveryai
 --cov-report term-missing:skip-covered
 --cov-fail-under 90
+--cov-report html:_coverage
 --cov-branch
 --profile --profile-svg
 """
