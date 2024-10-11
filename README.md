@@ -29,7 +29,7 @@ Provides an API for asking about specific pre-configured topics.
 
 Most topics will augment queries with relevant information from a
 knowledge library for that topic. Augmented queries will then be sent
-to a foundational large language model (LLM) for a response.
+to a foundation large language model (LLM) for a response.
 
 ## Details
 
@@ -39,7 +39,7 @@ knowledge library related to a topic.
 > The API itself is configurable *per* topic, so if a RAG architecture doesn't make sense for all topics, there is flexibility to support others.
 
 In RAG, upon receiving a query, additional information is retrieved from a knowledge library, relevancy compared to
-user query, and prompt to a foundational LLM is augmented with the
+user query, and prompt to a foundation LLM is augmented with the
 additional context from the knowledge library (alongside a configured system prompt
 to guide the LLM on how it should interpret the context and respond).
 
@@ -52,15 +52,20 @@ to guide the LLM on how it should interpret the context and respond).
   - :grey_question: Others
 
 **Knowledge Library Embeddings:**
-  - ✅ Google Vertex AI PaLM Embeddings
+  - ✅ [Google Embeddings](https://ai.google.dev/gemini-api/docs/embeddings)
   - ✅ OpenAI Embeddings
 
-**Foundational Model:**
-  - ✅ Google PaLM API Models (configurable, default model:`chat-bison`)
+**AI Model Support:**
+  - ✅ Google Models (configurable, default model:`chat-bison`, **IMPORTANT NOTE:** Please use `gemini-1.5-flash` instead.)
+      - `chat-bison` is Google's PaLM 2 Model. This was decomissioned by Google in Oct 2024. You should prefer Gemini models such as `gemini-1.5-flash`
+      - See [their docs](https://ai.google.dev/gemini-api/docs/models/gemini#model-variations) for more model options
   - ✅ OpenAI's Models (configurable, default model: `gpt-3.5-turbo`)
-  - :grey_question: Trained/tuned model
-  - :grey_question: AWS Bedrock
+  - :grey_question: AWS Models
+  - :grey_question: Open Source Models
+  - :grey_question: Trained/tuned model(s)
   - :grey_question: Others
+
+> Note: Our use of `langchain` makes adding new models and even architectures beyond RAG possible. Developers should look at the code in the `gen3discoveryai/topic_chains` folder.
 
 ### Background
 
@@ -70,7 +75,7 @@ cases where we're on the bleeding edge like this).
 
 In the case of generative AI and LLMs,
 there is a lot of excellent work out there. We are building this on the
-shoulders of giants for many of the knowledge libraries and foundational model
+shoulders of giants for many of the knowledge libraries and foundation model
 interactions. We're using `langchain`, `chromadb`, among others.
 
 We've even contributed back to open source tools like `chromadb` to improve its ability to operate in a FIPS-compliant
