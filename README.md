@@ -375,6 +375,6 @@ Adding a new `Topic Chain`:
    - Add to example configuration
    - Add any additional notes elsewhere in the README as necessary
 5. Write tests `tests/test_{{TOPIC_CHAIN}}`
-   - Update the `tests/.env` to add the new topic chain if necessary
+   - Update the `tests/.env` and `tests/badcfg/.env` to add the new topic chain if necessary
 6. Test it locally
 7. Make a PR 😃
