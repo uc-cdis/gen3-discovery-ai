@@ -24,12 +24,12 @@ async def test_topics_list_all(_, endpoint, client):
             "default",
             "bdc",
             "usedefault",
-            "ollama"
+            "ollama",
             # add new ones here
         ]
 
         for expected_topic in expected_topics:
-            assert expected_topic in topics
+            assert expected_topic in topics.keys()
 
         assert len(topics) == len(expected_topics)
 
