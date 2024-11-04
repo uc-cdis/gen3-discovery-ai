@@ -1721,6 +1721,27 @@ files = [
 ]
 
 [[package]]
+name = "html5lib"
+version = "1.1"
+description = "HTML parser based on the WHATWG HTML specification"
+optional = false
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
+files = [
+    {file = "html5lib-1.1-py2.py3-none-any.whl", hash = "sha256:0d78f8fde1c230e99fe37986a60526d7049ed4bf8a9fadbad5f00e22e58e041d"},
+    {file = "html5lib-1.1.tar.gz", hash = "sha256:b2e5b40261e20f354d198eae92afc10d750afb487ed5e50f9c4eaf07c184146f"},
+]
+
+[package.dependencies]
+six = ">=1.9"
+webencodings = "*"
+
+[package.extras]
+all = ["chardet (>=2.2)", "genshi", "lxml"]
+chardet = ["chardet (>=2.2)"]
+genshi = ["genshi"]
+lxml = ["lxml"]
+
+[[package]]
 name = "httpcore"
 version = "1.0.5"
 description = "A minimal low-level HTTP client."
@@ -4518,20 +4539,6 @@ mpmath = ">=1.1.0,<1.4"
 dev = ["hypothesis (>=6.70.0)", "pytest (>=7.1.0)"]
 
 [[package]]
-name = "tabulate"
-version = "0.9.0"
-description = "Pretty-print tabular data"
-optional = false
-python-versions = ">=3.7"
-files = [
-    {file = "tabulate-0.9.0-py3-none-any.whl", hash = "sha256:024ca478df22e9340661486f85298cff5f6dcdba14f3813e8830015b9ed1948f"},
-    {file = "tabulate-0.9.0.tar.gz", hash = "sha256:0095b12bf5966de529c0feb1fa08671671b3368eec77d7ef7ab114be2c068b3c"},
-]
-
-[package.extras]
-widechars = ["wcwidth"]
-
-[[package]]
 name = "tenacity"
 version = "8.5.0"
 description = "Retry code until it succeeds"
@@ -4813,13 +4820,13 @@ files = [
 
 [[package]]
 name = "unstructured"
-version = "0.15.12"
+version = "0.16.4"
 description = "A library that prepares raw documents for downstream ML tasks."
 optional = false
 python-versions = "<3.13,>=3.9.0"
 files = [
-    {file = "unstructured-0.15.12-py3-none-any.whl", hash = "sha256:a789c8bfde6da99bb9985301b19a8ed06e1c226f447921683a939d3412f72403"},
-    {file = "unstructured-0.15.12.tar.gz", hash = "sha256:22af44a9c949f9239d2eab2826e002fbbbbdb534a1698d3319a107f982feac2b"},
+    {file = "unstructured-0.16.4-py3-none-any.whl", hash = "sha256:300e4a9e630c6d55484a62e90df23075e5abd04f17bf15043898bc0eff6c4070"},
+    {file = "unstructured-0.16.4.tar.gz", hash = "sha256:da05433db186f8251fc0b1b1b273f584ca2a71363d541ec1ab82ef55dc49055d"},
 ]
 
 [package.dependencies]
@@ -4829,6 +4836,7 @@ chardet = "*"
 dataclasses-json = "*"
 emoji = "*"
 filetype = "*"
+html5lib = "*"
 langdetect = "*"
 lxml = "*"
 nltk = "*"
@@ -4839,76 +4847,30 @@ python-magic = "*"
 python-oxmsg = "*"
 rapidfuzz = "*"
 requests = "*"
-tabulate = "*"
 tqdm = "*"
 typing-extensions = "*"
 unstructured-client = "*"
 wrapt = "*"
 
 [package.extras]
-airtable = ["pyairtable"]
-all-docs = ["effdet", "google-cloud-vision", "markdown", "networkx", "onnx", "openpyxl", "pandas", "pdf2image", "pdfminer.six", "pi-heif", "pikepdf", "pypandoc", "pypdf", "python-docx (>=1.1.2)", "python-pptx (>=1.0.1)", "unstructured-inference (==0.7.36)", "unstructured.pytesseract (>=0.3.12)", "xlrd"]
-astradb = ["astrapy"]
-azure = ["adlfs", "fsspec"]
-azure-cognitive-search = ["azure-search-documents"]
-bedrock = ["boto3", "langchain-community"]
-biomed = ["bs4"]
-box = ["boxfs", "fsspec"]
-chroma = ["chromadb", "importlib-metadata (>=8.2.0)", "tenacity (==8.5.0)", "typer (<=0.9.0)"]
-clarifai = ["clarifai"]
-confluence = ["atlassian-python-api"]
+all-docs = ["effdet", "google-cloud-vision", "markdown", "networkx", "onnx", "openpyxl", "pandas", "pdf2image", "pdfminer.six", "pi-heif", "pikepdf", "pypandoc", "pypdf", "python-docx (>=1.1.2)", "python-pptx (>=1.0.1)", "unstructured-inference (==0.8.1)", "unstructured.pytesseract (>=0.3.12)", "xlrd"]
 csv = ["pandas"]
-databricks-volumes = ["databricks-sdk"]
-delta-table = ["deltalake (<=0.19.1)", "fsspec"]
-discord = ["discord-py"]
 doc = ["python-docx (>=1.1.2)"]
 docx = ["python-docx (>=1.1.2)"]
-dropbox = ["dropboxdrivefs", "fsspec"]
-elasticsearch = ["elasticsearch[async]"]
-embed-huggingface = ["langchain-huggingface"]
-embed-mixedbreadai = ["mixedbread-ai"]
-embed-octoai = ["openai", "tiktoken"]
-embed-vertexai = ["langchain", "langchain-community", "langchain-google-vertexai"]
-embed-voyageai = ["langchain", "langchain-voyageai"]
 epub = ["pypandoc"]
-gcs = ["bs4", "fsspec", "gcsfs"]
-github = ["pygithub (>1.58.0)"]
-gitlab = ["python-gitlab"]
-google-drive = ["google-api-python-client"]
-hubspot = ["hubspot-api-client", "urllib3"]
 huggingface = ["langdetect", "sacremoses", "sentencepiece", "torch", "transformers"]
-image = ["effdet", "google-cloud-vision", "onnx", "pdf2image", "pdfminer.six", "pi-heif", "pikepdf", "pypdf", "unstructured-inference (==0.7.36)", "unstructured.pytesseract (>=0.3.12)"]
-jira = ["atlassian-python-api"]
-kafka = ["confluent-kafka"]
-local-inference = ["effdet", "google-cloud-vision", "markdown", "networkx", "onnx", "openpyxl", "pandas", "pdf2image", "pdfminer.six", "pi-heif", "pikepdf", "pypandoc", "pypdf", "python-docx (>=1.1.2)", "python-pptx (>=1.0.1)", "unstructured-inference (==0.7.36)", "unstructured.pytesseract (>=0.3.12)", "xlrd"]
+image = ["effdet", "google-cloud-vision", "onnx", "pdf2image", "pdfminer.six", "pi-heif", "pikepdf", "pypdf", "unstructured-inference (==0.8.1)", "unstructured.pytesseract (>=0.3.12)"]
+local-inference = ["effdet", "google-cloud-vision", "markdown", "networkx", "onnx", "openpyxl", "pandas", "pdf2image", "pdfminer.six", "pi-heif", "pikepdf", "pypandoc", "pypdf", "python-docx (>=1.1.2)", "python-pptx (>=1.0.1)", "unstructured-inference (==0.8.1)", "unstructured.pytesseract (>=0.3.12)", "xlrd"]
 md = ["markdown"]
-mongodb = ["pymongo"]
-notion = ["htmlBuilder", "notion-client"]
 odt = ["pypandoc", "python-docx (>=1.1.2)"]
-onedrive = ["Office365-REST-Python-Client", "bs4", "msal"]
-openai = ["langchain-openai"]
-opensearch = ["opensearch-py"]
 org = ["pypandoc"]
-outlook = ["Office365-REST-Python-Client", "msal"]
 paddleocr = ["paddlepaddle (==3.0.0b1)", "unstructured.paddleocr (==2.8.1.0)"]
-pdf = ["effdet", "google-cloud-vision", "onnx", "pdf2image", "pdfminer.six", "pi-heif", "pikepdf", "pypdf", "unstructured-inference (==0.7.36)", "unstructured.pytesseract (>=0.3.12)"]
-pinecone = ["pinecone-client (>=3.7.1)"]
-postgres = ["psycopg2-binary"]
+pdf = ["effdet", "google-cloud-vision", "onnx", "pdf2image", "pdfminer.six", "pi-heif", "pikepdf", "pypdf", "unstructured-inference (==0.8.1)", "unstructured.pytesseract (>=0.3.12)"]
 ppt = ["python-pptx (>=1.0.1)"]
 pptx = ["python-pptx (>=1.0.1)"]
-qdrant = ["qdrant-client"]
-reddit = ["praw"]
 rst = ["pypandoc"]
 rtf = ["pypandoc"]
-s3 = ["fsspec", "s3fs"]
-salesforce = ["simple-salesforce"]
-sftp = ["fsspec", "paramiko"]
-sharepoint = ["Office365-REST-Python-Client", "msal"]
-singlestore = ["singlestoredb"]
-slack = ["slack-sdk"]
 tsv = ["pandas"]
-weaviate = ["weaviate-client"]
-wikipedia = ["wikipedia"]
 xlsx = ["networkx", "openpyxl", "pandas", "xlrd"]
 
 [[package]]
@@ -5127,6 +5089,17 @@ files = [
 
 [package.dependencies]
 anyio = ">=3.0.0"
+
+[[package]]
+name = "webencodings"
+version = "0.5.1"
+description = "Character encoding aliases for legacy web content"
+optional = false
+python-versions = "*"
+files = [
+    {file = "webencodings-0.5.1-py2.py3-none-any.whl", hash = "sha256:a0af1213f3c2226497a97e2b3aa01a7e4bee4f403f95be16fc9acd2947514a78"},
+    {file = "webencodings-0.5.1.tar.gz", hash = "sha256:b36a1c245f2d304965eb4e0a82848379241dc04b865afcc4aab16748587e1923"},
+]
 
 [[package]]
 name = "websocket-client"
