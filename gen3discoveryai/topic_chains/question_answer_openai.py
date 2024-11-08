@@ -9,6 +9,7 @@ The overall RAG process is the following:
    based on the previous relevancy search
 5. Send augmented prompt to the foundational model
 """
+
 from __future__ import annotations
 
 from typing import Any, Dict
@@ -19,7 +20,7 @@ import openai
 from fastapi import HTTPException
 from langchain.chains import RetrievalQA
 from langchain.prompts import PromptTemplate
-from langchain.vectorstores.chroma import Chroma
+from langchain_chroma import Chroma
 from langchain_openai import ChatOpenAI, OpenAIEmbeddings
 from starlette.status import HTTP_400_BAD_REQUEST, HTTP_429_TOO_MANY_REQUESTS
 
