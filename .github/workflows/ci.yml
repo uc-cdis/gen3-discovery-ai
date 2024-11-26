@@ -57,7 +57,7 @@ jobs:
   RequiredLint:
     name: Run Required Linters
     needs: [LintConfig]
-    uses: uc-cdis/.github/.github/workflows/required_lint_check.yaml@master
+    uses: uc-cdis/.github/.github/workflows/required_lint_check.yaml@fix/lint-path
     with:
       python-version: '3.9'
       use-cache: true
