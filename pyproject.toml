@@ -47,7 +47,7 @@ langchain-community = ">=0.0.14"
 langchain-google-vertexai = ">=0.0.2"
 langchain-openai = ">=0.0.3"
 uvicorn = ">=0.27.0"
-protobuf = "^3.20.0"
+protobuf = "^5.29.1"
 
 
 [tool.poetry.group.dev.dependencies]
