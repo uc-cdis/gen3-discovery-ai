@@ -75,7 +75,7 @@ class TopicChain:
         Args:
             query (str): query to provide to chain
         """
-        return self.chain(
+        return self.chain.invoke(
             {"query": query},
             *args,
             include_run_info=True,

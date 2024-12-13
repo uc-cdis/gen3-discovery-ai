@@ -19,14 +19,15 @@ import langchain
 from langchain.chains import RetrievalQA
 from langchain.prompts import PromptTemplate
 from langchain_chroma import Chroma
-from langchain_google_vertexai import ChatVertexAI, VertexAIEmbeddings
+from langchain_ollama import ChatOllama
+from langchain_ollama.embeddings import OllamaEmbeddings
 
 from gen3discoveryai import logging
 from gen3discoveryai.topic_chains.base import TopicChain
 from gen3discoveryai.topic_chains.utils import get_from_cfg_metadata
 
 
-class TopicChainGoogleQuestionAnswerRAG(TopicChain):
+class TopicChainOllamaQuestionAnswerRAG(TopicChain):
     """
     This implementation uses `langchain`'s abstraction of `chromadb`.
     `chromadb` implements an in-mem vector database with local file(s) for persistence.
@@ -47,7 +48,7 @@ class TopicChainGoogleQuestionAnswerRAG(TopicChain):
             initialization after the vectorstore and llm
     """
 
-    NAME = "TopicChainGoogleQuestionAnswerRAG"
+    NAME = "TopicChainOllamaQuestionAnswerRAG"
 
     def __init__(self, topic: str, metadata: Dict[str, Any] = None) -> None:
         logging.debug(f"initializing topic chain {self.NAME} for topic: {topic}")
@@ -55,43 +56,26 @@ class TopicChainGoogleQuestionAnswerRAG(TopicChain):
         metadata = metadata or {}
 
         llm_model_name = get_from_cfg_metadata(
-            "model_name", metadata, default="gemini-1.5-flash", type_=str
+            "model_name", metadata, default="llama3.2", type_=str
         )
         llm_model_temperature = get_from_cfg_metadata(
             "model_temperature", metadata, default=0, type_=float
         )
-        llm_location = get_from_cfg_metadata(
-            "location", metadata, default="us-central1", type_=str
-        )
         llm_max_output_tokens = get_from_cfg_metadata(
             "max_output_tokens", metadata, default=128, type_=int
         )
-        llm_top_p = get_from_cfg_metadata("top_p", metadata, default=0.95, type_=float)
-        llm_top_k = get_from_cfg_metadata("top_k", metadata, default=3, type_=int)
-
-        latest_embedding_model_name = "textembedding-gecko@latest"
-        embedding_model_name = get_from_cfg_metadata(
-            "embedding_model_name",
-            metadata,
-            default=latest_embedding_model_name,
-            type_=str,
+        llm_top_p = get_from_cfg_metadata("top_p", metadata, default=0.9, type_=float)
+        llm_top_k = get_from_cfg_metadata("top_k", metadata, default=40, type_=int)
+        ollama_model_base_url = get_from_cfg_metadata(
+            "ollama_model_base_url", metadata, default="localhost:11434", type_=str
         )
-
-        if embedding_model_name == latest_embedding_model_name:
-            logging.warning(
-                f"Using `embedding_model_name` or letting the default be `{latest_embedding_model_name}` "
-                "_could_ result in unexpected updates in behavior if Google releases a "
-                "new version and this service gets restarted. It is recommended to use an explicit version "
-                "such as `textembedding-gecko@003` in the configuration to ensure deterministic behavior."
-            )
 
         system_prompt = metadata.get("system_prompt", "")
 
-        self.llm = ChatVertexAI(
-            model_name=llm_model_name,
+        self.llm = ChatOllama(
+            model=llm_model_name,
             temperature=llm_model_temperature,
-            location=llm_location,
-            max_output_tokens=llm_max_output_tokens,
+            num_predict=llm_max_output_tokens,
             top_p=llm_top_p,
             top_k=llm_top_k,
         )
@@ -108,10 +92,10 @@ class TopicChainGoogleQuestionAnswerRAG(TopicChain):
         prompt = PromptTemplate.from_template(template)
 
         num_similar_docs_to_find = get_from_cfg_metadata(
-            "num_similar_docs_to_find", metadata, default=4, type_=int
+            "num_similar_docs_to_find", metadata, default=7, type_=int
         )
         similarity_score_threshold = get_from_cfg_metadata(
-            "similarity_score_threshold", metadata, default=0.5, type_=float
+            "similarity_score_threshold", metadata, default=0.7, type_=float
         )
         # langchain/chroma recommend a separate client per persisted path
         # to avoid potential collisions. We will separate on topic
@@ -125,10 +109,9 @@ class TopicChainGoogleQuestionAnswerRAG(TopicChain):
         vectorstore = Chroma(
             client=persistent_client,
             collection_name=topic,
-            embedding_function=VertexAIEmbeddings(model_name=embedding_model_name),
-            # We've heard the `cosine` distance function performs better
-            # https://docs.trychroma.com/usage-guide#changing-the-distance-function
-            collection_metadata={"hnsw:space": "cosine"},
+            embedding_function=OllamaEmbeddings(
+                model=llm_model_name, base_url=ollama_model_base_url
+            ),
             persist_directory=f"./knowledge/{topic}",
             client_settings=settings,
         )

@@ -2,6 +2,7 @@ from gen3discoveryai.factory import Factory
 from gen3discoveryai.topic_chains import (
     TopicChainGoogleQuestionAnswerRAG,
     TopicChainOpenAiQuestionAnswerRAG,
+    TopicChainOllamaQuestionAnswerRAG,
 )
 
 # ... import more here as implemented
@@ -22,6 +23,10 @@ def get_topic_chain_factory():
     chain_factory.register(
         TopicChainGoogleQuestionAnswerRAG.NAME,
         TopicChainGoogleQuestionAnswerRAG,
+    )
+    chain_factory.register(
+        TopicChainOllamaQuestionAnswerRAG.NAME,
+        TopicChainOllamaQuestionAnswerRAG,
     )
     # ... register more here as implemented
     return chain_factory
