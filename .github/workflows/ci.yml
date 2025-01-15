@@ -37,7 +37,7 @@ jobs:
 #    name: Customize Lint Config
 #    needs: [LintConfig]
 #    steps:
-#      - uses: actions/download-artifact@v3
+#      - uses: actions/download-artifact@v4
 #        with:
 #          # this is uploaded by the lint-create-config.yaml workflow
 #          name: linters-config
@@ -47,7 +47,7 @@ jobs:
 #      - run: echo "known_first_party=gen3discoveryai" >> .github/linters/.isort.cfg
 #
 #      # now we need to re-upload the artifacts with the changes
-#      - uses: actions/upload-artifact@v3
+#      - uses: actions/upload-artifact@v4
 #        with:
 #          name: linters-config
 #          path: |
