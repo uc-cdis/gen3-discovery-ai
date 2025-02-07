@@ -4,18 +4,18 @@ info:
   title: Gen3 Discovery AI Service
   description: |
     # Overview
-    
-    API for querying about specific pre-configured topics. A topic 
-    has a configured chain of actions that eventually query an LLM and may 
+
+    API for querying about specific pre-configured topics. A topic
+    has a configured chain of actions that eventually query an LLM and may
     contain a knowledge store of documents related to the topic (which may be used to
     include augmentation of the query).
 
     At this time, the available configured chain(s) are based on a
     [Retrieval Augmented Generation (RAG) architecture](https://arxiv.org/abs/2005.11401).
-    Queries will be augmented with relevant information from a 
-    knowledge library for that topic. Upon receiving a query, additional information is 
+    Queries will be augmented with relevant information from a
+    knowledge library for that topic. Upon receiving a query, additional information is
     retrieved from the library, relevancy compared to
-    user query, and a prompt to a foundational AI LLM model is augmented with the 
+    user query, and a prompt to a foundational AI LLM model is augmented with the
     additional context from the knowledge library. The foundational model then generates a response.
 
     In the future, more configured chains may enable alternative architectures or just
@@ -251,7 +251,7 @@ paths:
                   Example 1:
                     topics:
                       default:
-                        description: default topic 
+                        description: default topic
                         topic_chain: TopicChainOpenAiQuestionAnswerRAG
                         system_prompt: 'You answer questions about a specific topic. You''ll be given
                           relevant context for that topic. You are acting as a search assistant for a
@@ -267,7 +267,7 @@ paths:
                           num_similar_docs_to_find: '4'
                           similarity_score_threshold: '0.5'
                       bdc:
-                        description: Ask about available BDC datasets, powered by public dataset metadata like study descriptions 
+                        description: Ask about available BDC datasets, powered by public dataset metadata like study descriptions
                         topic_chain: TopicChainOpenAiQuestionAnswerRAG
                         system_prompt: You answer questions about datasets that are available in BioData
                           Catalyst. You'll be given relevant dataset descriptions for every dataset that's
@@ -281,7 +281,7 @@ paths:
                           num_similar_docs_to_find: '4'
                           similarity_score_threshold: '0.5'
                       heal:
-                        description: Ask about available datasets, powered by public dataset metadata like study descriptions 
+                        description: Ask about available datasets, powered by public dataset metadata like study descriptions
                         topic_chain: TopicChainOpenAiQuestionAnswerRAG
                         system_prompt: You answer questions about datasets that are available in NIH's
                           Helping to End Addiction Long-term Initiative, or HEAL Initiative data platform.
@@ -300,7 +300,7 @@ paths:
                         topic_chain: TopicChainOpenAiQuestionAnswerRAG
                         system_prompt: |
                           You answer questions about the Gen3 codebase.
-                          You'll be given relevant markdown files from the codebase. 
+                          You'll be given relevant markdown files from the codebase.
                         metadata:
                           model_name: gpt-3.5-turbo
                           model_temperature: '0.33'
@@ -311,7 +311,7 @@ paths:
                   value:
                     topics:
                       default:
-                        description: default topic 
+                        description: default topic
                         topic_chain: TopicChainOpenAiQuestionAnswerRAG
                         system_prompt: 'You answer questions about a specific topic. You''ll be given
                           relevant context for that topic. You are acting as a search assistant for a
@@ -327,7 +327,7 @@ paths:
                           num_similar_docs_to_find: '4'
                           similarity_score_threshold: '0.5'
                       bdc:
-                        description: Ask about available BDC datasets, powered by public dataset metadata like study descriptions 
+                        description: Ask about available BDC datasets, powered by public dataset metadata like study descriptions
                         topic_chain: TopicChainOpenAiQuestionAnswerRAG
                         system_prompt: You answer questions about datasets that are available in BioData
                           Catalyst. You'll be given relevant dataset descriptions for every dataset that's
@@ -341,7 +341,7 @@ paths:
                           num_similar_docs_to_find: '4'
                           similarity_score_threshold: '0.5'
                       heal:
-                        description: Ask about available datasets, powered by public dataset metadata like study descriptions 
+                        description: Ask about available datasets, powered by public dataset metadata like study descriptions
                         topic_chain: TopicChainOpenAiQuestionAnswerRAG
                         system_prompt: You answer questions about datasets that are available in NIH's
                           Helping to End Addiction Long-term Initiative, or HEAL Initiative data platform.
@@ -360,7 +360,7 @@ paths:
                         topic_chain: TopicChainOpenAiQuestionAnswerRAG
                         system_prompt: |
                           You answer questions about the Gen3 codebase.
-                          You'll be given relevant markdown files from the codebase. 
+                          You'll be given relevant markdown files from the codebase.
                         metadata:
                           model_name: gpt-3.5-turbo
                           model_temperature: '0.33'
@@ -450,7 +450,7 @@ paths:
                   Example 1:
                     topics:
                       bdc:
-                        description: Ask about available BDC datasets, powered by public dataset metadata like study descriptions 
+                        description: Ask about available BDC datasets, powered by public dataset metadata like study descriptions
                         topic_chain: TopicChainOpenAiQuestionAnswerRAG
                         system_prompt: You answer questions about datasets that are available in BioData
                           Catalyst. You'll be given relevant dataset descriptions for every dataset that's
@@ -468,7 +468,7 @@ paths:
                   value:
                     topics:
                       bdc:
-                        description: Ask about available BDC datasets, powered by public dataset metadata like study descriptions 
+                        description: Ask about available BDC datasets, powered by public dataset metadata like study descriptions
                         topic_chain: TopicChainOpenAiQuestionAnswerRAG
                         system_prompt: You answer questions about datasets that are available in BioData
                           Catalyst. You'll be given relevant dataset descriptions for every dataset that's

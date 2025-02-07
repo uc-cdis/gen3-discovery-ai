@@ -9,6 +9,7 @@ The overall RAG process is the following:
    based on the previous relevancy search
 5. Send augmented prompt to the foundational model
 """
+
 from __future__ import annotations
 
 from typing import Any, Dict

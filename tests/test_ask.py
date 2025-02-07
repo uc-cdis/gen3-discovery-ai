@@ -377,9 +377,9 @@ def test_ask_too_many_requests(endpoint, client, monkeypatch):
         raise HTTPException(status_code=HTTP_429_TOO_MANY_REQUESTS)
 
     # ensure overriding for Depends() on routes
-    client.app.dependency_overrides[
-        raise_if_user_exceeded_limits
-    ] = _override_raise_if_user_exceeded_limits
+    client.app.dependency_overrides[raise_if_user_exceeded_limits] = (
+        _override_raise_if_user_exceeded_limits
+    )
 
     # call endpoint
     endpoint_string = f"{endpoint}"
@@ -413,9 +413,9 @@ def test_ask_service_unavailable_due_to_global_limit(endpoint, client, monkeypat
         raise HTTPException(status_code=HTTP_503_SERVICE_UNAVAILABLE)
 
     # ensure overriding for Depends() on routes
-    client.app.dependency_overrides[
-        raise_if_global_ai_limit_exceeded
-    ] = _override_raise_if_global_ai_limit_exceeded
+    client.app.dependency_overrides[raise_if_global_ai_limit_exceeded] = (
+        _override_raise_if_global_ai_limit_exceeded
+    )
 
     # call endpoint
     endpoint_string = f"{endpoint}"
