@@ -1,9 +1,9 @@
 import importlib
 import os
+from unittest.mock import patch
 
 import pytest
 from starlette.testclient import TestClient
-from unittest.mock import patch
 
 from gen3discoveryai import config
 from gen3discoveryai.main import get_app

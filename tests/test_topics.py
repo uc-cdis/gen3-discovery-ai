@@ -20,12 +20,18 @@ async def test_topics_list_all(_, endpoint, client):
         topics = response.json().get("topics")
         assert topics is not None
 
-        # test config only has these 2
-        assert "default" in topics
-        assert "bdc" in topics
-        assert "usedefault" in topics
+        expected_topics = [
+            "default",
+            "bdc",
+            "usedefault",
+            "ollama",
+            # add new ones here
+        ]
 
-        assert len(topics) == 3
+        for expected_topic in expected_topics:
+            assert expected_topic in topics.keys()
+
+        assert len(topics) == len(expected_topics)
 
         # the actual content here is checked in other tests
         assert topics["default"].get("topic_chain") is not None
@@ -42,6 +48,11 @@ async def test_topics_list_all(_, endpoint, client):
         assert topics["usedefault"].get("description") is not None
         assert topics["usedefault"].get("system_prompt") is not None
         assert topics["usedefault"].get("metadata") is not None
+
+        assert topics["ollama"].get("topic_chain") is not None
+        assert topics["ollama"].get("description") is not None
+        assert topics["ollama"].get("system_prompt") is not None
+        assert topics["ollama"].get("metadata") is not None
 
 
 @pytest.mark.parametrize("endpoint", ["/topics", "/topics/"])
