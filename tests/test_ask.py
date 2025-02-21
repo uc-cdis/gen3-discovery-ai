@@ -9,7 +9,7 @@ from starlette.status import HTTP_429_TOO_MANY_REQUESTS, HTTP_503_SERVICE_UNAVAI
 
 from gen3discoveryai import config
 from gen3discoveryai.routes import (
-    raise_if_global_ai_limit_exceeded,
+    raise_if_global_ai_limit,
     raise_if_user_exceeded_limits,
 )
 
@@ -409,12 +409,12 @@ def test_ask_service_unavailable_due_to_global_limit(endpoint, client, monkeypat
     previous_config = config.DEBUG_SKIP_AUTH
     monkeypatch.setattr(config, "DEBUG_SKIP_AUTH", True)
 
-    async def _override_raise_if_global_ai_limit_exceeded():
+    async def _override_raise_if_global_ai_limit():
         raise HTTPException(status_code=HTTP_503_SERVICE_UNAVAILABLE)
 
     # ensure overriding for Depends() on routes
-    client.app.dependency_overrides[raise_if_global_ai_limit_exceeded] = (
-        _override_raise_if_global_ai_limit_exceeded
+    client.app.dependency_overrides[raise_if_global_ai_limit] = (
+        _override_raise_if_global_ai_limit
     )
 
     # call endpoint

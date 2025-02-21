@@ -151,7 +151,7 @@ async def raise_if_user_exceeded_limits(
         )
 
 
-async def raise_if_global_ai_limit_exceeded():
+async def raise_if_global_ai_limit():
     """
     Checks and raises an exception if a global AI limit has been exceeded.
 
