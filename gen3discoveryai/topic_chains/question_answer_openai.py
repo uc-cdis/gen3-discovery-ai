@@ -96,6 +96,7 @@ class TopicChainOpenAiQuestionAnswerRAG(TopicChain):
         # to avoid potential collisions. We will separate on topic
         settings = chromadb.Settings(
             migrations_hash_algorithm="sha256",
+            anonymized_telemetry=False,
         )
 
         persistent_client = chromadb.PersistentClient(
