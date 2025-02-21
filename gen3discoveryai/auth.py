@@ -121,7 +121,7 @@ async def get_user_id(
     return token_claims["sub"]
 
 
-async def raise_if_user_exceeded_limits(
+async def raise_if_user_exceeded_maximum_artificial_intelligence_usage_limits(
     token: HTTPAuthorizationCredentials = Depends(get_bearer_token),
     request: Request = None,
 ):
