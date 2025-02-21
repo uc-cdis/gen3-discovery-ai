@@ -25,7 +25,7 @@ COPY ./docs/openapi.yaml /$appname/docs/openapi.yaml
 
 RUN poetry install -vv --without dev --no-interaction
 
-# copy source code ONLY after installing dependencies
+# copy source code and needed files ONLY after installing dependencies
 COPY --chown=gen3:gen3 . /$appname
 
 # Run poetry again so this app itself gets installed too

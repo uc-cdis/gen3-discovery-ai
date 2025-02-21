@@ -350,6 +350,8 @@ docker run --name gen3discoveryai \
 gen3discoveryai:latest
 ```
 
+> NOTE: If you're using Ollama, you need to ensure it's available to the running container.
+
 To exec into a bash shell in running container:
 
 ```bash

@@ -69,21 +69,13 @@ class TopicChainGoogleQuestionAnswerRAG(TopicChain):
         llm_top_p = get_from_cfg_metadata("top_p", metadata, default=0.95, type_=float)
         llm_top_k = get_from_cfg_metadata("top_k", metadata, default=3, type_=int)
 
-        latest_embedding_model_name = "textembedding-gecko@latest"
+        latest_embedding_model_name = "text-embedding-004"
         embedding_model_name = get_from_cfg_metadata(
             "embedding_model_name",
             metadata,
             default=latest_embedding_model_name,
             type_=str,
         )
-
-        if embedding_model_name == latest_embedding_model_name:
-            logging.warning(
-                f"Using `embedding_model_name` or letting the default be `{latest_embedding_model_name}` "
-                "_could_ result in unexpected updates in behavior if Google releases a "
-                "new version and this service gets restarted. It is recommended to use an explicit version "
-                "such as `textembedding-gecko@003` in the configuration to ensure deterministic behavior."
-            )
 
         system_prompt = metadata.get("system_prompt", "")
 
@@ -117,6 +109,7 @@ class TopicChainGoogleQuestionAnswerRAG(TopicChain):
         # to avoid potential collisions. We will separate on topic
         settings = chromadb.Settings(
             migrations_hash_algorithm="sha256",
+            anonymized_telemetry=False,
         )
 
         persistent_client = chromadb.PersistentClient(
