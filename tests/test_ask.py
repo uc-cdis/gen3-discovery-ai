@@ -9,8 +9,8 @@ from starlette.status import HTTP_429_TOO_MANY_REQUESTS, HTTP_503_SERVICE_UNAVAI
 
 from gen3discoveryai import config
 from gen3discoveryai.routes import (
-    raise_if_global_ai_limit_exceeded,
-    raise_if_user_exceeded_limits,
+    raise_if_overall_global_artificial_intelligence_limit_exceeded,
+    raise_if_user_exceeded_maximum_artificial_intelligence_usage_limits,
 )
 
 get_bearer_token = HTTPBearer(auto_error=False)
@@ -373,13 +373,13 @@ def test_ask_too_many_requests(endpoint, client, monkeypatch):
     previous_config = config.DEBUG_SKIP_AUTH
     monkeypatch.setattr(config, "DEBUG_SKIP_AUTH", True)
 
-    async def _override_raise_if_user_exceeded_limits():
+    async def _override_raise_if_user_exceeded_maximum_artificial_intelligence_usage_limits():
         raise HTTPException(status_code=HTTP_429_TOO_MANY_REQUESTS)
 
     # ensure overriding for Depends() on routes
     client.app.dependency_overrides[
-        raise_if_user_exceeded_limits
-    ] = _override_raise_if_user_exceeded_limits
+        raise_if_user_exceeded_maximum_artificial_intelligence_usage_limits
+    ] = _override_raise_if_user_exceeded_maximum_artificial_intelligence_usage_limits
 
     # call endpoint
     endpoint_string = f"{endpoint}"
@@ -409,13 +409,13 @@ def test_ask_service_unavailable_due_to_global_limit(endpoint, client, monkeypat
     previous_config = config.DEBUG_SKIP_AUTH
     monkeypatch.setattr(config, "DEBUG_SKIP_AUTH", True)
 
-    async def _override_raise_if_global_ai_limit_exceeded():
+    async def _override_raise_if_overall_global_artificial_intelligence_limit_exceeded():
         raise HTTPException(status_code=HTTP_503_SERVICE_UNAVAILABLE)
 
     # ensure overriding for Depends() on routes
     client.app.dependency_overrides[
-        raise_if_global_ai_limit_exceeded
-    ] = _override_raise_if_global_ai_limit_exceeded
+        raise_if_overall_global_artificial_intelligence_limit_exceeded
+    ] = _override_raise_if_overall_global_artificial_intelligence_limit_exceeded
 
     # call endpoint
     endpoint_string = f"{endpoint}"

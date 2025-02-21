@@ -16,24 +16,21 @@ from typing import Any, Dict
 
 import chromadb
 import langchain
-import openai
-from fastapi import HTTPException
 from langchain.chains import RetrievalQA
 from langchain.prompts import PromptTemplate
 from langchain_chroma import Chroma
-from langchain_openai import ChatOpenAI, OpenAIEmbeddings
-from starlette.status import HTTP_400_BAD_REQUEST, HTTP_429_TOO_MANY_REQUESTS
+from langchain_ollama import ChatOllama
+from langchain_ollama.embeddings import OllamaEmbeddings
 
-from gen3discoveryai import config, logging
+from gen3discoveryai import logging
 from gen3discoveryai.topic_chains.base import TopicChain
 from gen3discoveryai.topic_chains.utils import get_from_cfg_metadata
 
 
-class TopicChainOpenAiQuestionAnswerRAG(TopicChain):
+class TopicChainOllamaQuestionAnswerRAG(TopicChain):
     """
     This implementation uses `langchain`'s abstraction of `chromadb`.
     `chromadb` implements an in-mem vector database with local file(s) for persistence.
-    This class uses OpenAI's embedding capabilities.
 
     NOTE: vectorstore is a `langchain.vectorstores.chroma.Chroma`
           and inherits from `langchain.vectorstores.base.VectorStore`
@@ -51,28 +48,36 @@ class TopicChainOpenAiQuestionAnswerRAG(TopicChain):
             initialization after the vectorstore and llm
     """
 
-    NAME = "TopicChainOpenAiQuestionAnswerRAG"
+    NAME = "TopicChainOllamaQuestionAnswerRAG"
 
     def __init__(self, topic: str, metadata: Dict[str, Any] = None) -> None:
         logging.debug(f"initializing topic chain {self.NAME} for topic: {topic}")
 
         metadata = metadata or {}
-        # gpt-3.5-turbo-instruct is double the price but instead of 4K context
-        # you get 16K (as of 6 OCT 2023, see https://openai.com/pricing)
-        llm_model_name = get_from_cfg_metadata(
-            "model_name", metadata, default="gpt-3.5-turbo", type_=str
-        )
 
+        llm_model_name = get_from_cfg_metadata(
+            "model_name", metadata, default="llama3.2", type_=str
+        )
         llm_model_temperature = get_from_cfg_metadata(
-            "model_temperature", metadata, default=0.3, type_=float
+            "model_temperature", metadata, default=0, type_=float
+        )
+        llm_max_output_tokens = get_from_cfg_metadata(
+            "max_output_tokens", metadata, default=128, type_=int
+        )
+        llm_top_p = get_from_cfg_metadata("top_p", metadata, default=0.9, type_=float)
+        llm_top_k = get_from_cfg_metadata("top_k", metadata, default=40, type_=int)
+        ollama_model_base_url = get_from_cfg_metadata(
+            "ollama_model_base_url", metadata, default="localhost:11434", type_=str
         )
 
         system_prompt = metadata.get("system_prompt", "")
 
-        self.llm = ChatOpenAI(
-            openai_api_key=str(config.OPENAI_API_KEY),
-            model_name=llm_model_name,
+        self.llm = ChatOllama(
+            model=llm_model_name,
             temperature=llm_model_temperature,
+            num_predict=llm_max_output_tokens,
+            top_p=llm_top_p,
+            top_k=llm_top_k,
         )
 
         template = (
@@ -87,10 +92,10 @@ class TopicChainOpenAiQuestionAnswerRAG(TopicChain):
         prompt = PromptTemplate.from_template(template)
 
         num_similar_docs_to_find = get_from_cfg_metadata(
-            "num_similar_docs_to_find", metadata, default=4, type_=int
+            "num_similar_docs_to_find", metadata, default=7, type_=int
         )
         similarity_score_threshold = get_from_cfg_metadata(
-            "similarity_score_threshold", metadata, default=0.5, type_=float
+            "similarity_score_threshold", metadata, default=0.7, type_=float
         )
         # langchain/chroma recommend a separate client per persisted path
         # to avoid potential collisions. We will separate on topic
@@ -100,22 +105,22 @@ class TopicChainOpenAiQuestionAnswerRAG(TopicChain):
         )
 
         persistent_client = chromadb.PersistentClient(
-            path=f"./knowledge/{topic}", settings=settings
+            path=f"./knowledge/{topic}",
+            settings=settings,
         )
         vectorstore = Chroma(
             client=persistent_client,
             collection_name=topic,
-            embedding_function=OpenAIEmbeddings(
-                openai_api_key=str(config.OPENAI_API_KEY)
+            embedding_function=OllamaEmbeddings(
+                model=llm_model_name, base_url=ollama_model_base_url
             ),
-            # We've heard the `cosine` distance function performs better
-            # https://docs.trychroma.com/usage-guide#changing-the-distance-function
-            collection_metadata={"hnsw:space": "cosine"},
             persist_directory=f"./knowledge/{topic}",
             client_settings=settings,
         )
 
-        logging.debug("chroma vectorstore initialized")
+        logging.debug(
+            f"chroma vectorstore initialized from ./knowledge/{topic} with docs"
+        )
 
         retriever_cfg = {
             "k": num_similar_docs_to_find,
@@ -123,7 +128,7 @@ class TopicChainOpenAiQuestionAnswerRAG(TopicChain):
         }
         logging.debug(f"retreiver search_kwargs: {retriever_cfg}")
 
-        retreival_qa_chain = RetrievalQA.from_chain_type(
+        retrieval_qa_chain = RetrievalQA.from_chain_type(
             self.llm,
             retriever=vectorstore.as_retriever(
                 search_type="similarity_score_threshold",
@@ -136,7 +141,7 @@ class TopicChainOpenAiQuestionAnswerRAG(TopicChain):
         super().__init__(
             name=self.NAME,
             topic=topic,
-            chain=retreival_qa_chain,
+            chain=retrieval_qa_chain,
             vectorstore=vectorstore,
         )
 
@@ -152,6 +157,7 @@ class TopicChainOpenAiQuestionAnswerRAG(TopicChain):
         Args:
             documents (list[langchain.schema.document.Document]): documents to store in the knowledge store
         """
+        # try:
         # get all docs but don't include anything other than ids
         docs = self.vectorstore.get(include=[])
         if docs["ids"]:
@@ -161,25 +167,3 @@ class TopicChainOpenAiQuestionAnswerRAG(TopicChain):
             self.vectorstore.delete(ids=docs["ids"])
 
         self.insert_documents_into_vectorstore(documents)
-
-    def run(self, query: str, *args, **kwargs):
-        """
-        Run the query on the underlying chain, overriding base to add OpenAI specific
-        error catching.
-
-        Args:
-            query (str): query to provide to chain
-        """
-        try:
-            return super().run(query, *args, **kwargs)
-        except openai.RateLimitError as exc:
-            logging.debug("openai.RateLimitError")
-            raise HTTPException(
-                HTTP_429_TOO_MANY_REQUESTS, "Please try again later."
-            ) from exc
-        except openai.OpenAIError as exc:
-            logging.debug("openai.OpenAIError")
-            raise HTTPException(
-                HTTP_400_BAD_REQUEST,
-                "Error. You may have too much text in your query.",
-            ) from exc
