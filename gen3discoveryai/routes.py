@@ -14,7 +14,7 @@ from gen3discoveryai import config, logging
 from gen3discoveryai.auth import (
     authorize_request,
     get_user_id,
-    raise_if_global_ai_limit,
+    raise_if_overall_global_artificial_intelligence_limit_exceeded,
     raise_if_user_exceeded_limits,
 )
 from gen3discoveryai.topic_chains.logging import LoggingCallbackHandler
@@ -25,7 +25,7 @@ root_router = APIRouter()
 @root_router.post(
     "/ask/",
     dependencies=[
-        Depends(raise_if_global_ai_limit),
+        Depends(raise_if_overall_global_artificial_intelligence_limit_exceeded),
         Depends(raise_if_user_exceeded_limits),
     ],
 )
@@ -33,7 +33,7 @@ root_router = APIRouter()
     "/ask",
     include_in_schema=False,
     dependencies=[
-        Depends(raise_if_global_ai_limit),
+        Depends(raise_if_overall_global_artificial_intelligence_limit_exceeded),
         Depends(raise_if_user_exceeded_limits),
     ],
 )
