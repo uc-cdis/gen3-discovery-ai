@@ -9,6 +9,7 @@ The overall RAG process is the following:
    based on the previous relevancy search
 5. Send augmented prompt to the foundational model
 """
+
 from __future__ import annotations
 
 from typing import Any, Dict
@@ -17,10 +18,10 @@ import chromadb
 import langchain
 from langchain.chains import RetrievalQA
 from langchain.prompts import PromptTemplate
-from langchain.vectorstores.chroma import Chroma
+from langchain_chroma import Chroma
 from langchain_google_vertexai import ChatVertexAI, VertexAIEmbeddings
 
-from gen3discoveryai import config, logging
+from gen3discoveryai import logging
 from gen3discoveryai.topic_chains.base import TopicChain
 from gen3discoveryai.topic_chains.utils import get_from_cfg_metadata
 
@@ -54,7 +55,7 @@ class TopicChainGoogleQuestionAnswerRAG(TopicChain):
         metadata = metadata or {}
 
         llm_model_name = get_from_cfg_metadata(
-            "model_name", metadata, default="chat-bison", type_=str
+            "model_name", metadata, default="gemini-1.5-flash", type_=str
         )
         llm_model_temperature = get_from_cfg_metadata(
             "model_temperature", metadata, default=0, type_=float
@@ -66,9 +67,9 @@ class TopicChainGoogleQuestionAnswerRAG(TopicChain):
             "max_output_tokens", metadata, default=128, type_=int
         )
         llm_top_p = get_from_cfg_metadata("top_p", metadata, default=0.95, type_=float)
-        llm_top_k = get_from_cfg_metadata("top_k", metadata, default=0, type_=int)
+        llm_top_k = get_from_cfg_metadata("top_k", metadata, default=3, type_=int)
 
-        latest_embedding_model_name = "textembedding-gecko@latest"
+        latest_embedding_model_name = "text-embedding-004"
         embedding_model_name = get_from_cfg_metadata(
             "embedding_model_name",
             metadata,
@@ -76,18 +77,10 @@ class TopicChainGoogleQuestionAnswerRAG(TopicChain):
             type_=str,
         )
 
-        if embedding_model_name == latest_embedding_model_name:
-            logging.warning(
-                f"Using `embedding_model_name` or letting the default be `{latest_embedding_model_name}` "
-                "_could_ result in unexpected updates in behavior if Google releases a "
-                "new version and this service gets restarted. It is recommended to use an explicit version "
-                "such as `textembedding-gecko@003` in the configuration to ensure deterministic behavior."
-            )
-
         system_prompt = metadata.get("system_prompt", "")
 
         self.llm = ChatVertexAI(
-            model_name=llm_model_name,  # codechat-bison: for code assistance
+            model_name=llm_model_name,
             temperature=llm_model_temperature,
             location=llm_location,
             max_output_tokens=llm_max_output_tokens,
@@ -116,6 +109,7 @@ class TopicChainGoogleQuestionAnswerRAG(TopicChain):
         # to avoid potential collisions. We will separate on topic
         settings = chromadb.Settings(
             migrations_hash_algorithm="sha256",
+            anonymized_telemetry=False,
         )
 
         persistent_client = chromadb.PersistentClient(

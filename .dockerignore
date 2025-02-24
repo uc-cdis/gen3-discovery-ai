@@ -3,3 +3,7 @@
 **/*.pyc
 **/*.egg-info
 **/__pycache__
+knowledge/
+prof/
+tests/
+tsvs/

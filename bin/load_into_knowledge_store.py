@@ -119,6 +119,8 @@ def load_tsvs_from_dir(
             logging.info(f"Loading data from file: {file}, for topic: {topic}")
 
             # Load the document, split it into chunks, embed each chunk and load it into the vector store.
+
+            # TODO: check for source column and return a reusable error
             loader = CSVLoader(
                 source_column=source_column_name,
                 file_path=file,
