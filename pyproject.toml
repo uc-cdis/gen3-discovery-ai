@@ -53,7 +53,7 @@ langchain-ollama = ">=0.2.0"
 
 # TODO: Remove this restriction when there's no errors
 #       with trying >= 1.20
-onnxruntime = "==1.19.0"
+onnxruntime = "==1.20.1"
 
 # TODO: Remove this restriction when this issue is resolved:
 # https://github.com/langchain-ai/langchain/issues/28271
