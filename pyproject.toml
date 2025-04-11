@@ -8,7 +8,7 @@ readme = "README.md"
 packages = [{include = "gen3discoveryai"}]
 
 [tool.poetry.dependencies]
-python = ">=3.9,<3.10.dev0"
+python = ">=3.9.2,<3.10.dev0"
 
 aiohttp = ">=3.8.4"
 aiosignal = ">=1.3.1"
@@ -38,7 +38,7 @@ gunicorn = ">=20.1.0"
 langchain = ">=0.0.302"
 chromadb = ">=0.4.18"
 gen3authz = ">=2.1.0"
-authutils = ">=6.2.2"
+authutils = ">=6.2.7"
 google-cloud-aiplatform = ">=1.76.0"
 unstructured = ">=0.11.0"
 markdown = ">=3.5.1"
@@ -58,6 +58,7 @@ onnxruntime = "==1.19.0"
 # TODO: Remove this restriction when this issue is resolved:
 # https://github.com/langchain-ai/langchain/issues/28271
 pydantic = "==2.9.0"
+cryptography = "^44.0.1"
 
 [tool.poetry.group.dev.dependencies]
 # <8.0.0 is temporary, try removing. It was causing issues because the
