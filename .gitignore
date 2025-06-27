@@ -7,6 +7,8 @@ tests/prof/
 prof/
 bin/library
 tmp/
+.DS_Store
+*.bak
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
