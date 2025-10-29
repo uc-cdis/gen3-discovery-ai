@@ -18,7 +18,7 @@ jobs:
 
   UnitTest:
     name: Python Unit Test with Postgres
-    uses: uc-cdis/.github/.github/workflows/python_unit_test.yaml@master
+    uses: uc-cdis/.github/.github/workflows/python_unit_test.yaml@dependabot/github_actions/actions/setup-python-5
     with:
        test-script: 'tests/ci_commands_script.sh'
        python-version: '3.9'
@@ -57,7 +57,7 @@ jobs:
   RequiredLint:
     name: Run Required Linters
     needs: [LintConfig]
-    uses: uc-cdis/.github/.github/workflows/required_lint_check.yaml@master
+    uses: uc-cdis/.github/.github/workflows/required_lint_check.yaml@dependabot/github_actions/actions/setup-python-5
     with:
       python-version: '3.9'
       use-cache: true
