@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "gen3discoveryai"
-version = "1.1.1"
+version = "1.1.2"
 description = "Gen3 Discovery AI Service"
 authors = ["CTDS UChicago <cdis@uchicago.edu>"]
 license = "Apache-2.0"
@@ -38,7 +38,7 @@ gunicorn = ">=20.1.0"
 langchain = ">=0.0.302"
 chromadb = ">=0.4.18"
 gen3authz = ">=2.1.0"
-authutils = ">=6.2.7"
+authutils = ">=7.1.0"
 google-cloud-aiplatform = ">=1.76.0"
 unstructured = ">=0.11.0"
 markdown = ">=3.5.1"
