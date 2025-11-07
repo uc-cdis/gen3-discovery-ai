@@ -10,55 +10,23 @@ packages = [{include = "gen3discoveryai"}]
 [tool.poetry.dependencies]
 python = ">=3.9.2,<3.10.dev0"
 
-aiohttp = ">=3.8.4"
-aiosignal = ">=1.3.1"
-async = ">=0.6.2"
-attrs = ">=23.1.0"
-frozenlist = ">=1.3.3"
-idna = ">=3.4"
-multidict = ">=6.0.4"
-numpy = ">=1.24.3"
-oauthlib = ">=3.2.2"
 openai = ">=0.27.8"
-pandas = ">=2.0.2"
-pytz = ">=2023.3"
-regex = ">=2023.6.3"
 requests = ">=2.32.4,<3"
-six = ">=1.16.0"
-tiktoken = ">=0.4.0"
-tqdm = ">=4.65.0"
-tzdata = ">=2023.3"
-yarl = ">=1.9.2"
-scipy = ">=1.10.1"
 fastapi = ">=0.97.0"
 cdislogging = ">=1.1.1"
 pyyaml = ">=6.0"
-setuptools = ">=67.8.0"
 gunicorn = ">=20.1.0"
 langchain = ">=0.0.302"
 chromadb = ">=0.4.18"
 gen3authz = ">=2.1.0"
 authutils = ">=7.1.0"
-google-cloud-aiplatform = ">=1.76.0"
-unstructured = ">=0.11.0"
-markdown = ">=3.5.1"
 werkzeug = ">=3.0.1"
 langchain-community = ">=0.0.14"
 langchain-google-vertexai = ">=0.0.2"
 langchain-openai = ">=0.0.3"
 uvicorn = ">=0.27.0"
-protobuf = ">=5.29.5"
 langchain-chroma = ">=0.1.4"
 langchain-ollama = ">=0.2.0"
-
-# TODO: Remove this restriction when there's no errors
-#       with trying >= 1.20
-onnxruntime = "==1.19.0"
-
-# TODO: Remove this restriction when this issue is resolved:
-# https://github.com/langchain-ai/langchain/issues/28271
-pydantic = "==2.9.0"
-cryptography = "^44.0.1"
 
 [tool.poetry.group.dev.dependencies]
 # <8.0.0 is temporary, try removing. It was causing issues because the
@@ -72,6 +40,7 @@ isort = ">=5.12.0"
 black = ">=23.10.0"
 pylint = ">=3.0.1"
 pytest-profiling = ">=1.7.0"
+deptry = "^0.23.1"
 
 [tool.pytest.ini_options]
 # Better default `pytest` command which adds coverage
