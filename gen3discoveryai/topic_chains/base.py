@@ -1,6 +1,6 @@
-from langchain.chains.base import Chain
-from langchain.schema.document import Document
-from langchain.vectorstores.base import VectorStore
+from langchain_classic.chains.base import Chain
+from langchain_classic.schema.document import Document
+from langchain_classic.vectorstores.base import VectorStore
 
 from gen3discoveryai import logging
 
@@ -41,7 +41,7 @@ class TopicChain:
         with the provided documents.
 
         Args:
-            documents (list[langchain.schema.document.Document]): IDs to Documents to store in the knowledge store
+            documents (list[langchain_classic.schema.document.Document]): IDs to Documents to store in the knowledge store
         """
         raise NotImplementedError()
 
@@ -51,7 +51,7 @@ class TopicChain:
         and requires that the `self.vectorstore` be configured.
 
         Args:
-            documents (list[langchain.schema.document.Document]): IDs to Documents to store in the knowledge store
+            documents (list[langchain_classic.schema.document.Document]): IDs to Documents to store in the knowledge store
         """
         if self.vectorstore is None:
             msg = (

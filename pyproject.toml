@@ -8,7 +8,7 @@ readme = "README.md"
 packages = [{include = "gen3discoveryai"}]
 
 [tool.poetry.dependencies]
-python = ">=3.9.2,<3.10.dev0"
+python = ">=3.13, <4.0"
 
 openai = ">=0.27.8"
 requests = ">=2.32.4,<3"
@@ -16,17 +16,17 @@ fastapi = ">=0.97.0"
 cdislogging = ">=1.1.1"
 pyyaml = ">=6.0"
 gunicorn = ">=20.1.0"
-langchain = ">=0.0.302"
+langchain = "^1.0.7"
 chromadb = ">=0.4.18"
 gen3authz = ">=2.1.0"
 authutils = ">=7.1.0"
 werkzeug = ">=3.0.1"
-langchain-community = ">=0.0.14"
-langchain-google-vertexai = ">=0.0.2"
-langchain-openai = ">=0.0.3"
+langchain-community = "^0.4.1"
+langchain-google-vertexai = "^3.0.3"
+langchain-openai = "^1.0.3"
 uvicorn = ">=0.27.0"
-langchain-chroma = ">=0.1.4"
-langchain-ollama = ">=0.2.0"
+langchain-chroma = "^1.0.0"
+langchain-ollama = "^1.0.0"
 
 [tool.poetry.group.dev.dependencies]
 # <8.0.0 is temporary, try removing. It was causing issues because the

@@ -3,7 +3,7 @@ import glob
 import os
 
 import click
-from langchain.text_splitter import TokenTextSplitter
+from langchain_classic.text_splitter import TokenTextSplitter
 from langchain_community.document_loaders import UnstructuredMarkdownLoader
 from langchain_community.document_loaders.csv_loader import CSVLoader
 
