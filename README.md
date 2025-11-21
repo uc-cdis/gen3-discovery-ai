@@ -47,9 +47,9 @@ to guide the LLM on how it should interpret the context and respond).
 
 **AI Model Support:**
 - ✅ Google Models (configurable, default model: `gemini-2.5-flash`)
-    - See [their docs](https://ai.google.dev/gemini-api/docs/models#model-variations) for more model options
+  - See [their docs](https://ai.google.dev/gemini-api/docs/models#model-variations) for more model options
 - ✅ OpenAI's Models (configurable, default model: `gpt-5-mini`)
-    - See [their docs](https://platform.openai.com/docs/models) for more model options
+  - See [their docs](https://platform.openai.com/docs/models) for more model options
 - ✅ Locally hosted models using [Ollama](https://ollama.com/) (configurable, default model: `llama3.2`)
   - Other models untested, but should work. See [available models](https://ollama.com/library)
 - :grey_question: AWS Models
