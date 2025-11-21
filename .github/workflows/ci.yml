@@ -60,7 +60,7 @@ jobs:
     uses: uc-cdis/.github/.github/workflows/required_lint_check.yaml@fix/linting
     with:
       python-version: '3.13'
-      use-cache: false
+      use-cache: true
 
   InformationalLint:
     name: Run Informational Linters
@@ -69,7 +69,7 @@ jobs:
     uses: uc-cdis/.github/.github/workflows/optional_lint_check.yaml@master
     with:
       python-version: '3.13'
-      use-cache: false
+      use-cache: true
 
   ImageBuildAndPush:
     name: Build Image and Push
