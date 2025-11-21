@@ -15,12 +15,12 @@ for users, so they can send queries and get intelligent AI-generated responses.
     - [OpenAI Key](#openai-key)
     - [Configuration](#configuration)
     - [Knowledge Library Population](#knowledge-library-population)
-    - [Non-TSV Knowledge Loading](#non-tsv-knowledge-loading)
+    - [Non-TSV Knowledge Loading](#non-tsv-and-non-markdown-knowledge-loading)
   - [Running locally](#running-locally)
 - [Authz](#authz)
 - [Local Dev](#local-dev)
-    - [Automatically format code and run pylint](#automatically-format-code-and-run-pylint)
-    - [Testing Docker Build](#testing-docker-build)
+  - [Automatically format code and run pylint](#automatically-format-code-and-run-pylint)
+  - [Testing Docker Build](#testing-docker-build)
 - [Contributing](#contributing)
 
 ## Overview
@@ -46,27 +46,27 @@ to guide the LLM on how it should interpret the context and respond).
 ### Currently Supported Backends, Embeddings, and Models
 
 **AI Model Support:**
-  - ✅ Google Models (configurable, default model: `gemini-2.5-flash`)
-      - See [their docs](https://ai.google.dev/gemini-api/docs/models#model-variations) for more model options
-  - ✅ OpenAI's Models (configurable, default model: `gpt-5-mini`)
-      - See [their docs](https://platform.openai.com/docs/models) for more model options
-  - ✅ Locally hosted models using [Ollama](https://ollama.com/) (configurable, default model: `llama3.2`)
-    - Other models untested, but should work. See [available models](https://ollama.com/library)
-  - :grey_question: AWS Models
-  - :grey_question: Open Source Models
-  - :grey_question: Trained/tuned model(s)
-  - :grey_question: Others
+- ✅ Google Models (configurable, default model: `gemini-2.5-flash`)
+    - See [their docs](https://ai.google.dev/gemini-api/docs/models#model-variations) for more model options
+- ✅ OpenAI's Models (configurable, default model: `gpt-5-mini`)
+    - See [their docs](https://platform.openai.com/docs/models) for more model options
+- ✅ Locally hosted models using [Ollama](https://ollama.com/) (configurable, default model: `llama3.2`)
+  - Other models untested, but should work. See [available models](https://ollama.com/library)
+- :grey_question: AWS Models
+- :grey_question: Open Source Models
+- :grey_question: Trained/tuned model(s)
+- :grey_question: Others
 
 **Knowledge Library:**
-  - ✅ Chroma in-memory vector database
-  - :grey_question: Google Vertex AI Vector Search
-  - :grey_question: AWS Aurora Postgres with pgvector
-  - :grey_question: Others
+- ✅ Chroma in-memory vector database
+- :grey_question: Google Vertex AI Vector Search
+- :grey_question: AWS Aurora Postgres with pgvector
+- :grey_question: Others
 
 **Knowledge Library Embeddings:**
-  - ✅ [Google Embeddings](https://ai.google.dev/gemini-api/docs/embeddings)
-  - ✅ OpenAI Embeddings
-  - ✅ Ollama Embeddings
+- ✅ [Google Embeddings](https://ai.google.dev/gemini-api/docs/embeddings)
+- ✅ OpenAI Embeddings
+- ✅ Ollama Embeddings
 
 > Note: Our use of `langchain` makes adding new models and even architectures beyond RAG possible. Developers should look at the code in the `gen3discoveryai/topic_chains` folder. Also see the [contributing](#contributing) section in this doc.
 
@@ -98,7 +98,7 @@ This documented examples here presume setting up:
 
 It's unlikely you actually want to set up all these options, so take the parts of the setup and config for your particular needs.
 
-If you're just trying things out, `Ollama` allows you to set up things fully locally, but can require significant GPU resources _depending on the model choice_. The default is fairly small (relative to other models in general), but you may want to find something even smaller if you run into performance issues.
+If you're just trying things out, `Ollama` allows you to set up things fully locally, but can require significant GPU resources *depending on the model choice*. The default is fairly small (relative to other models in general), but you may want to find something even smaller if you run into performance issues.
 
 #### Google Application Credentials
 
@@ -197,7 +197,7 @@ This script currently supports loading from arbitrary TSVs or Markdown files in 
 > is set up and appropriately loaded (e.g. execute the script from a directory where there is
 > a `.env` config). The `/bin` scripts REQUIRE loading the configuration in order to
 > both load the available topics and to properly embed and load into the vectorstore.
-
+>
 > NOTE if you're using **Ollama**: The embedding process is pretty expensive locally, so if you don't have a great GPU it could fail (depending on the size of the data you're trying to load). If you're having issues, try using a smaller dataset or a more powerful GPU.
 
 ##### Loading TSVs
@@ -313,7 +313,7 @@ in the `pyproject.toml` additionally:
 * runs coverage and will error if it falls below the threshold
 * profiles using [pytest-profiling](https://pypi.org/project/pytest-profiling/) which outputs into `/prof`
 
-#### Automatically format code and run pylint
+### Automatically format code and run pylint
 
 This quick `clean.sh` script is used to run `isort` and `black` over everything if
 you don't integrate those with your editor/IDE.
