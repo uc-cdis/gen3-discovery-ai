@@ -15,7 +15,6 @@ from __future__ import annotations
 from typing import Any, Dict
 
 import chromadb
-import langchain
 import langchain_classic
 from langchain_chroma import Chroma
 from langchain_classic.chains import RetrievalQA

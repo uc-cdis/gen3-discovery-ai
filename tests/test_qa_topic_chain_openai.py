@@ -1,6 +1,5 @@
 from unittest.mock import MagicMock, patch
 
-import chromadb
 import pytest
 
 from gen3discoveryai.topic_chains.question_answer_openai import (
