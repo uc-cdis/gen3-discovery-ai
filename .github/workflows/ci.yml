@@ -31,7 +31,7 @@ jobs:
     with:
       python-module-name: "gen3discoveryai"
 
-#  # (optional) modify the linter configurations from above. You could omit this if you didn't need to do this
+#  # (optional) modify the linter configurations from above. You could omit this if you didn't need it
 #  CustomizeLintConfig:
 #    runs-on: ubuntu-latest
 #    name: Customize Lint Config
