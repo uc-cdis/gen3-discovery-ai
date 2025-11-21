@@ -11,7 +11,12 @@ packages = [{include = "gen3discoveryai"}]
 python = ">=3.13, <4.0"
 
 openai = ">=0.27.8"
-requests = ">=2.32.4,<3"
+requests = ">=2.32.4"
+
+# Latest requests 2.32.5 has sub-dep of urllib3 version that has security issues, so explicitly upgrade here:
+# TODO: Try removing this after requests 2.32.5
+urllib3 = ">=2.5.0"
+
 fastapi = ">=0.97.0"
 cdislogging = ">=1.1.1"
 pyyaml = ">=6.0"
