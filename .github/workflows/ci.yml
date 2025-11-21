@@ -54,6 +54,7 @@ jobs:
 #            .github/linters/
 #          if-no-files-found: error
 
+  # If pylint is failing to find packages, you may need to ignore it
   RequiredLint:
     name: Run Required Linters
     needs: [LintConfig]
