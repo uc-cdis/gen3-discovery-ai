@@ -16,8 +16,8 @@ from typing import Any, Dict
 
 import chromadb
 import langchain
-from langchain_chroma import Chroma
 import langchain_classic
+from langchain_chroma import Chroma
 from langchain_classic.chains import RetrievalQA
 from langchain_classic.prompts import PromptTemplate
 from langchain_ollama import ChatOllama
