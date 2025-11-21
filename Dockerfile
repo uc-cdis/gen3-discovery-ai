@@ -41,8 +41,6 @@ COPY --from=builder /venv /venv
 WORKDIR /${appname}
 EXPOSE 80
 
-RUN pip list
-
 # Cache the necessary tiktoken encoding file
 RUN poetry run python -c "from langchain_classic.text_splitter import TokenTextSplitter; TokenTextSplitter.from_tiktoken_encoder(chunk_size=100, chunk_overlap=0)"
 
