@@ -3,7 +3,7 @@ from urllib.parse import urlencode
 
 import langchain_classic.schema
 import pytest
-from fastapi import HTTPException
+from fastapi import Depends, HTTPException, Request
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from starlette.status import HTTP_429_TOO_MANY_REQUESTS, HTTP_503_SERVICE_UNAVAILABLE
 
