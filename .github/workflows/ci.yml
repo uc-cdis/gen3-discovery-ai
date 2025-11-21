@@ -62,6 +62,7 @@ jobs:
       python-version: '3.13'
       use-cache: true
 
+  # this info lint should not be required to pass
   InformationalLint:
     name: Run Informational Linters
     needs: [LintConfig, UnitTest]
