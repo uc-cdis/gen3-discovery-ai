@@ -105,7 +105,7 @@ async def test_topics_specific_topic_with_configured_overrides(_, endpoint, clie
             == "You answer questions about datasets that are available in BioData Catalyst. You'll be given relevant "
             "dataset descriptions for every dataset that's been ingested into BioData Catalyst. You are acting as a "
             "search assistant for a biomedical researcher (who will be asking you questions). The researcher is likely "
-            "trying to find datasets of interest for a particular research question. You should recommend datasets  "
+            "trying to find datasets of interest for a particular research question. You should recommend datasets "
             "that may be of interest to that researcher."
         )
 
