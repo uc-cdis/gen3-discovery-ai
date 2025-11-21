@@ -27,7 +27,7 @@ jobs:
   # this creates linter settings and uploads to an artifact so the configs can be pulled and used across jobs
   LintConfig:
     name: Get Lint Config
-    uses: uc-cdis/.github/.github/workflows/lint-create-config.yaml@master
+    uses: uc-cdis/.github/.github/workflows/lint-create-config.yaml@fix/linting
     with:
       python-module-name: "gen3discoveryai"
 
