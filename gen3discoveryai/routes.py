@@ -155,7 +155,7 @@ async def topics_route(request: Request, provided_topic: str = None) -> dict:
                   "topic_chain": "TopicChainOpenAiQuestionAnswerRAG",
                   "system_prompt": "You answer questions about datasets...",
                   "metadata": {
-                    "model_name": "gpt-3.5-turbo",
+                    "model_name": "gpt-5-mini",
                     "model_temperature": "0.33",
                     "num_similar_docs_to_find": "4",
                     "similarity_score_threshold": "0.5"

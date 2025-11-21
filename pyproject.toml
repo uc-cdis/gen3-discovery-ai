@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "gen3discoveryai"
-version = "1.1.2"
+version = "1.2.0"
 description = "Gen3 Discovery AI Service"
 authors = ["CTDS UChicago <cdis@uchicago.edu>"]
 license = "Apache-2.0"
@@ -16,17 +16,22 @@ fastapi = ">=0.97.0"
 cdislogging = ">=1.1.1"
 pyyaml = ">=6.0"
 gunicorn = ">=20.1.0"
-langchain = "^1.0.7"
+langchain = ">=1.0.7"
 chromadb = ">=0.4.18"
 gen3authz = ">=2.1.0"
 authutils = ">=7.1.0"
 werkzeug = ">=3.0.1"
-langchain-community = "^0.4.1"
-langchain-google-vertexai = "^3.0.3"
-langchain-openai = "^1.0.3"
+langchain-community = ">=0.4.1"
+langchain-google-vertexai = ">=3.0.3"
+langchain-openai = ">=1.0.3"
 uvicorn = ">=0.27.0"
-langchain-chroma = "^1.0.0"
-langchain-ollama = "^1.0.0"
+langchain-chroma = ">=1.0.0"
+langchain-ollama = ">=1.0.0"
+starlette = ">=0.50.0"
+click = ">=8.3.1"
+
+# TODO: Update to use base langchain package and remove this
+langchain-classic = ">=1.0.0"
 
 [tool.poetry.group.dev.dependencies]
 # <8.0.0 is temporary, try removing. It was causing issues because the
@@ -40,7 +45,7 @@ isort = ">=5.12.0"
 black = ">=23.10.0"
 pylint = ">=3.0.1"
 pytest-profiling = ">=1.7.0"
-deptry = "^0.23.1"
+deptry = ">=0.23.1"
 
 [tool.pytest.ini_options]
 # Better default `pytest` command which adds coverage

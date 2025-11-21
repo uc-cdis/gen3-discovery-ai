@@ -55,7 +55,7 @@ class TopicChainGoogleQuestionAnswerRAG(TopicChain):
         metadata = metadata or {}
 
         llm_model_name = get_from_cfg_metadata(
-            "model_name", metadata, default="gemini-1.5-flash", type_=str
+            "model_name", metadata, default="gemini-2.5-flash", type_=str
         )
         llm_model_temperature = get_from_cfg_metadata(
             "model_temperature", metadata, default=0, type_=float
@@ -69,7 +69,7 @@ class TopicChainGoogleQuestionAnswerRAG(TopicChain):
         llm_top_p = get_from_cfg_metadata("top_p", metadata, default=0.95, type_=float)
         llm_top_k = get_from_cfg_metadata("top_k", metadata, default=3, type_=int)
 
-        latest_embedding_model_name = "text-embedding-004"
+        latest_embedding_model_name = "gemini-embedding-001"
         embedding_model_name = get_from_cfg_metadata(
             "embedding_model_name",
             metadata,

@@ -111,7 +111,7 @@ async def test_topics_specific_topic_with_configured_overrides(_, endpoint, clie
 
         # this is parsed from the string in the config
         assert topic_data["metadata"] == {
-            "model_name": "gpt-3.5-turbo",
+            "model_name": "gpt-5-mini",
             "max_output_tokens": "512",
             "model_temperature": "0.45",
             "num_similar_docs_to_find": "5",

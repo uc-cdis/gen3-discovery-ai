@@ -57,10 +57,9 @@ class TopicChainOpenAiQuestionAnswerRAG(TopicChain):
         logging.debug(f"initializing topic chain {self.NAME} for topic: {topic}")
 
         metadata = metadata or {}
-        # gpt-3.5-turbo-instruct is double the price but instead of 4K context
-        # you get 16K (as of 6 OCT 2023, see https://openai.com/pricing)
+        # see https://openai.com/pricing
         llm_model_name = get_from_cfg_metadata(
-            "model_name", metadata, default="gpt-3.5-turbo", type_=str
+            "model_name", metadata, default="gpt-5-mini", type_=str
         )
 
         llm_model_temperature = get_from_cfg_metadata(
