@@ -18,9 +18,9 @@ import chromadb
 import langchain_classic
 import openai
 from fastapi import HTTPException
+from langchain_chroma import Chroma
 from langchain_classic.chains import RetrievalQA
 from langchain_classic.prompts import PromptTemplate
-from langchain_chroma import Chroma
 from langchain_openai import ChatOpenAI, OpenAIEmbeddings
 from starlette.status import HTTP_400_BAD_REQUEST, HTTP_429_TOO_MANY_REQUESTS
 

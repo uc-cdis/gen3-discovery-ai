@@ -16,9 +16,9 @@ from typing import Any, Dict
 
 import chromadb
 import langchain
+from langchain_chroma import Chroma
 from langchain_classic.chains.retrieval_qa.base import RetrievalQA
 from langchain_classic.prompts import PromptTemplate
-from langchain_chroma import Chroma
 from langchain_google_vertexai import ChatVertexAI, VertexAIEmbeddings
 
 from gen3discoveryai import logging
