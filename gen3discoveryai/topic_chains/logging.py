@@ -1,7 +1,7 @@
 from typing import Any, Dict, List, Union
 
-from langchain.callbacks.base import BaseCallbackHandler
-from langchain.schema import AgentAction, AgentFinish, BaseMessage, LLMResult
+from langchain_classic.callbacks.base import BaseCallbackHandler
+from langchain_classic.schema import AgentAction, AgentFinish, BaseMessage, LLMResult
 
 from gen3discoveryai import config, logging
 

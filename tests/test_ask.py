@@ -1,7 +1,7 @@
 from unittest.mock import AsyncMock, MagicMock, patch
 from urllib.parse import urlencode
 
-import langchain.schema
+import langchain_classic.schema
 import pytest
 from fastapi import Depends, HTTPException, Request
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
@@ -65,10 +65,10 @@ def test_ask(
 
     topic_chain_response = "yes"
 
-    test_a = langchain.schema.Document(
+    test_a = langchain_classic.schema.Document(
         page_content="fooA", metadata={"row": 120, "source": "phs000001.v1.p1.c1"}
     )
-    test_b = langchain.schema.Document(
+    test_b = langchain_classic.schema.Document(
         page_content="barB", metadata={"row": 59, "source": "phs000002.v2.p2.c2"}
     )
 

@@ -1,7 +1,7 @@
-ARG AZLINUX_BASE_VERSION=master
+ARG AZLINUX_BASE_VERSION=3.13-pythonnginx
 
 # Base stage with python-build-base
-FROM quay.io/cdis/python-nginx-al:${AZLINUX_BASE_VERSION} AS base
+FROM quay.io/cdis/amazonlinux-base:${AZLINUX_BASE_VERSION} AS base
 
 ENV appname=gen3discoveryai
 
@@ -37,10 +37,11 @@ FROM base
 USER gen3
 
 COPY --from=builder /${appname} /${appname}
+COPY --from=builder /venv /venv
 WORKDIR /${appname}
 EXPOSE 80
 
 # Cache the necessary tiktoken encoding file
-RUN poetry run python -c "from langchain.text_splitter import TokenTextSplitter; TokenTextSplitter.from_tiktoken_encoder(chunk_size=100, chunk_overlap=0)"
+RUN poetry run python -c "from langchain_classic.text_splitter import TokenTextSplitter; TokenTextSplitter.from_tiktoken_encoder(chunk_size=100, chunk_overlap=0)"
 
 CMD ["poetry", "run", "gunicorn", "gen3discoveryai.main:app", "-k", "uvicorn.workers.UvicornWorker", "-c", "gunicorn.conf.py"]

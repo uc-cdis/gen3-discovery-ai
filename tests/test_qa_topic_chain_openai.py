@@ -56,8 +56,8 @@ def test_qa_topic_chain_run():
     query = "some query"
     topic_chain.run(query, "an arg", another_thing="a kwarg")
 
-    assert topic_chain.chain.called_with(
-        {"query": query}, "an arg", another_thing="a kwarg"
+    topic_chain.chain.invoke.assert_called_with(
+        {"query": query}, "an arg", include_run_info=True, another_thing="a kwarg"
     )
 
 
@@ -79,4 +79,4 @@ def test_qa_topic_chain_store_knowledge(chroma, _, does_chroma_collection_exist)
 
     topic_chain.store_knowledge(documents=["doc1", "doc2"])
 
-    assert topic_chain.vectorstore.add_documents.called_with(documents=["doc1", "doc2"])
+    topic_chain.vectorstore.add_documents.assert_called_with(["doc1", "doc2"])
