@@ -71,7 +71,6 @@ jobs:
     with:
       python-version: '3.13'
       use-cache: true
-      ignore-paths: openapi.yaml
 
   ImageBuildAndPush:
     name: Build Image and Push
