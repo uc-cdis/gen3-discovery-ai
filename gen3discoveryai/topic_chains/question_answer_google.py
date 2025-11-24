@@ -16,9 +16,10 @@ from typing import Any, Dict
 
 import chromadb
 import langchain
-from langchain.chains import RetrievalQA
-from langchain.prompts import PromptTemplate
+import langchain_classic
 from langchain_chroma import Chroma
+from langchain_classic.chains.retrieval_qa.base import RetrievalQA
+from langchain_classic.prompts import PromptTemplate
 from langchain_google_vertexai import ChatVertexAI, VertexAIEmbeddings
 
 from gen3discoveryai import logging
@@ -55,7 +56,7 @@ class TopicChainGoogleQuestionAnswerRAG(TopicChain):
         metadata = metadata or {}
 
         llm_model_name = get_from_cfg_metadata(
-            "model_name", metadata, default="gemini-1.5-flash", type_=str
+            "model_name", metadata, default="gemini-2.5-flash", type_=str
         )
         llm_model_temperature = get_from_cfg_metadata(
             "model_temperature", metadata, default=0, type_=float
@@ -69,7 +70,7 @@ class TopicChainGoogleQuestionAnswerRAG(TopicChain):
         llm_top_p = get_from_cfg_metadata("top_p", metadata, default=0.95, type_=float)
         llm_top_k = get_from_cfg_metadata("top_k", metadata, default=3, type_=int)
 
-        latest_embedding_model_name = "text-embedding-004"
+        latest_embedding_model_name = "gemini-embedding-001"
         embedding_model_name = get_from_cfg_metadata(
             "embedding_model_name",
             metadata,
@@ -154,16 +155,16 @@ class TopicChainGoogleQuestionAnswerRAG(TopicChain):
         )
 
     def store_knowledge(
-        self, documents: list[langchain.schema.document.Document]
+        self, documents: list[langchain_classic.schema.document.Document]
     ) -> None:
         """
         Delete and replace knowledge store under the topic provided (or default if not provided)
         with the provided documents.
 
-        https://api.python.langchain.com/en/latest/schema/langchain.schema.document.Document.html#langchain-schema-document-document
+        https://api.python.langchain.com/en/latest/schema/langchain_classic.schema.document.Document.html#langchain-schema-document-document
 
         Args:
-            documents (list[langchain.schema.document.Document]): documents to store in the knowledge store
+            documents (list[langchain_classic.schema.document.Document]): documents to store in the knowledge store
         """
         # try:
         # get all docs but don't include anything other than ids

@@ -15,12 +15,12 @@ from __future__ import annotations
 from typing import Any, Dict
 
 import chromadb
-import langchain
+import langchain_classic
 import openai
 from fastapi import HTTPException
-from langchain.chains import RetrievalQA
-from langchain.prompts import PromptTemplate
 from langchain_chroma import Chroma
+from langchain_classic.chains import RetrievalQA
+from langchain_classic.prompts import PromptTemplate
 from langchain_openai import ChatOpenAI, OpenAIEmbeddings
 from starlette.status import HTTP_400_BAD_REQUEST, HTTP_429_TOO_MANY_REQUESTS
 
@@ -57,10 +57,9 @@ class TopicChainOpenAiQuestionAnswerRAG(TopicChain):
         logging.debug(f"initializing topic chain {self.NAME} for topic: {topic}")
 
         metadata = metadata or {}
-        # gpt-3.5-turbo-instruct is double the price but instead of 4K context
-        # you get 16K (as of 6 OCT 2023, see https://openai.com/pricing)
+        # see https://openai.com/pricing
         llm_model_name = get_from_cfg_metadata(
-            "model_name", metadata, default="gpt-3.5-turbo", type_=str
+            "model_name", metadata, default="gpt-5-mini", type_=str
         )
 
         llm_model_temperature = get_from_cfg_metadata(
@@ -70,8 +69,8 @@ class TopicChainOpenAiQuestionAnswerRAG(TopicChain):
         system_prompt = metadata.get("system_prompt", "")
 
         self.llm = ChatOpenAI(
-            openai_api_key=str(config.OPENAI_API_KEY),
-            model_name=llm_model_name,
+            api_key=str(config.OPENAI_API_KEY),
+            model=llm_model_name,
             temperature=llm_model_temperature,
         )
 
@@ -105,9 +104,7 @@ class TopicChainOpenAiQuestionAnswerRAG(TopicChain):
         vectorstore = Chroma(
             client=persistent_client,
             collection_name=topic,
-            embedding_function=OpenAIEmbeddings(
-                openai_api_key=str(config.OPENAI_API_KEY)
-            ),
+            embedding_function=OpenAIEmbeddings(api_key=str(config.OPENAI_API_KEY)),
             # We've heard the `cosine` distance function performs better
             # https://docs.trychroma.com/usage-guide#changing-the-distance-function
             collection_metadata={"hnsw:space": "cosine"},
@@ -141,16 +138,16 @@ class TopicChainOpenAiQuestionAnswerRAG(TopicChain):
         )
 
     def store_knowledge(
-        self, documents: list[langchain.schema.document.Document]
+        self, documents: list[langchain_classic.schema.document.Document]
     ) -> None:
         """
         Delete and replace knowledge store under the topic provided (or default if not provided)
         with the provided documents.
 
-        https://api.python.langchain.com/en/latest/schema/langchain.schema.document.Document.html#langchain-schema-document-document
+        https://api.python.langchain.com/en/latest/schema/langchain_classic.schema.document.Document.html#langchain-schema-document-document
 
         Args:
-            documents (list[langchain.schema.document.Document]): documents to store in the knowledge store
+            documents (list[langchain_classic.schema.document.Document]): documents to store in the knowledge store
         """
         # get all docs but don't include anything other than ids
         docs = self.vectorstore.get(include=[])

@@ -16,9 +16,10 @@ from typing import Any, Dict
 
 import chromadb
 import langchain
-from langchain.chains import RetrievalQA
-from langchain.prompts import PromptTemplate
+import langchain_classic
 from langchain_chroma import Chroma
+from langchain_classic.chains import RetrievalQA
+from langchain_classic.prompts import PromptTemplate
 from langchain_ollama import ChatOllama
 from langchain_ollama.embeddings import OllamaEmbeddings
 
@@ -146,16 +147,16 @@ class TopicChainOllamaQuestionAnswerRAG(TopicChain):
         )
 
     def store_knowledge(
-        self, documents: list[langchain.schema.document.Document]
+        self, documents: list[langchain_classic.schema.document.Document]
     ) -> None:
         """
         Delete and replace knowledge store under the topic provided (or default if not provided)
         with the provided documents.
 
-        https://api.python.langchain.com/en/latest/schema/langchain.schema.document.Document.html#langchain-schema-document-document
+        https://api.python.langchain.com/en/latest/schema/langchain_classic.schema.document.Document.html#langchain-schema-document-document
 
         Args:
-            documents (list[langchain.schema.document.Document]): documents to store in the knowledge store
+            documents (list[langchain_classic.schema.document.Document]): documents to store in the knowledge store
         """
         # try:
         # get all docs but don't include anything other than ids

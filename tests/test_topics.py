@@ -105,13 +105,13 @@ async def test_topics_specific_topic_with_configured_overrides(_, endpoint, clie
             == "You answer questions about datasets that are available in BioData Catalyst. You'll be given relevant "
             "dataset descriptions for every dataset that's been ingested into BioData Catalyst. You are acting as a "
             "search assistant for a biomedical researcher (who will be asking you questions). The researcher is likely "
-            "trying to find datasets of interest for a particular research question. You should recommend datasets that "
-            "may be of interest to that researcher."
+            "trying to find datasets of interest for a particular research question. You should recommend datasets "
+            "that may be of interest to that researcher."
         )
 
         # this is parsed from the string in the config
         assert topic_data["metadata"] == {
-            "model_name": "gpt-3.5-turbo",
+            "model_name": "gpt-5-mini",
             "max_output_tokens": "512",
             "model_temperature": "0.45",
             "num_similar_docs_to_find": "5",
