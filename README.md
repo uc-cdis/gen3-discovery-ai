@@ -3,6 +3,16 @@
 Information discovery using generative artificial intelligence (AI). This service allows for configuring multiple topics
 for users, so they can send queries and get intelligent AI-generated responses.
 
+## ⚠️ IMPORTANT SETUP NOTES (READ FIRST)
+
+- Python 3.14 is NOT supported (NumPy + LangChain incompatibility).  
+  👉 Use Python 3.13.x
+- Default backend is Google Vertex AI unless overridden.
+- OpenAI users MUST set:
+  DEFAULT_CHAIN_NAME=TopicChainOpenAiQuestionAnswerRAG
+- The config file must be named exactly `.env` (not `.env.txt`).
+- Windows users cannot use Linux-style curl. Use PowerShell Invoke-RestMethod.
+
 **Table of Contents**
 
 - [Overview](#overview)
@@ -86,6 +96,25 @@ environment. :heart:
 
 ## Quickstart
 
+## Windows + OpenAI Quickstart (Recommended)
+
+This is the fastest working setup for most users.
+
+### Step 1 — Install Python 3.13
+
+Download and install Python 3.13.x (64-bit):  
+https://www.python.org/downloads/windows/
+
+✔ Make sure to check **Add Python to PATH**
+
+---
+
+### Step 2 — Clone repo
+
+```powershell
+git clone https://github.com/uc-cdis/gen3-discovery-ai.git
+cd gen3-discovery-ai
+```
 ### Setup
 
 This documented examples here presume setting up:
@@ -281,6 +310,20 @@ curl --location 'http://0.0.0.0:8089/ask/' \
 --header 'Content-Type: application/json' \
 --header 'Accept: application/json' \
 --data '{"query": "Do you have COVID data?"}'
+```
+
+#### Windows (PowerShell)
+
+⚠️ Windows note: PowerShell aliases `curl` to `Invoke-WebRequest`.  
+The Linux-style curl commands below will NOT work on Windows.  
+Use the PowerShell example instead.
+
+
+```powershell
+Invoke-RestMethod -Uri "http://localhost:8089/ask/" `
+  -Method Post `
+  -Headers @{ "Content-Type" = "application/json" } `
+  -Body '{"query":"Do you have COVID data?"}'
 ```
 
 > You can change the port in the `run.py` as needed
