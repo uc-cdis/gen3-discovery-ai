@@ -34,6 +34,7 @@ langchain-chroma = ">=1.0.0"
 langchain-ollama = ">=1.0.0"
 starlette = ">=0.50.0"
 click = ">=8.3.1"
+pyasn1 = ">=0.6.2"
 
 # TODO: Update to use base langchain package and remove this
 langchain-classic = ">=1.0.0"
