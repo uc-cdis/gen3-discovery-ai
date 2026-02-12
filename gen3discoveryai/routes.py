@@ -205,17 +205,9 @@ async def get_version(request: Request) -> dict:
     """
     Return the version of the running service
 
-    Args:
-        request (Request): FastAPI request (so we can check authorization)
-
     Returns:
         dict: {"version": "1.0.0"} the version
     """
-    await authorize_request(
-        request=request,
-        authz_access_method="read",
-        authz_resources=["/gen3_discovery_ai/service_info/version"],
-    )
 
     service_version = version("gen3discoveryai")
 
@@ -224,21 +216,13 @@ async def get_version(request: Request) -> dict:
 
 @root_router.get("/_status/")
 @root_router.get("/_status", include_in_schema=False)
-async def get_status(request: Request) -> dict:
+async def get_status() -> dict:
     """
     Return the status of the running service
-
-    Args:
-        request (Request): FastAPI request (so we can check authorization)
 
     Returns:
         dict: simple status and timestamp in format: `{"status": "OK", "timestamp": time.time()}`
     """
-    await authorize_request(
-        request=request,
-        authz_access_method="read",
-        authz_resources=["/gen3_discovery_ai/service_info/status"],
-    )
     return {"status": "OK", "timestamp": time.time()}
 
 
