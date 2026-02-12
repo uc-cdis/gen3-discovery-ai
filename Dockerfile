@@ -46,7 +46,6 @@ USER gen3
 COPY --from=builder /${appname} /${appname}
 COPY --from=builder /venv /venv
 WORKDIR /${appname}
-EXPOSE 80
 
 # Cache the necessary tiktoken encoding file
 RUN poetry run python -c "from langchain_classic.text_splitter import TokenTextSplitter; TokenTextSplitter.from_tiktoken_encoder(chunk_size=100, chunk_overlap=0)"
