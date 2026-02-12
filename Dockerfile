@@ -34,6 +34,13 @@ RUN poetry install --without dev --no-interaction
 # Creating the runtime image
 FROM base
 
+COPY --from=builder /${appname} /${appname}
+COPY --from=builder /venv /venv
+ENV  PATH="/usr/sbin:$PATH"
+USER root
+RUN mkdir -p /var/log/nginx
+RUN chown -R gen3:gen3 /var/log/nginx
+
 USER gen3
 
 COPY --from=builder /${appname} /${appname}
@@ -44,4 +51,4 @@ EXPOSE 80
 # Cache the necessary tiktoken encoding file
 RUN poetry run python -c "from langchain_classic.text_splitter import TokenTextSplitter; TokenTextSplitter.from_tiktoken_encoder(chunk_size=100, chunk_overlap=0)"
 
-CMD ["poetry", "run", "gunicorn", "gen3discoveryai.main:app", "-k", "uvicorn.workers.UvicornWorker", "-c", "gunicorn.conf.py"]
+CMD ["/bin/bash", "-c", "/${appname}/dockerrun.bash"]
