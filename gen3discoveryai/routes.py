@@ -234,11 +234,6 @@ async def get_status(request: Request) -> dict:
     Returns:
         dict: simple status and timestamp in format: `{"status": "OK", "timestamp": time.time()}`
     """
-    await authorize_request(
-        request=request,
-        authz_access_method="read",
-        authz_resources=["/gen3_discovery_ai/service_info/status"],
-    )
     return {"status": "OK", "timestamp": time.time()}
 
 
