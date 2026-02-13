@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "gen3discoveryai"
-version = "1.2.2"
+version = "1.2.4"
 description = "Gen3 Discovery AI Service"
 authors = ["CTDS UChicago <cdis@uchicago.edu>"]
 license = "Apache-2.0"
