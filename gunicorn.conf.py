@@ -41,7 +41,7 @@ class CDISLogger(gunicorn.glogging.Logger):
 logger_class = CDISLogger
 
 wsgi_app = "gen3discoveryai.main:app"
-bind = "0.0.0.0:8089"
+bind = "0.0.0.0:8000"
 workers = 1
 user = "gen3"
 group = "gen3"

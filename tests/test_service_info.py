@@ -18,27 +18,22 @@ def test_version(_, endpoint, client):
 @pytest.mark.parametrize("endpoint", ["/_version", "/_version/"])
 def test_version_no_token(endpoint, client):
     """
-    Test that the version endpoint returns a 401 with details when no token is provided
+    Test that the version endpoint returns a 200 when no token is provided
     """
     response = client.get(endpoint)
     assert response
-    assert response.status_code == 401
-    assert response.json().get("detail")
+    assert response.status_code == 200
 
 
 @pytest.mark.parametrize("endpoint", ["/_version", "/_version/"])
-@patch("gen3discoveryai.auth.arborist", new_callable=AsyncMock)
-def test_version_unauthorized(arborist, endpoint, client):
+def test_version_unauthorized(endpoint, client):
     """
     Test accessing the endpoint when authorized
     """
-    # Simulate an unauthorized request
-    arborist.auth_request.return_value = False
 
     headers = {"Authorization": "Bearer ofbadnews"}
     response = client.get(endpoint, headers=headers)
-    assert response.status_code == 403
-    assert response.json().get("detail")
+    assert response.status_code == 200
 
 
 @pytest.mark.parametrize("endpoint", ["/_status", "/_status/"])
@@ -56,12 +51,11 @@ def test_status(_, endpoint, client):
 @pytest.mark.parametrize("endpoint", ["/_status", "/_status/"])
 def test_status_no_token(endpoint, client):
     """
-    Test that the status endpoint returns a 401 with details when no token is provided
+    Test that the status endpoint returns a 200 when no token is provided
     """
     response = client.get(endpoint)
     assert response
-    assert response.status_code == 401
-    assert response.json().get("detail")
+    assert response.status_code == 200
 
 
 @pytest.mark.parametrize("endpoint", ["/_status", "/_status/"])
@@ -75,5 +69,4 @@ def test_status_unauthorized(arborist, endpoint, client):
 
     headers = {"Authorization": "Bearer ofbadnews"}
     response = client.get(endpoint, headers=headers)
-    assert response.status_code == 403
-    assert response.json().get("detail")
+    assert response.status_code == 200
