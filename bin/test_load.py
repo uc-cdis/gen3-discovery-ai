@@ -1,13 +1,13 @@
 import os
 from unittest.mock import MagicMock, patch
 
-from .load_into_knowledge_store import load_tsvs_from_dir
+from bin.load_into_knowledge_store import load_tsvs_from_dir
 
 from gen3discoveryai import config
 
 
-@patch("load_into_knowledge_store._store_documents_in_chain")
-@patch("load_into_knowledge_store.get_topics_from_config")
+@patch("bin.load_into_knowledge_store._store_documents_in_chain")
+@patch("bin.load_into_knowledge_store.get_topics_from_config")
 def test_load_from_tsvs(config_topics, store_documents_in_chain):
     """
     Test that the loading from TSVs pulls the correct information from various files and
