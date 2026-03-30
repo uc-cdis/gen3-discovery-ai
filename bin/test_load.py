@@ -1,7 +1,7 @@
 import os
 from unittest.mock import MagicMock, patch
 
-from load_into_knowledge_store import load_tsvs_from_dir
+from .load_into_knowledge_store import load_tsvs_from_dir
 
 from gen3discoveryai import config
 
