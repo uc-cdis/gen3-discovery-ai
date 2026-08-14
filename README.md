@@ -346,9 +346,12 @@ To run:
 docker run --name gen3discoveryai \
 --env-file "./.env" \
 -v "$GOOGLE_APPLICATION_CREDENTIALS":"$GOOGLE_APPLICATION_CREDENTIALS" \
--p 8089:8089 \
+-p 8000:8000 \
 gen3discoveryai:latest
 ```
+
+> NOTE: The container serves on `8000` with Uvicorn directly. The local `run.py` flow above
+> uses `8089`.
 
 > NOTE: If you're using Ollama, you need to ensure it's available to the running container.
 

@@ -1,8 +1,10 @@
+import logging as stdlib_logging
 import os
 import traceback
 from contextlib import asynccontextmanager
 from importlib.metadata import version
 
+import cdislogging
 import fastapi
 import yaml
 from fastapi import FastAPI
@@ -10,6 +12,8 @@ from fastapi import FastAPI
 from gen3discoveryai import config, logging
 from gen3discoveryai.routes import root_router
 from gen3discoveryai.utils import get_topic_chain_factory
+
+SERVER_LOGGER_NAMES = ("uvicorn", "uvicorn.error", "uvicorn.access")
 
 
 def get_app() -> fastapi.FastAPI:
@@ -19,6 +23,7 @@ def get_app() -> fastapi.FastAPI:
     Returns:
         fastapi.FastAPI: The FastAPI app object
     """
+    configure_logging()
 
     fastapi_app = FastAPI(
         title="Gen3 Discovery AI Service",
@@ -34,6 +39,24 @@ def get_app() -> fastapi.FastAPI:
     fastapi_app.openapi = _override_generated_openapi_spec
 
     return fastapi_app
+
+
+def configure_logging() -> None:
+    """
+    Send the root and web server loggers through this service's logging setup.
+
+    Uvicorn puts its own handlers and levels on its loggers before it imports this
+    module, so those are dropped and the loggers are re-parented: server logs then use
+    the cdislogging format and follow this service's DEBUG setting.
+    """
+    cdislogging.get_logger(None, log_level="debug" if config.DEBUG else "warn")
+
+    for logger_name in SERVER_LOGGER_NAMES:
+        server_logger = stdlib_logging.getLogger(logger_name)
+        server_logger.handlers.clear()
+        server_logger.setLevel(stdlib_logging.NOTSET)
+        server_logger.propagate = True
+        server_logger.parent = logging
 
 
 def _override_generated_openapi_spec():
