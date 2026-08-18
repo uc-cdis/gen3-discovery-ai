@@ -7,3 +7,23 @@ knowledge/
 prof/
 tests/
 tsvs/
+
+# Never bake local configuration or credentials into the image
+**/.env
+**/.env.*
+**/*.json
+**/*.pem
+**/*.key
+
+# Local tooling state and build context bloat
+**/.DS_Store
+.git/
+.github/
+.idea/
+.vscode/
+.claude/
+.serena/
+.pytest_cache/
+.benchmarks/
+_coverage/
+.coverage
