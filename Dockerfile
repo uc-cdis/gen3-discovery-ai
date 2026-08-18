@@ -1,7 +1,4 @@
-# TEMPORARY: points at the base-images branch build (branch `feat/pythonuv`, where the workflow
-# tags `$BRANCH_NAME-3.13-pythonpoetry`). Revert to `3.13-pythonpoetry` before
-# merging, or main will build against a branch tag that eventually gets pruned.
-ARG AZLINUX_BASE_VERSION=feat_pythonuv-3.13-pythonpoetry
+ARG AZLINUX_BASE_VERSION=3.13-pythonpoetry
 
 # Base stage with python-poetry-base
 FROM quay.io/cdis/amazonlinux-base:${AZLINUX_BASE_VERSION} AS base
