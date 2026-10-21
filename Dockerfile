@@ -17,6 +17,12 @@ RUN chown -R gen3:gen3 /${appname}
 # Builder stage
 FROM base AS builder
 
+# The base image's /venv is root-owned and not empty
+# let gen3 upgrade preinstalled packages
+USER root
+RUN chown -R gen3:gen3 /venv
+USER gen3
+
 # copy ONLY poetry artifact, install the dependencies but not gen3discoveryai
 # this will make sure that the dependencies are cached
 COPY --chown=gen3:gen3 poetry.lock pyproject.toml /$appname/
