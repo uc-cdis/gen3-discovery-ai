@@ -121,14 +121,15 @@ def issuer() -> Iterator[str]:
     class IssuerHandler(BaseHTTPRequestHandler):
         """Answers the two requests authutils makes to find an issuer's keys."""
 
-        def do_GET(
-            self,
-        ) -> None:  # noqa: N802 # pylint: disable=invalid-name
+        # fmt: off
+        def do_GET(self) -> None:  # noqa: N802 # pylint: disable=invalid-name
+        # fmt: on
             """
             Return the discovery document or the key set, depending on the path.
 
             The name is fixed by BaseHTTPRequestHandler, which dispatches GET requests to `do_GET`.
             """
+
             if self.path.endswith("/.well-known/openid-configuration"):
                 body = {"issuer": issuer_url, "jwks_uri": f"{issuer_url}/jwt/keys"}
             else:
