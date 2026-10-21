@@ -123,8 +123,12 @@ def issuer() -> Iterator[str]:
 
         def do_GET(
             self,
-        ) -> None:  # noqa: N802 - name is fixed by BaseHTTPRequestHandler
-            """Return the discovery document or the key set, depending on the path."""
+        ) -> None:  # noqa: N802 # pylint: disable=invalid-name
+            """
+            Return the discovery document or the key set, depending on the path.
+
+            The name is fixed by BaseHTTPRequestHandler, which dispatches GET requests to `do_GET`.
+            """
             if self.path.endswith("/.well-known/openid-configuration"):
                 body = {"issuer": issuer_url, "jwks_uri": f"{issuer_url}/jwt/keys"}
             else:
